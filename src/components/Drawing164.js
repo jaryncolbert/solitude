@@ -5,13 +5,13 @@ import Slider from './Slider';
 import Checkbox from './Checkbox';
 import { getRandomInt, getRandomBool } from '../util';
 
-class Drawing154 extends Component {
+class Drawing164 extends Component {
 
-  static drawingId = "drawing-154";
+  static drawingId = "drawing-164";
   static initSquareSize = 300;
   static minSquareSize = 10;
   static maxSquareSize = 380;
-  static minLineLen = 10;
+  static minLineLen = 5;
   static canvasWidth = 600;
   static canvasHeight = 400;
 
@@ -20,16 +20,16 @@ class Drawing154 extends Component {
 
 		this.state = {
 			stateSketch: this.sketch,
-      squareSize: Drawing154.initSquareSize,
+      squareSize: Drawing164.initSquareSize,
       lineExtendsBeyondSquare: false,
-      lineMax: Drawing154.initSquareSize,
-      lineLen: getRandomInt(Drawing154.minLineLen, Drawing154.initSquareSize),
+      lineMax: Drawing164.initSquareSize,
+      horizLineLen: getRandomInt(Drawing164.minLineLen, Drawing164.initSquareSize),
 		};
 	}
 
-	lineLenChange(e) {
-    let lineLen = Number(e.target.value);
-		this.setState({lineLen: lineLen});
+	horizLineLenChange(e) {
+    let horizLineLen = Number(e.target.value);
+		this.setState({horizLineLen: horizLineLen});
 	}
 
   squareSizeChange(e) {
@@ -50,33 +50,33 @@ class Drawing154 extends Component {
 
   randomize() {
     let canExtend = getRandomBool();
-    let squareSize = getRandomInt(Drawing154.minSquareSize,
-      Drawing154.maxSquareSize);
+    let squareSize = getRandomInt(Drawing164.minSquareSize,
+      Drawing164.maxSquareSize);
 
-    this.setState(this.randomizeAndGetLineLen(squareSize, canExtend));
+    this.setState(this.randomizeAndGethorizLineLen(squareSize, canExtend));
   }
 
   recalcMaxFromSquareSize(squareSize) {
     return (previousState, currentProps) => {
       return this.getState(squareSize,
-        previousState.lineExtendsBeyondSquare, previousState.lineLen);
+        previousState.lineExtendsBeyondSquare, previousState.horizLineLen);
     };
   }
 
   recalcMaxFromCanExtend(canExtend) {
     return (previousState, currentProps) => {
       return this.getState(previousState.squareSize,
-        canExtend, previousState.lineLen);
+        canExtend, previousState.horizLineLen);
     }
   }
 
   calcLineMax(squareSize, canExtend) {
-    const canvasMax = Drawing154.canvasWidth -
-      ((Drawing154.canvasWidth - squareSize) / 2)
+    const canvasMax = Drawing164.canvasWidth -
+      ((Drawing164.canvasWidth - squareSize) / 2)
     return canExtend ? canvasMax : squareSize;
   }
 
-  randomizeAndGetLineLen(squareSize, canExtend) {
+  randomizeAndGethorizLineLen(squareSize, canExtend) {
     return (previousState, currentProps) => {
 
       // If line can extend beyond square, set its max to the full canvas width.
@@ -84,25 +84,25 @@ class Drawing154 extends Component {
       let lineMax = this.calcLineMax(squareSize, canExtend);
 
       // Regenerate random line length using new maximum length
-      let lineLen = getRandomInt(Drawing154.minLineLen, lineMax);
+      let horizLineLen = getRandomInt(Drawing164.minLineLen, lineMax);
 
-      return this.getState(squareSize, canExtend, lineLen);
+      return this.getState(squareSize, canExtend, horizLineLen);
     };
   }
 
-  getState(squareSize, canExtend, lineLen) {
+  getState(squareSize, canExtend, horizLineLen) {
     // If line can extend beyond square, set its max to the full canvas width.
     // Otherwise, limit it to the size of the square
     let lineMax = this.calcLineMax(squareSize, canExtend);
 
     // If line extends beyond max, crop it to new max value
-    if (lineLen > lineMax) {
-      lineLen = lineMax;
+    if (horizLineLen > lineMax) {
+      horizLineLen = lineMax;
     }
 
     return {
       lineMax: lineMax,
-      lineLen: lineLen,
+      horizLineLen: horizLineLen,
       squareSize: squareSize,
       lineExtendsBeyondSquare: canExtend
     };
@@ -113,24 +113,27 @@ class Drawing154 extends Component {
       <div className="drawing-container">
         <P5Wrapper sketch={this.state.stateSketch}
           squareSize={this.state.squareSize}
-          lineLen={this.state.lineLen}/>
+          horizLineLen={this.state.horizLineLen}/>
 
-        <Sketch drawingId={Drawing154.drawingId}
-          instructions="A black outlined square with a red
-          horizontal line from the midpoint of the left side toward the
-          middle of the right side." year="1973"/>
+        <Sketch drawingId={Drawing164.drawingId}
+          instructions="A black outlined square
+          with a red horizontal line centered on the axis
+          between the midpoint of the left side
+          and the midpoint of the right side
+          and a red diagonal line centered on the axis
+          between the lower left and upper right corners." year="1973"/>
 
-        <Slider sliderId="lineLength"
+        <Slider sliderId="horizLineLen"
           label="Line Length:"
-          value={this.state.lineLen}
-          changeHandler={this.lineLenChange.bind(this)}
+          value={this.state.horizLineLen}
+          changeHandler={this.horizLineLenChange.bind(this)}
           min="0" max={this.state.lineMax}/>
 
         <Slider sliderId="squareSize"
           label="Square Size:"
           value={this.state.squareSize}
           changeHandler={this.squareSizeChange.bind(this)}
-          min="10" max={Drawing154.maxSquareSize}/>
+          min="10" max={Drawing164.maxSquareSize}/>
 
         <Checkbox
           label="Can line extend beyond square?"
@@ -146,15 +149,15 @@ class Drawing154 extends Component {
   sketch (p) {
     // User-variable properties
     let squareSize;
-    let lineLen;
+    let horizLineLen;
 
     p.setup = function () {
-      var canvas = p.createCanvas(Drawing154.canvasWidth, Drawing154.canvasHeight);
-      canvas.parent(Drawing154.drawingId);
+      var canvas = p.createCanvas(Drawing164.canvasWidth, Drawing164.canvasHeight);
+      canvas.parent(Drawing164.drawingId);
     };
 
     p.myCustomRedrawAccordingToNewPropsHandler = function (props) {
-        lineLen = props.lineLen;
+        horizLineLen = props.horizLineLen;
         squareSize = props.squareSize;
     };
 
@@ -163,18 +166,20 @@ class Drawing154 extends Component {
       let squareX = (p.width - squareSize) / 2;
       let squareY = (p.height - squareSize) / 2;
 
+      let horizLineStartX = squareX + ((squareSize - horizLineLen) / 2);
+
       p.clear();
 
       // Black square
       p.stroke(0,0,0);
       p.rect(squareX, squareY, squareSize, squareSize);
 
-      // Red line of random length bisecting left side of square
-      // and extending toward right side
+      // Red line of random length along midpoint line
       p.stroke(255,0,0);
-      p.line(squareX, squareY + midpoint, squareX + lineLen, squareY + midpoint);
+      p.line(horizLineStartX, squareY + midpoint,
+        horizLineStartX + horizLineLen, squareY + midpoint);
     };
   }
 }
 
-export default Drawing154;
+export default Drawing164;

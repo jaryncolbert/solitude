@@ -4,11 +4,11 @@ import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
-  risingDiagMidLine, fallingDiagMidLine } from '../util';
+  risingDiagMidLineFrom, fallingDiagMidLineFrom } from '../util';
 
-class Drawing160 extends Component {
+class Drawing159 extends Component {
 
-  static drawingId = "drawing-160";
+  static drawingId = "drawing-159";
   static initSquareSize = 300;
   static minSquareSize = 10;
   static maxSquareSize = 380;
@@ -19,15 +19,15 @@ class Drawing160 extends Component {
   constructor(props) {
 		super(props);
 
-    let lineMax = calcDiagLineMax(Drawing160.canvasWidth,
-      Drawing160.canvasHeight, Drawing160.initSquareSize, false);
+    let lineMax = calcDiagLineMax(Drawing159.canvasWidth,
+      Drawing159.canvasHeight, Drawing159.initSquareSize, false);
 		this.state = {
 			stateSketch: this.sketch,
-      squareSize: Drawing160.initSquareSize,
+      squareSize: Drawing159.initSquareSize,
       lineExtendsBeyondSquare: false,
       lineMax: lineMax,
-      fallLineLen: getRandomInt(Drawing160.minLineLen, lineMax),
-      riseLineLen: getRandomInt(Drawing160.minLineLen, lineMax),
+      fallLineLen: getRandomInt(Drawing159.minLineLen, lineMax),
+      riseLineLen: getRandomInt(Drawing159.minLineLen, lineMax),
 		};
 	}
 
@@ -59,8 +59,8 @@ class Drawing160 extends Component {
 
   randomize() {
     let canExtend = getRandomBool();
-    let squareSize = getRandomInt(Drawing160.minSquareSize,
-      Drawing160.maxSquareSize);
+    let squareSize = getRandomInt(Drawing159.minSquareSize,
+      Drawing159.maxSquareSize);
 
     this.setState(this.getRandomState(squareSize, canExtend));
   }
@@ -85,18 +85,18 @@ class Drawing160 extends Component {
 
   getRandomState(squareSize, canExtend) {
     return (previousState, currentProps) => {
-      let lineMax = calcDiagLineMax(Drawing160.canvasWidth,
-        Drawing160.canvasHeight, squareSize, canExtend);
-      let fallLineLen = getRandomInt(Drawing160.minLineLen, lineMax);
-      let riseLineLen = getRandomInt(Drawing160.minLineLen, lineMax);
+      let lineMax = calcDiagLineMax(Drawing159.canvasWidth,
+        Drawing159.canvasHeight, squareSize, canExtend);
+      let fallLineLen = getRandomInt(Drawing159.minLineLen, lineMax);
+      let riseLineLen = getRandomInt(Drawing159.minLineLen, lineMax);
 
       return this.getState(squareSize, canExtend, fallLineLen, riseLineLen);
     };
   }
 
   getState(squareSize, canExtend, fallLineLen, riseLineLen) {
-    let lineMax = calcDiagLineMax(Drawing160.canvasWidth,
-      Drawing160.canvasHeight, squareSize, canExtend);
+    let lineMax = calcDiagLineMax(Drawing159.canvasWidth,
+      Drawing159.canvasHeight, squareSize, canExtend);
 
     if (fallLineLen > lineMax) {
       fallLineLen = lineMax;
@@ -122,7 +122,8 @@ class Drawing160 extends Component {
           fallLineLen={this.state.fallLineLen}
           riseLineLen={this.state.riseLineLen}/>
 
-        <Sketch drawingId={Drawing160.drawingId}
+        <Sketch drawingId={Drawing159.drawingId}
+          title="Wall Drawing 159"
           instructions="A black outlined square
           with a red diagonal line
           from the lower left corner
@@ -135,19 +136,19 @@ class Drawing160 extends Component {
           label="Line Length (Falling Line):"
           value={this.state.fallLineLen}
           changeHandler={this.fallLineLenChange.bind(this)}
-          min={Drawing160.minLineLen} max={this.state.lineMax}/>
+          min={Drawing159.minLineLen} max={this.state.lineMax}/>
 
         <Slider sliderId="riseLineLen"
           label="Line Length (Rising Line):"
           value={this.state.riseLineLen}
           changeHandler={this.riseLineLenChange.bind(this)}
-          min={Drawing160.minLineLen} max={this.state.lineMax}/>
+          min={Drawing159.minLineLen} max={this.state.lineMax}/>
 
         <Slider sliderId="squareSize"
           label="Square Size:"
           value={this.state.squareSize}
           changeHandler={this.squareSizeChange.bind(this)}
-          min={Drawing160.minSquareSize} max={Drawing160.maxSquareSize}/>
+          min={Drawing159.minSquareSize} max={Drawing159.maxSquareSize}/>
 
         <Checkbox
           label="Can lines extend beyond square?"
@@ -167,8 +168,8 @@ class Drawing160 extends Component {
     let riseLineLen;
 
     p.setup = function () {
-      var canvas = p.createCanvas(Drawing160.canvasWidth, Drawing160.canvasHeight);
-      canvas.parent(Drawing160.drawingId);
+      var canvas = p.createCanvas(Drawing159.canvasWidth, Drawing159.canvasHeight);
+      canvas.parent(Drawing159.drawingId);
     };
 
     p.myCustomRedrawAccordingToNewPropsHandler = function (props) {
@@ -183,16 +184,19 @@ class Drawing160 extends Component {
 
       // Black square
       p.stroke(0,0,0);
-      p.rect(...centerSquare(p.width, p.height, squareSize));
+      let squareDims = centerSquare(p.width, p.height, squareSize);
+      p.rect(...squareDims);
 
-      // Two red diagonal lines of random length centered along midpoint line
-      let canvasMidX = p.width / 2;
-      let canvasMidY = p.height / 2;
+      // Two red diagonal lines of random length starting from lower corners
+      // and extending along midpoint line
       p.stroke(255,0,0);
-      p.line(...fallingDiagMidLine(canvasMidX, canvasMidY, fallLineLen));
-      p.line(...risingDiagMidLine(canvasMidX, canvasMidY, riseLineLen));
+      let squareX = squareDims[0];
+      let squareY = squareDims[1];
+      p.line(...fallingDiagMidLineFrom(squareX + squareSize,
+        squareY + squareSize, fallLineLen));
+      p.line(...risingDiagMidLineFrom(squareX, squareY + squareSize, riseLineLen));
     };
   }
 }
 
-export default Drawing160;
+export default Drawing159;

@@ -18,20 +18,32 @@ export function centerSquare(canvasWidth, canvasHeight, squareSize) {
   return [squareX, squareY, squareSize, squareSize];
 }
 
-export function horizMidLine(lineX, lineY, lineLen) {
+export function horizMidLineFrom(lineX, lineY, lineLen) {
   return [lineX, lineY, lineX + lineLen, lineY];
 }
 
 export function risingDiagMidLine(canvasMidX, canvasMidY, lineLen) {
-  let squareSizeFromDiag = lineLen / (2 * Math.sqrt(2));
+  // Use half of lineLen as hypotenuse so line can extend from midpoint
+  let squareSizeFromDiag = calcSquareSideFromHypotenuse(lineLen / 2);
   return [canvasMidX - squareSizeFromDiag, canvasMidY + squareSizeFromDiag,
       canvasMidX + squareSizeFromDiag, canvasMidY - squareSizeFromDiag];
 }
 
+export function risingDiagMidLineFrom(lineX, lineY, lineLen) {
+  let squareSizeFromDiag = calcSquareSideFromHypotenuse(lineLen);
+  return [lineX, lineY, lineX + squareSizeFromDiag, lineY - squareSizeFromDiag];
+}
+
 export function fallingDiagMidLine(canvasMidX, canvasMidY, lineLen) {
-  let squareSizeFromDiag = lineLen / (2 * Math.sqrt(2));
+  // Use half of lineLen as hypotenuse so line can extend from midpoint
+  let squareSizeFromDiag = calcSquareSideFromHypotenuse(lineLen / 2);
   return [canvasMidX - squareSizeFromDiag, canvasMidY - squareSizeFromDiag,
       canvasMidX + squareSizeFromDiag, canvasMidY + squareSizeFromDiag];
+}
+
+export function fallingDiagMidLineFrom(lineX, lineY, lineLen) {
+  let squareSizeFromDiag = calcSquareSideFromHypotenuse(lineLen);
+  return [lineX, lineY, lineX - squareSizeFromDiag, lineY - squareSizeFromDiag];
 }
 
 export function calcDiagLineMax(canvasWidth, canvasHeight, squareSize, canExtend) {
@@ -41,11 +53,13 @@ export function calcDiagLineMax(canvasWidth, canvasHeight, squareSize, canExtend
   const canvasDims = [canvasWidth, canvasHeight];
   const squareDims = [squareSize, squareSize];
   let dims = canExtend ? canvasDims : squareDims;
-  let val = Math.floor(calcHypotenuse(...dims));
-  console.log("Hypot value: " + val);
-  return val;
+  return calcHypotenuse(...dims);
 }
 
 export function calcHypotenuse(sideA, sideB) {
-  return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
+  return Math.floor(Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2)));
+}
+
+function calcSquareSideFromHypotenuse(hypotenuse) {
+  return Math.floor(hypotenuse / Math.sqrt(2));
 }

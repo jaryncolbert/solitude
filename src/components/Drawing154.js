@@ -4,7 +4,7 @@ import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
 import { getRandomInt, getRandomBool,
-  centerSquare, horizMidLine } from '../util';
+  centerSquare, horizMidLineFrom } from '../util';
 
 class Drawing154 extends Component {
 
@@ -173,7 +173,7 @@ class Drawing154 extends Component {
       let canvasMidY = p.height / 2;
       let squareX = canvasMidX - squareSize / 2;
       p.stroke(255,0,0);
-      p.line(...horizMidLine(squareX, canvasMidY, lineLen));
+      p.line(...horizMidLineFrom(squareX, canvasMidY, lineLen));
     };
   }
 }

@@ -4,7 +4,7 @@ import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
-  horizMidLine, risingDiagMidLine } from '../util';
+  horizMidLineFrom, risingDiagMidLine } from '../util';
 
 class Drawing164 extends Component {
 
@@ -195,12 +195,13 @@ class Drawing164 extends Component {
       p.stroke(0,0,0);
       p.rect(...centerSquare(p.width, p.height, squareSize));
 
-      // Red line of random length along midpoint line
+      // Two red lines of random length; one centered along diagonal midpoint
+      // and the other centered along horizontal midpoint
       let canvasMidX = p.width / 2;
       let canvasMidY = p.height / 2;
       let horizLineStartX = canvasMidX - horizLineLen / 2;
       p.stroke(255,0,0);
-      p.line(...horizMidLine(horizLineStartX, canvasMidY, horizLineLen));
+      p.line(...horizMidLineFrom(horizLineStartX, canvasMidY, horizLineLen));
       p.line(...risingDiagMidLine(canvasMidX, canvasMidY, diagLineLen));
     };
   }

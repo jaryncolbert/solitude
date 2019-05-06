@@ -123,6 +123,7 @@ class Drawing160 extends Component {
           riseLineLen={this.state.riseLineLen}/>
 
         <Sketch drawingId={Drawing160.drawingId}
+          title="Wall Drawing 160"
           instructions="A black outlined square
           with a red diagonal line
           from the lower left corner

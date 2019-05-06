@@ -134,6 +134,7 @@ class Drawing164 extends Component {
           diagLineLen={this.state.diagLineLen}/>
 
         <Sketch drawingId={Drawing164.drawingId}
+          title="Wall Drawing 164"
           instructions="A black outlined square
           with a red horizontal line centered on the axis
           between the midpoint of the left side

@@ -117,6 +117,7 @@ class Drawing154 extends Component {
           lineLen={this.state.lineLen}/>
 
         <Sketch drawingId={Drawing154.drawingId}
+          title="Wall Drawing 154"
           instructions="A black outlined square with a red
           horizontal line from the midpoint of the left side toward the
           middle of the right side." year="1973"/>

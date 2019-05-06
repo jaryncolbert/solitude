@@ -3,7 +3,8 @@ import P5Wrapper from './P5Wrapper';
 import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
-import { getRandomInt, getRandomBool } from '../util';
+import { getRandomInt, getRandomBool,
+  centerSquare, horizMidLine } from '../util';
 
 class Drawing154 extends Component {
 
@@ -124,13 +125,13 @@ class Drawing154 extends Component {
           label="Line Length:"
           value={this.state.lineLen}
           changeHandler={this.lineLenChange.bind(this)}
-          min="0" max={this.state.lineMax}/>
+          min={Drawing154.minLineLen} max={this.state.lineMax}/>
 
         <Slider sliderId="squareSize"
           label="Square Size:"
           value={this.state.squareSize}
           changeHandler={this.squareSizeChange.bind(this)}
-          min="10" max={Drawing154.maxSquareSize}/>
+          min={Drawing154.minSquareSize} max={Drawing154.maxSquareSize}/>
 
         <Checkbox
           label="Can line extend beyond square?"
@@ -159,20 +160,22 @@ class Drawing154 extends Component {
     };
 
     p.draw = function () {
-      let midpoint = squareSize / 2;
-      let squareX = (p.width - squareSize) / 2;
-      let squareY = (p.height - squareSize) / 2;
 
       p.clear();
 
       // Black square
       p.stroke(0,0,0);
-      p.rect(squareX, squareY, squareSize, squareSize);
+      p.rect(...centerSquare(p.width, p.height, squareSize));
 
       // Red line of random length bisecting left side of square
       // and extending toward right side
       p.stroke(255,0,0);
-      p.line(squareX, squareY + midpoint, squareX + lineLen, squareY + midpoint);
+
+      let canvasMidX = p.width / 2;
+      let canvasMidY = p.height / 2;
+      let squareX = canvasMidX - squareSize / 2;
+
+      p.line(...horizMidLine(squareX, canvasMidY, lineLen));
     };
   }
 }

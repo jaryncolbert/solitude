@@ -3,7 +3,8 @@ import P5Wrapper from './P5Wrapper';
 import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
-import { getRandomInt, getRandomBool } from '../util';
+import { getRandomInt, getRandomBool, centerSquare,
+  horizMidLine, diagMidLine } from '../util';
 
 class Drawing164 extends Component {
 
@@ -18,13 +19,21 @@ class Drawing164 extends Component {
   constructor(props) {
 		super(props);
 
+    let diagLineMax = this.calcDiagLineMax(Drawing164.initSquareSize, false);
 		this.state = {
 			stateSketch: this.sketch,
       squareSize: Drawing164.initSquareSize,
       lineExtendsBeyondSquare: false,
-      lineMax: Drawing164.initSquareSize,
+      horizLineMax: Drawing164.initSquareSize,
       horizLineLen: getRandomInt(Drawing164.minLineLen, Drawing164.initSquareSize),
+      diagLineMax: diagLineMax,
+      diagLineLen: getRandomInt(Drawing164.minLineLen, diagLineMax),
 		};
+	}
+
+  diagLineLenChange(e) {
+    let diagLineLen = Number(e.target.value);
+		this.setState({diagLineLen: diagLineLen});
 	}
 
 	horizLineLenChange(e) {
@@ -53,56 +62,76 @@ class Drawing164 extends Component {
     let squareSize = getRandomInt(Drawing164.minSquareSize,
       Drawing164.maxSquareSize);
 
-    this.setState(this.randomizeAndGethorizLineLen(squareSize, canExtend));
+    this.setState(this.getRandomState(squareSize, canExtend));
   }
 
   recalcMaxFromSquareSize(squareSize) {
     return (previousState, currentProps) => {
       return this.getState(squareSize,
-        previousState.lineExtendsBeyondSquare, previousState.horizLineLen);
+        previousState.lineExtendsBeyondSquare,
+        previousState.horizLineLen,
+        previousState.diagLineLen);
     };
   }
 
   recalcMaxFromCanExtend(canExtend) {
     return (previousState, currentProps) => {
       return this.getState(previousState.squareSize,
-        canExtend, previousState.horizLineLen);
+        canExtend,
+        previousState.horizLineLen,
+        previousState.diagLineLen);
     }
   }
 
-  calcLineMax(squareSize, canExtend) {
-    const canvasMax = Drawing164.canvasWidth -
-      ((Drawing164.canvasWidth - squareSize) / 2)
-    return canExtend ? canvasMax : squareSize;
+  calcHorizLineMax(squareSize, canExtend) {
+    // If line can extend beyond square, set its max to the full canvas width.
+    // Otherwise, limit it to the size of the square
+    return canExtend ? Drawing164.canvasWidth : squareSize;
   }
 
-  randomizeAndGethorizLineLen(squareSize, canExtend) {
+  calcDiagLineMax(squareSize, canExtend) {
+    // If line can extend beyond square, set its max to the
+    // full canvas diagonal.
+    // Otherwise, limit it to the size of the diagonal of the square
+    const canvasDiag = this.calcHypotenuse(Drawing164.canvasWidth,
+      Drawing164.canvasHeight);
+    const squareDiag = this.calcHypotenuse(squareSize, squareSize);
+    let max = canExtend ? canvasDiag : squareDiag;
+    return Math.floor(max);
+  }
+
+  calcHypotenuse(sideA, sideB) {
+    return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
+  }
+
+  getRandomState(squareSize, canExtend) {
     return (previousState, currentProps) => {
+      let horizLineMax = this.calcHorizLineMax(squareSize, canExtend);
+      let horizLineLen = getRandomInt(Drawing164.minLineLen, horizLineMax);
 
-      // If line can extend beyond square, set its max to the full canvas width.
-      // Otherwise, limit it to the size of the square
-      let lineMax = this.calcLineMax(squareSize, canExtend);
+      let diagLineMax = this.calcDiagLineMax(squareSize, canExtend);
+      let diagLineLen = getRandomInt(Drawing164.minLineLen, diagLineMax);
 
-      // Regenerate random line length using new maximum length
-      let horizLineLen = getRandomInt(Drawing164.minLineLen, lineMax);
-
-      return this.getState(squareSize, canExtend, horizLineLen);
+      return this.getState(squareSize, canExtend, horizLineLen, diagLineLen);
     };
   }
 
-  getState(squareSize, canExtend, horizLineLen) {
-    // If line can extend beyond square, set its max to the full canvas width.
-    // Otherwise, limit it to the size of the square
-    let lineMax = this.calcLineMax(squareSize, canExtend);
+  getState(squareSize, canExtend, horizLineLen, diagLineLen) {
+    let horizLineMax = this.calcHorizLineMax(squareSize, canExtend);
+    let diagLineMax = this.calcDiagLineMax(squareSize, canExtend);
 
-    // If line extends beyond max, crop it to new max value
-    if (horizLineLen > lineMax) {
-      horizLineLen = lineMax;
+    if (horizLineLen > horizLineMax) {
+      horizLineLen = horizLineMax;
+    }
+    if (diagLineLen > diagLineMax) {
+      diagLineLen = diagLineMax;
     }
 
     return {
-      lineMax: lineMax,
+      horizLineMax: horizLineMax,
       horizLineLen: horizLineLen,
+      diagLineMax: diagLineMax,
+      diagLineLen: diagLineLen,
       squareSize: squareSize,
       lineExtendsBeyondSquare: canExtend
     };
@@ -113,7 +142,8 @@ class Drawing164 extends Component {
       <div className="drawing-container">
         <P5Wrapper sketch={this.state.stateSketch}
           squareSize={this.state.squareSize}
-          horizLineLen={this.state.horizLineLen}/>
+          horizLineLen={this.state.horizLineLen}
+          diagLineLen={this.state.diagLineLen}/>
 
         <Sketch drawingId={Drawing164.drawingId}
           instructions="A black outlined square
@@ -124,19 +154,25 @@ class Drawing164 extends Component {
           between the lower left and upper right corners." year="1973"/>
 
         <Slider sliderId="horizLineLen"
-          label="Line Length:"
+          label="Line Length (Horiz):"
           value={this.state.horizLineLen}
           changeHandler={this.horizLineLenChange.bind(this)}
-          min="0" max={this.state.lineMax}/>
+          min={Drawing164.minLineLen} max={this.state.horizLineMax}/>
+
+        <Slider sliderId="diagLineLen"
+          label="Line Length (Diag):"
+          value={this.state.diagLineLen}
+          changeHandler={this.diagLineLenChange.bind(this)}
+          min={Drawing164.minLineLen} max={this.state.diagLineMax}/>
 
         <Slider sliderId="squareSize"
           label="Square Size:"
           value={this.state.squareSize}
           changeHandler={this.squareSizeChange.bind(this)}
-          min="10" max={Drawing164.maxSquareSize}/>
+          min={Drawing164.minSquareSize} max={Drawing164.maxSquareSize}/>
 
         <Checkbox
-          label="Can line extend beyond square?"
+          label="Can lines extend beyond square?"
           isSelected={this.state.lineExtendsBeyondSquare}
           changeHandler={this.toggleLineExtension.bind(this)}
           id="extension"/>
@@ -150,6 +186,7 @@ class Drawing164 extends Component {
     // User-variable properties
     let squareSize;
     let horizLineLen;
+    let diagLineLen;
 
     p.setup = function () {
       var canvas = p.createCanvas(Drawing164.canvasWidth, Drawing164.canvasHeight);
@@ -158,26 +195,28 @@ class Drawing164 extends Component {
 
     p.myCustomRedrawAccordingToNewPropsHandler = function (props) {
         horizLineLen = props.horizLineLen;
+        diagLineLen = props.diagLineLen;
         squareSize = props.squareSize;
     };
 
     p.draw = function () {
-      let midpoint = squareSize / 2;
-      let squareX = (p.width - squareSize) / 2;
-      let squareY = (p.height - squareSize) / 2;
-
-      let horizLineStartX = squareX + ((squareSize - horizLineLen) / 2);
 
       p.clear();
 
       // Black square
       p.stroke(0,0,0);
-      p.rect(squareX, squareY, squareSize, squareSize);
+      p.rect(...centerSquare(p.width, p.height, squareSize));
 
       // Red line of random length along midpoint line
       p.stroke(255,0,0);
-      p.line(horizLineStartX, squareY + midpoint,
-        horizLineStartX + horizLineLen, squareY + midpoint);
+
+      let canvasMidX = p.width / 2;
+      let canvasMidY = p.height / 2;
+      let horizLineStartX = canvasMidX - horizLineLen / 2;
+      p.line(...horizMidLine(horizLineStartX, canvasMidY, horizLineLen));
+
+      p.stroke(255,0,0);
+      p.line(...diagMidLine(canvasMidX, canvasMidY, diagLineLen));
     };
   }
 }

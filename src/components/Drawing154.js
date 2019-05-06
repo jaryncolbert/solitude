@@ -169,12 +169,10 @@ class Drawing154 extends Component {
 
       // Red line of random length bisecting left side of square
       // and extending toward right side
-      p.stroke(255,0,0);
-
       let canvasMidX = p.width / 2;
       let canvasMidY = p.height / 2;
       let squareX = canvasMidX - squareSize / 2;
-
+      p.stroke(255,0,0);
       p.line(...horizMidLine(squareX, canvasMidY, lineLen));
     };
   }

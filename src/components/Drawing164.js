@@ -3,8 +3,8 @@ import P5Wrapper from './P5Wrapper';
 import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
-import { getRandomInt, getRandomBool, centerSquare,
-  horizMidLine, diagMidLine } from '../util';
+import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
+  horizMidLine, risingDiagMidLine } from '../util';
 
 class Drawing164 extends Component {
 
@@ -19,7 +19,8 @@ class Drawing164 extends Component {
   constructor(props) {
 		super(props);
 
-    let diagLineMax = this.calcDiagLineMax(Drawing164.initSquareSize, false);
+    let diagLineMax = calcDiagLineMax(Drawing164.canvasWidth,
+      Drawing164.canvasHeight, Drawing164.initSquareSize, false);
 		this.state = {
 			stateSketch: this.sketch,
       squareSize: Drawing164.initSquareSize,
@@ -89,27 +90,13 @@ class Drawing164 extends Component {
     return canExtend ? Drawing164.canvasWidth : squareSize;
   }
 
-  calcDiagLineMax(squareSize, canExtend) {
-    // If line can extend beyond square, set its max to the
-    // full canvas diagonal.
-    // Otherwise, limit it to the size of the diagonal of the square
-    const canvasDiag = this.calcHypotenuse(Drawing164.canvasWidth,
-      Drawing164.canvasHeight);
-    const squareDiag = this.calcHypotenuse(squareSize, squareSize);
-    let max = canExtend ? canvasDiag : squareDiag;
-    return Math.floor(max);
-  }
-
-  calcHypotenuse(sideA, sideB) {
-    return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
-  }
-
   getRandomState(squareSize, canExtend) {
     return (previousState, currentProps) => {
       let horizLineMax = this.calcHorizLineMax(squareSize, canExtend);
       let horizLineLen = getRandomInt(Drawing164.minLineLen, horizLineMax);
 
-      let diagLineMax = this.calcDiagLineMax(squareSize, canExtend);
+      let diagLineMax = calcDiagLineMax(Drawing164.canvasWidth,
+        Drawing164.canvasHeight, squareSize, canExtend);
       let diagLineLen = getRandomInt(Drawing164.minLineLen, diagLineMax);
 
       return this.getState(squareSize, canExtend, horizLineLen, diagLineLen);
@@ -118,7 +105,8 @@ class Drawing164 extends Component {
 
   getState(squareSize, canExtend, horizLineLen, diagLineLen) {
     let horizLineMax = this.calcHorizLineMax(squareSize, canExtend);
-    let diagLineMax = this.calcDiagLineMax(squareSize, canExtend);
+    let diagLineMax = calcDiagLineMax(Drawing164.canvasWidth,
+      Drawing164.canvasHeight,squareSize, canExtend);
 
     if (horizLineLen > horizLineMax) {
       horizLineLen = horizLineMax;
@@ -208,15 +196,12 @@ class Drawing164 extends Component {
       p.rect(...centerSquare(p.width, p.height, squareSize));
 
       // Red line of random length along midpoint line
-      p.stroke(255,0,0);
-
       let canvasMidX = p.width / 2;
       let canvasMidY = p.height / 2;
       let horizLineStartX = canvasMidX - horizLineLen / 2;
-      p.line(...horizMidLine(horizLineStartX, canvasMidY, horizLineLen));
-
       p.stroke(255,0,0);
-      p.line(...diagMidLine(canvasMidX, canvasMidY, diagLineLen));
+      p.line(...horizMidLine(horizLineStartX, canvasMidY, horizLineLen));
+      p.line(...risingDiagMidLine(canvasMidX, canvasMidY, diagLineLen));
     };
   }
 }

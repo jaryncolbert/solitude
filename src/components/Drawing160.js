@@ -126,11 +126,11 @@ class Drawing160 extends Component {
           title="Wall Drawing 160"
           instructions="A black outlined square
           with a red diagonal line
-          from the lower left corner
-          toward the upper right corner;
-          and another red line
-          from the lower right corner
-          to the upper left." year="1973"/>
+          centered on the axis 
+          between the upper left and lower right corners
+          and another red diagonal line
+          centered on the axis
+          between the lower left and upper right corners." year="1973"/>
 
         <Slider sliderId="fallLineLen"
           label="Line Length (Falling Line):"

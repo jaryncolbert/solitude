@@ -176,16 +176,23 @@ class Drawing160 extends Component {
           </div>
         </div>
 
-        <Checkbox
-          label="Can lines extend beyond square?"
-          isSelected={this.state.lineExtendsBeyondSquare}
-          changeHandler={this.toggleLineExtension.bind(this)}
-          id="extension"/>
-        <Checkbox
-          label="Scale square proportionally?"
-          isSelected={this.state.scaleProportionally}
-          changeHandler={this.toggleScaleProportionally.bind(this)}
-          id="scale"/>
+        <div className="row">
+          <div className="col">
+            <Checkbox
+              label="Can lines extend beyond square?"
+              isSelected={this.state.lineExtendsBeyondSquare}
+              changeHandler={this.toggleLineExtension.bind(this)}
+              id="extension"/>
+          </div>
+          <div className="col">
+            <Checkbox
+              label="Scale square proportionally?"
+              isSelected={this.state.scaleProportionally}
+              changeHandler={this.toggleScaleProportionally.bind(this)}
+              id="scale"/>
+          </div>
+        </div>
+
         <button onClick={() => this.randomize()}
           className="btn btn-primary">Randomize</button>
       </div>

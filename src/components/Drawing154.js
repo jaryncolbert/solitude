@@ -3,6 +3,7 @@ import P5Wrapper from './P5Wrapper';
 import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
+import RowGroup from './RowGroup';
 import { getRandomInt, getRandomBool,
   centerSquare, horizMidLineFrom } from '../util';
 
@@ -142,39 +143,31 @@ class Drawing154 extends Component {
           horizontal line from the midpoint of the left side toward the
           middle of the right side." year="1973"/>
 
-        <div className="row">
-          <div className="col">
-            <Slider sliderId="lineLength"
-              label="Line Length:"
-              value={this.state.lineLen}
-              changeHandler={this.lineLenChange.bind(this)}
-              min={Drawing154.minLineLen} max={this.state.lineMax}/>
-          </div>
-          <div className="col">
-            <Slider sliderId="squareSize"
-              label="Square Size:"
-              value={this.state.squareSize}
-              changeHandler={this.squareSizeChange.bind(this)}
-              min={Drawing154.minSquareSize} max={Drawing154.maxSquareSize}/>
-          </div>
-        </div>
+        <RowGroup>
+          <Slider sliderId="lineLength"
+            label="Line Length:"
+            value={this.state.lineLen}
+            changeHandler={this.lineLenChange.bind(this)}
+            min={Drawing154.minLineLen} max={this.state.lineMax}/>
+          <Slider sliderId="squareSize"
+            label="Square Size:"
+            value={this.state.squareSize}
+            changeHandler={this.squareSizeChange.bind(this)}
+            min={Drawing154.minSquareSize} max={Drawing154.maxSquareSize}/>
+        </RowGroup>
 
-        <div className="row">
-          <div className="col">
-            <Checkbox
-              label="Can line extend beyond square?"
-              isSelected={this.state.lineExtendsBeyondSquare}
-              changeHandler={this.toggleLineExtension.bind(this)}
-              id="extension"/>
-          </div>
-          <div className="col">
-            <Checkbox
-              label="Scale square proportionally?"
-              isSelected={this.state.scaleProportionally}
-              changeHandler={this.toggleScaleProportionally.bind(this)}
-              id="scale"/>
-          </div>
-        </div>
+        <RowGroup>
+          <Checkbox
+            label="Can line extend beyond square?"
+            isSelected={this.state.lineExtendsBeyondSquare}
+            changeHandler={this.toggleLineExtension.bind(this)}
+            id="extension"/>
+          <Checkbox
+            label="Scale square proportionally?"
+            isSelected={this.state.scaleProportionally}
+            changeHandler={this.toggleScaleProportionally.bind(this)}
+            id="scale"/>
+        </RowGroup>
 
         <button onClick={this.randomize.bind(this)}
           className="btn btn-primary">Randomize</button>

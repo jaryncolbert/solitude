@@ -3,6 +3,7 @@ import P5Wrapper from './P5Wrapper';
 import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
+import RowGroup from './RowGroup';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
   horizMidLineFrom, risingDiagMidLine } from '../util';
 
@@ -163,46 +164,36 @@ class Drawing164 extends Component {
           and a red diagonal line centered on the axis
           between the lower left and upper right corners." year="1973"/>
 
-        <div className="row">
-          <div className="col">
-            <Slider sliderId="horizLineLen"
-              label="Line Length (Horiz):"
-              value={this.state.horizLineLen}
-              changeHandler={this.horizLineLenChange.bind(this)}
-              min={Drawing164.minLineLen} max={this.state.horizLineMax}/>
-          </div>
-          <div className="col">
-            <Slider sliderId="diagLineLen"
-              label="Line Length (Diag):"
-              value={this.state.diagLineLen}
-              changeHandler={this.diagLineLenChange.bind(this)}
-              min={Drawing164.minLineLen} max={this.state.diagLineMax}/>
-          </div>
-          <div className="col">
-            <Slider sliderId="squareSize"
-              label="Square Size:"
-              value={this.state.squareSize}
-              changeHandler={this.squareSizeChange.bind(this)}
-              min={Drawing164.minSquareSize} max={Drawing164.maxSquareSize}/>
-          </div>
-        </div>
+        <RowGroup>
+          <Slider sliderId="horizLineLen"
+            label="Line Length (Horiz):"
+            value={this.state.horizLineLen}
+            changeHandler={this.horizLineLenChange.bind(this)}
+            min={Drawing164.minLineLen} max={this.state.horizLineMax}/>
+          <Slider sliderId="diagLineLen"
+            label="Line Length (Diag):"
+            value={this.state.diagLineLen}
+            changeHandler={this.diagLineLenChange.bind(this)}
+            min={Drawing164.minLineLen} max={this.state.diagLineMax}/>
+          <Slider sliderId="squareSize"
+            label="Square Size:"
+            value={this.state.squareSize}
+            changeHandler={this.squareSizeChange.bind(this)}
+            min={Drawing164.minSquareSize} max={Drawing164.maxSquareSize}/>
+        </RowGroup>
 
-        <div className="row">
-          <div className="col">
-            <Checkbox
-              label="Can lines extend beyond square?"
-              isSelected={this.state.lineExtendsBeyondSquare}
-              changeHandler={this.toggleLineExtension.bind(this)}
-              id="extension"/>
-          </div>
-          <div className="col">
-            <Checkbox
-              label="Scale square proportionally?"
-              isSelected={this.state.scaleProportionally}
-              changeHandler={this.toggleScaleProportionally.bind(this)}
-              id="scale"/>
-          </div>
-        </div>
+        <RowGroup>
+          <Checkbox
+            label="Can lines extend beyond square?"
+            isSelected={this.state.lineExtendsBeyondSquare}
+            changeHandler={this.toggleLineExtension.bind(this)}
+            id="extension"/>
+          <Checkbox
+            label="Scale square proportionally?"
+            isSelected={this.state.scaleProportionally}
+            changeHandler={this.toggleScaleProportionally.bind(this)}
+            id="scale"/>
+        </RowGroup>
 
         <button onClick={this.randomize.bind(this)}
           className="btn btn-primary">Randomize</button>

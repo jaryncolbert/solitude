@@ -3,6 +3,7 @@ import P5Wrapper from './P5Wrapper';
 import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
+import RowGroup from './RowGroup';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
   risingDiagMidLine, fallingDiagMidLine } from '../util';
 
@@ -152,46 +153,36 @@ class Drawing160 extends Component {
           centered on the axis
           between the lower left and upper right corners." year="1973"/>
 
-        <div className="row">
-          <div className="col">
-            <Slider sliderId="fallLineLen"
-              label="Line Length (Falling Line):"
-              value={this.state.fallLineLen}
-              changeHandler={this.fallLineLenChange.bind(this)}
-              min={Drawing160.minLineLen} max={this.state.lineMax}/>
-          </div>
-          <div className="col">
-            <Slider sliderId="riseLineLen"
-              label="Line Length (Rising Line):"
-              value={this.state.riseLineLen}
-              changeHandler={this.riseLineLenChange.bind(this)}
-              min={Drawing160.minLineLen} max={this.state.lineMax}/>
-          </div>
-          <div className="col">
-            <Slider sliderId="squareSize"
-              label="Square Size:"
-              value={this.state.squareSize}
-              changeHandler={this.squareSizeChange.bind(this)}
-              min={Drawing160.minSquareSize} max={Drawing160.maxSquareSize}/>
-          </div>
-        </div>
+        <RowGroup>
+          <Slider sliderId="fallLineLen"
+            label="Line Length (Falling Line):"
+            value={this.state.fallLineLen}
+            changeHandler={this.fallLineLenChange.bind(this)}
+            min={Drawing160.minLineLen} max={this.state.lineMax}/>
+          <Slider sliderId="riseLineLen"
+            label="Line Length (Rising Line):"
+            value={this.state.riseLineLen}
+            changeHandler={this.riseLineLenChange.bind(this)}
+            min={Drawing160.minLineLen} max={this.state.lineMax}/>
+          <Slider sliderId="squareSize"
+            label="Square Size:"
+            value={this.state.squareSize}
+            changeHandler={this.squareSizeChange.bind(this)}
+            min={Drawing160.minSquareSize} max={Drawing160.maxSquareSize}/>
+        </RowGroup>
 
-        <div className="row">
-          <div className="col">
-            <Checkbox
-              label="Can lines extend beyond square?"
-              isSelected={this.state.lineExtendsBeyondSquare}
-              changeHandler={this.toggleLineExtension.bind(this)}
-              id="extension"/>
-          </div>
-          <div className="col">
-            <Checkbox
-              label="Scale square proportionally?"
-              isSelected={this.state.scaleProportionally}
-              changeHandler={this.toggleScaleProportionally.bind(this)}
-              id="scale"/>
-          </div>
-        </div>
+        <RowGroup>
+          <Checkbox
+            label="Can lines extend beyond square?"
+            isSelected={this.state.lineExtendsBeyondSquare}
+            changeHandler={this.toggleLineExtension.bind(this)}
+            id="extension"/>
+          <Checkbox
+            label="Scale square proportionally?"
+            isSelected={this.state.scaleProportionally}
+            changeHandler={this.toggleScaleProportionally.bind(this)}
+            id="scale"/>
+        </RowGroup>
 
         <button onClick={this.randomize.bind(this)}
           className="btn btn-primary">Randomize</button>

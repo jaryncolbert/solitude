@@ -25,6 +25,7 @@ class Drawing164 extends Component {
 			stateSketch: this.sketch,
       squareSize: Drawing164.initSquareSize,
       lineExtendsBeyondSquare: false,
+      scaleProportionally: false,
       horizLineMax: Drawing164.initSquareSize,
       horizLineLen: getRandomInt(Drawing164.minLineLen, Drawing164.initSquareSize),
       diagLineMax: diagLineMax,
@@ -49,6 +50,10 @@ class Drawing164 extends Component {
     this.setState(this.recalcMaxFromSquareSize(squareSize));
 	}
 
+  toggleScaleProportionally(e) {
+    this.setState({scaleProportionally: !!e.target.checked});
+  }
+
   toggleLineExtension(e) {
     this.setLineExtension(!!e.target.checked);
   }
@@ -68,10 +73,22 @@ class Drawing164 extends Component {
 
   recalcMaxFromSquareSize(squareSize) {
     return (previousState, currentProps) => {
+      let horizLineLen = previousState.horizLineLen;
+      let diagLineLen = previousState.diagLineLen;
+
+      if (previousState.scaleProportionally) {
+        // Maintain previous scale of lineLens to squareSize
+        let prevDiagRatio = previousState.diagLineLen / previousState.squareSize;
+        diagLineLen = Math.max(Math.round(prevDiagRatio * squareSize), Drawing164.minLineLen);
+        let prevHorizRatio = previousState.horizLineLen / previousState.squareSize;
+        horizLineLen = Math.max(Math.round(prevHorizRatio * squareSize), Drawing164.minLineLen);
+      }
+
       return this.getState(squareSize,
         previousState.lineExtendsBeyondSquare,
-        previousState.horizLineLen,
-        previousState.diagLineLen);
+        previousState.scaleProportionally,
+        horizLineLen,
+        diagLineLen);
     };
   }
 
@@ -79,6 +96,7 @@ class Drawing164 extends Component {
     return (previousState, currentProps) => {
       return this.getState(previousState.squareSize,
         canExtend,
+        previousState.scaleProportionally,
         previousState.horizLineLen,
         previousState.diagLineLen);
     }
@@ -99,11 +117,13 @@ class Drawing164 extends Component {
         Drawing164.canvasHeight, squareSize, canExtend);
       let diagLineLen = getRandomInt(Drawing164.minLineLen, diagLineMax);
 
-      return this.getState(squareSize, canExtend, horizLineLen, diagLineLen);
+      let scaled = getRandomBool();
+
+      return this.getState(squareSize, canExtend, scaled, horizLineLen, diagLineLen);
     };
   }
 
-  getState(squareSize, canExtend, horizLineLen, diagLineLen) {
+  getState(squareSize, canExtend, scaled, horizLineLen, diagLineLen) {
     let horizLineMax = this.calcHorizLineMax(squareSize, canExtend);
     let diagLineMax = calcDiagLineMax(Drawing164.canvasWidth,
       Drawing164.canvasHeight,squareSize, canExtend);
@@ -121,7 +141,8 @@ class Drawing164 extends Component {
       diagLineMax: diagLineMax,
       diagLineLen: diagLineLen,
       squareSize: squareSize,
-      lineExtendsBeyondSquare: canExtend
+      lineExtendsBeyondSquare: canExtend,
+      scaleProportionally: scaled
     };
   }
 
@@ -171,9 +192,13 @@ class Drawing164 extends Component {
           isSelected={this.state.lineExtendsBeyondSquare}
           changeHandler={this.toggleLineExtension.bind(this)}
           id="extension"/>
-
-          <button onClick={() => this.randomize()}
-            className="btn btn-primary">Randomize</button>
+        <Checkbox
+          label="Scale square proportionally?"
+          isSelected={this.state.scaleProportionally}
+          changeHandler={this.toggleScaleProportionally.bind(this)}
+          id="scale"/>
+        <button onClick={() => this.randomize()}
+          className="btn btn-primary">Randomize</button>
       </div>
     );
   }

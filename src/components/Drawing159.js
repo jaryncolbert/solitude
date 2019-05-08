@@ -25,6 +25,7 @@ class Drawing159 extends Component {
 			stateSketch: this.sketch,
       squareSize: Drawing159.initSquareSize,
       lineExtendsBeyondSquare: false,
+      scaleProportionally: false,
       lineMax: lineMax,
       fallLineLen: getRandomInt(Drawing159.minLineLen, lineMax),
       riseLineLen: getRandomInt(Drawing159.minLineLen, lineMax),
@@ -48,6 +49,10 @@ class Drawing159 extends Component {
     this.setState(this.recalcMaxFromSquareSize(squareSize));
 	}
 
+  toggleScaleProportionally(e) {
+    this.setState({scaleProportionally: !!e.target.checked});
+  }
+
   toggleLineExtension(e) {
     this.setLineExtension(!!e.target.checked);
   }
@@ -67,10 +72,22 @@ class Drawing159 extends Component {
 
   recalcMaxFromSquareSize(squareSize) {
     return (previousState, currentProps) => {
+      let fallLineLen = previousState.fallLineLen;
+      let riseLineLen = previousState.riseLineLen;
+
+      if (previousState.scaleProportionally) {
+        // Maintain previous scale of lineLens to squareSize
+        let prevRiseRatio = previousState.riseLineLen / previousState.squareSize;
+        riseLineLen = Math.max(Math.round(prevRiseRatio * squareSize), Drawing159.minLineLen);
+        let prevFallRatio = previousState.fallLineLen / previousState.squareSize;
+        fallLineLen = Math.max(Math.round(prevFallRatio * squareSize), Drawing159.minLineLen);
+      }
+
       return this.getState(squareSize,
         previousState.lineExtendsBeyondSquare,
-        previousState.fallLineLen,
-        previousState.riseLineLen);
+        previousState.scaleProportionally,
+        fallLineLen,
+        riseLineLen);
     };
   }
 
@@ -78,6 +95,7 @@ class Drawing159 extends Component {
     return (previousState, currentProps) => {
       return this.getState(previousState.squareSize,
         canExtend,
+        previousState.scaleProportionally,
         previousState.fallLineLen,
         previousState.riseLineLen);
     }
@@ -89,12 +107,13 @@ class Drawing159 extends Component {
         Drawing159.canvasHeight, squareSize, canExtend);
       let fallLineLen = getRandomInt(Drawing159.minLineLen, lineMax);
       let riseLineLen = getRandomInt(Drawing159.minLineLen, lineMax);
+      let scaled = getRandomBool();
 
-      return this.getState(squareSize, canExtend, fallLineLen, riseLineLen);
+      return this.getState(squareSize, canExtend, scaled, fallLineLen, riseLineLen);
     };
   }
 
-  getState(squareSize, canExtend, fallLineLen, riseLineLen) {
+  getState(squareSize, canExtend, scaled, fallLineLen, riseLineLen) {
     let lineMax = calcDiagLineMax(Drawing159.canvasWidth,
       Drawing159.canvasHeight, squareSize, canExtend);
 
@@ -110,7 +129,8 @@ class Drawing159 extends Component {
       fallLineLen: fallLineLen,
       riseLineLen: riseLineLen,
       squareSize: squareSize,
-      lineExtendsBeyondSquare: canExtend
+      lineExtendsBeyondSquare: canExtend,
+      scaleProportionally: scaled
     };
   }
 
@@ -161,9 +181,13 @@ class Drawing159 extends Component {
           isSelected={this.state.lineExtendsBeyondSquare}
           changeHandler={this.toggleLineExtension.bind(this)}
           id="extension"/>
-
-          <button onClick={() => this.randomize()}
-            className="btn btn-primary">Randomize</button>
+        <Checkbox
+          label="Scale square proportionally?"
+          isSelected={this.state.scaleProportionally}
+          changeHandler={this.toggleScaleProportionally.bind(this)}
+          id="scale"/>
+        <button onClick={() => this.randomize(this)}
+          className="btn btn-primary">Randomize</button>
       </div>
     );
   }

@@ -127,7 +127,7 @@ class Drawing164 extends Component {
 
   render() {
     return (
-      <div className="drawing-container">
+      <div className="drawing-container col">
         <P5Wrapper sketch={this.state.stateSketch}
           squareSize={this.state.squareSize}
           horizLineLen={this.state.horizLineLen}
@@ -142,23 +142,29 @@ class Drawing164 extends Component {
           and a red diagonal line centered on the axis
           between the lower left and upper right corners." year="1973"/>
 
-        <Slider sliderId="horizLineLen"
-          label="Line Length (Horiz):"
-          value={this.state.horizLineLen}
-          changeHandler={this.horizLineLenChange.bind(this)}
-          min={Drawing164.minLineLen} max={this.state.horizLineMax}/>
-
-        <Slider sliderId="diagLineLen"
-          label="Line Length (Diag):"
-          value={this.state.diagLineLen}
-          changeHandler={this.diagLineLenChange.bind(this)}
-          min={Drawing164.minLineLen} max={this.state.diagLineMax}/>
-
-        <Slider sliderId="squareSize"
-          label="Square Size:"
-          value={this.state.squareSize}
-          changeHandler={this.squareSizeChange.bind(this)}
-          min={Drawing164.minSquareSize} max={Drawing164.maxSquareSize}/>
+        <div className="row">
+          <div className="col">
+            <Slider sliderId="horizLineLen"
+              label="Line Length (Horiz):"
+              value={this.state.horizLineLen}
+              changeHandler={this.horizLineLenChange.bind(this)}
+              min={Drawing164.minLineLen} max={this.state.horizLineMax}/>
+          </div>
+          <div className="col">
+            <Slider sliderId="diagLineLen"
+              label="Line Length (Diag):"
+              value={this.state.diagLineLen}
+              changeHandler={this.diagLineLenChange.bind(this)}
+              min={Drawing164.minLineLen} max={this.state.diagLineMax}/>
+          </div>
+          <div className="col">
+            <Slider sliderId="squareSize"
+              label="Square Size:"
+              value={this.state.squareSize}
+              changeHandler={this.squareSizeChange.bind(this)}
+              min={Drawing164.minSquareSize} max={Drawing164.maxSquareSize}/>
+          </div>
+        </div>
 
         <Checkbox
           label="Can lines extend beyond square?"
@@ -166,7 +172,8 @@ class Drawing164 extends Component {
           changeHandler={this.toggleLineExtension.bind(this)}
           id="extension"/>
 
-          <button onClick={() => this.randomize()}>Randomize</button>
+          <button onClick={() => this.randomize()}
+            className="btn btn-primary">Randomize</button>
       </div>
     );
   }

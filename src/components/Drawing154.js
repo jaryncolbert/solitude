@@ -111,7 +111,7 @@ class Drawing154 extends Component {
 
   render() {
     return (
-      <div className="drawing-container">
+      <div className="drawing-container col">
         <P5Wrapper sketch={this.state.stateSketch}
           squareSize={this.state.squareSize}
           lineLen={this.state.lineLen}/>
@@ -122,25 +122,30 @@ class Drawing154 extends Component {
           horizontal line from the midpoint of the left side toward the
           middle of the right side." year="1973"/>
 
-        <Slider sliderId="lineLength"
-          label="Line Length:"
-          value={this.state.lineLen}
-          changeHandler={this.lineLenChange.bind(this)}
-          min={Drawing154.minLineLen} max={this.state.lineMax}/>
-
-        <Slider sliderId="squareSize"
-          label="Square Size:"
-          value={this.state.squareSize}
-          changeHandler={this.squareSizeChange.bind(this)}
-          min={Drawing154.minSquareSize} max={Drawing154.maxSquareSize}/>
+        <div className="row">
+          <div className="col">
+            <Slider sliderId="lineLength"
+              label="Line Length:"
+              value={this.state.lineLen}
+              changeHandler={this.lineLenChange.bind(this)}
+              min={Drawing154.minLineLen} max={this.state.lineMax}/>
+          </div>
+          <div className="col">
+            <Slider sliderId="squareSize"
+              label="Square Size:"
+              value={this.state.squareSize}
+              changeHandler={this.squareSizeChange.bind(this)}
+              min={Drawing154.minSquareSize} max={Drawing154.maxSquareSize}/>
+          </div>
+        </div>
 
         <Checkbox
           label="Can line extend beyond square?"
           isSelected={this.state.lineExtendsBeyondSquare}
           changeHandler={this.toggleLineExtension.bind(this)}
           id="extension"/>
-
-          <button onClick={() => this.randomize()}>Randomize</button>
+        <button onClick={() => this.randomize()}
+          className="btn btn-primary">Randomize</button>
       </div>
     );
   }

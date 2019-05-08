@@ -2,14 +2,13 @@ import React from 'react';
 
 function Checkbox({ isSelected, changeHandler, checkboxId, label }) {
   return (
-    <div className="checkbox-container">
-      <label htmlFor={checkboxId}>{label}</label>
-      <input
+    <div className="checkbox-container form-check">
+      <input className="form-check-input"
         type="checkbox"
-        name={checkboxId}
+        id={checkboxId}
         checked={isSelected}
-        onChange={changeHandler}>
-      </input>
+        onChange={changeHandler}/>
+      <label className="form-check-label" htmlFor={checkboxId}>{label}</label>
     </div>
   );
 }

@@ -1,0 +1,31 @@
+/* .drawing-container
+  flex-basis calc(33.333% - 4rem)
+  flex-grow 1
+  flex-shrink 0
+  margin 0 2rem 2rem 2rem
+  padding 2rem
+  border 1px solid lightgray
+  background white
+  box-shadow 0 0 0 5px rgba(0,0,0,0.03);
+  position relative */
+
+.drawing-container {
+  margin-top: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  border: 1px solid lightgray;
+  background: white;
+  box-shadow: 0 0 0 5px rgba(0,0,0,0.03);
+}
+.sketch {
+  padding: 1rem;
+  font-size: 1.3em;
+}
+.sketch-year {
+  padding: .5rem;
+}
+.slider-output {
+  padding: .2rem;
+}

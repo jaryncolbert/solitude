@@ -116,7 +116,7 @@ class Drawing160 extends Component {
 
   render() {
     return (
-      <div className="drawing-container">
+      <div className="drawing-container col">
         <P5Wrapper sketch={this.state.stateSketch}
           squareSize={this.state.squareSize}
           fallLineLen={this.state.fallLineLen}
@@ -126,29 +126,35 @@ class Drawing160 extends Component {
           title="Wall Drawing 160"
           instructions="A black outlined square
           with a red diagonal line
-          centered on the axis 
+          centered on the axis
           between the upper left and lower right corners
           and another red diagonal line
           centered on the axis
           between the lower left and upper right corners." year="1973"/>
 
-        <Slider sliderId="fallLineLen"
-          label="Line Length (Falling Line):"
-          value={this.state.fallLineLen}
-          changeHandler={this.fallLineLenChange.bind(this)}
-          min={Drawing160.minLineLen} max={this.state.lineMax}/>
-
-        <Slider sliderId="riseLineLen"
-          label="Line Length (Rising Line):"
-          value={this.state.riseLineLen}
-          changeHandler={this.riseLineLenChange.bind(this)}
-          min={Drawing160.minLineLen} max={this.state.lineMax}/>
-
-        <Slider sliderId="squareSize"
-          label="Square Size:"
-          value={this.state.squareSize}
-          changeHandler={this.squareSizeChange.bind(this)}
-          min={Drawing160.minSquareSize} max={Drawing160.maxSquareSize}/>
+        <div className="row">
+          <div className="col">
+            <Slider sliderId="fallLineLen"
+              label="Line Length (Falling Line):"
+              value={this.state.fallLineLen}
+              changeHandler={this.fallLineLenChange.bind(this)}
+              min={Drawing160.minLineLen} max={this.state.lineMax}/>
+          </div>
+          <div className="col">
+            <Slider sliderId="riseLineLen"
+              label="Line Length (Rising Line):"
+              value={this.state.riseLineLen}
+              changeHandler={this.riseLineLenChange.bind(this)}
+              min={Drawing160.minLineLen} max={this.state.lineMax}/>
+          </div>
+          <div className="col">
+            <Slider sliderId="squareSize"
+              label="Square Size:"
+              value={this.state.squareSize}
+              changeHandler={this.squareSizeChange.bind(this)}
+              min={Drawing160.minSquareSize} max={Drawing160.maxSquareSize}/>
+          </div>
+        </div>
 
         <Checkbox
           label="Can lines extend beyond square?"
@@ -156,7 +162,8 @@ class Drawing160 extends Component {
           changeHandler={this.toggleLineExtension.bind(this)}
           id="extension"/>
 
-          <button onClick={() => this.randomize()}>Randomize</button>
+        <button onClick={() => this.randomize()}
+          className="btn btn-primary">Randomize</button>
       </div>
     );
   }

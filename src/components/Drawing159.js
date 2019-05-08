@@ -193,7 +193,7 @@ class Drawing159 extends Component {
           </div>
         </div>
 
-        <button onClick={() => this.randomize(this)}
+        <button onClick={this.randomize.bind(this)}
           className="btn btn-primary">Randomize</button>
       </div>
     );

@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import P5Wrapper from './P5Wrapper';
-import Sketch from './Sketch';
-import Slider from './Slider';
-import Checkbox from './Checkbox';
-import RowGroup from './RowGroup';
-import withRandomizer from './Randomizer';
-import withDrawingContainer from './DrawingContainer.js';
+import Sketch from '../Sketch';
+import { Slider, Checkbox, RowGroup,
+  withRandomizer, withDrawingContainer } from '../CommonComponents';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
   horizMidLineFrom, risingDiagMidLine } from '../util';
 
@@ -156,11 +152,6 @@ class Drawing164 extends Component {
   render() {
     return (
       <>
-        <P5Wrapper sketch={this.state.stateSketch}
-          squareSize={this.state.squareSize}
-          horizLineLen={this.state.horizLineLen}
-          diagLineLen={this.state.diagLineLen}/>
-
         <Sketch drawingId={Drawing164.drawingId}
           title="Wall Drawing 164"
           instructions="A black outlined square
@@ -168,7 +159,12 @@ class Drawing164 extends Component {
           between the midpoint of the left side
           and the midpoint of the right side
           and a red diagonal line centered on the axis
-          between the lower left and upper right corners." year="1973"/>
+          between the lower left and upper right corners."
+          year="1973"
+          sketch={this.state.stateSketch}
+          squareSize={this.state.squareSize}
+          horizLineLen={this.state.horizLineLen}
+          diagLineLen={this.state.diagLineLen}/>
 
         <RowGroup>
           <Slider sliderId="horizLineLen"

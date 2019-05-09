@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import P5Wrapper from './P5Wrapper';
-import Sketch from './Sketch';
-import Slider from './Slider';
-import Checkbox from './Checkbox';
-import RowGroup from './RowGroup';
-import withRandomizer from './Randomizer';
-import withDrawingContainer from './DrawingContainer.js';
+import Sketch from '../Sketch';
+import { Slider, Checkbox, RowGroup,
+  withRandomizer, withDrawingContainer } from '../CommonComponents';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
   risingDiagMidLineFrom, fallingDiagMidLineFrom } from '../util';
 
@@ -144,11 +140,6 @@ class Drawing159 extends Component {
   render() {
     return (
       <>
-        <P5Wrapper sketch={this.state.stateSketch}
-          squareSize={this.state.squareSize}
-          fallLineLen={this.state.fallLineLen}
-          riseLineLen={this.state.riseLineLen}/>
-
         <Sketch drawingId={Drawing159.drawingId}
           title="Wall Drawing 159"
           instructions="A black outlined square
@@ -157,7 +148,12 @@ class Drawing159 extends Component {
           toward the upper right corner;
           and another red line
           from the lower right corner
-          to the upper left." year="1973"/>
+          to the upper left."
+          year="1973"
+          sketch={this.state.stateSketch}
+          squareSize={this.state.squareSize}
+          fallLineLen={this.state.fallLineLen}
+          riseLineLen={this.state.riseLineLen}/>
 
         <RowGroup>
           <Slider sliderId="fallLineLen"

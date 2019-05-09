@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Drawing154 from './Drawing154';
-import Drawing159 from './Drawing159';
-import Drawing160 from './Drawing160';
-import Drawing164 from './Drawing164';
+import Drawing154 from './drawings/Drawing154';
+import Drawing159 from './drawings/Drawing159';
+import Drawing160 from './drawings/Drawing160';
+import Drawing164 from './drawings/Drawing164';
 import '../App.css';
 import '../square-drawings.css';
 

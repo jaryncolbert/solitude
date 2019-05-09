@@ -3,9 +3,10 @@ import React from 'react';
 export function withDrawingContainer(Component) {
   return class WithDrawingContainer extends React.Component {
     render() {
+      const { className, ...otherProps } = this.props;
       return (
-        <div className="drawing-container col">
-          <Component {...this.props}/>
+        <div className={"drawing-container " + className}>
+          <Component {...otherProps}/>
         </div>
       );
     }
@@ -30,13 +31,14 @@ export function withRandomizer(Component) {
 export class RowGroup extends React.Component {
   render() {
     return (
+      // Surround element with 'row' div and add 'col' class to existing elem
       <div className="row">
         {this.props.children.map((c, i) =>
-          <div className="col" key={"col-" + i}>
-            {c}
-          </div>
+          React.cloneElement(c, {
+            className: c.props.className ? c.props.className + " col" : "col",
+            key: "col-" + i
+          })
         )}
-
       </div>
     );
   }
@@ -44,7 +46,7 @@ export class RowGroup extends React.Component {
 
 export function Slider(props) {
   return (
-    <div className="slider-container form-group">
+    <div className={"slider-container form-group " + props.className}>
       <label htmlFor={props.sliderId}>{props.label}</label>
       <output className="slider-output">{props.value}</output>
       <input className="form-control-range"
@@ -57,9 +59,9 @@ export function Slider(props) {
   );
 }
 
-export function Checkbox({ isSelected, changeHandler, checkboxId, label }) {
+export function Checkbox({ isSelected, changeHandler, checkboxId, label, className }) {
   return (
-    <div className="checkbox-container form-check">
+    <div className={"checkbox-container form-check " + className}>
       <input className="form-check-input"
         type="checkbox"
         id={checkboxId}

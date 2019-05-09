@@ -4,6 +4,8 @@ import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
 import RowGroup from './RowGroup';
+import withRandomizer from './Randomizer';
+import withDrawingContainer from './DrawingContainer.js';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
   risingDiagMidLine, fallingDiagMidLine } from '../util';
 
@@ -32,6 +34,10 @@ class Drawing160 extends Component {
       riseLineLen: getRandomInt(Drawing160.minLineLen, lineMax),
 		};
 	}
+
+  componentDidMount() {
+    this.props.randomizer(this.randomize);
+  }
 
   riseLineLenChange(e) {
     let riseLineLen = Number(e.target.value);
@@ -63,7 +69,7 @@ class Drawing160 extends Component {
     this.setState(this.recalcMaxFromCanExtend(canExtend));
   }
 
-  randomize() {
+  randomize = () => {
     let canExtend = getRandomBool();
     let squareSize = getRandomInt(Drawing160.minSquareSize,
       Drawing160.maxSquareSize);
@@ -102,7 +108,7 @@ class Drawing160 extends Component {
     }
   }
 
-  getRandomState(squareSize, canExtend) {
+  getRandomState = (squareSize, canExtend) => {
     return (previousState, currentProps) => {
       let lineMax = calcDiagLineMax(Drawing160.canvasWidth,
         Drawing160.canvasHeight, squareSize, canExtend);
@@ -114,7 +120,7 @@ class Drawing160 extends Component {
     };
   }
 
-  getState(squareSize, canExtend, scaled, fallLineLen, riseLineLen) {
+  getState = (squareSize, canExtend, scaled, fallLineLen, riseLineLen) => {
     let lineMax = calcDiagLineMax(Drawing160.canvasWidth,
       Drawing160.canvasHeight, squareSize, canExtend);
 
@@ -137,7 +143,7 @@ class Drawing160 extends Component {
 
   render() {
     return (
-      <div className="drawing-container col">
+      <>
         <P5Wrapper sketch={this.state.stateSketch}
           squareSize={this.state.squareSize}
           fallLineLen={this.state.fallLineLen}
@@ -183,10 +189,7 @@ class Drawing160 extends Component {
             changeHandler={this.toggleScaleProportionally.bind(this)}
             id="scale"/>
         </RowGroup>
-
-        <button onClick={this.randomize.bind(this)}
-          className="btn btn-primary">Randomize</button>
-      </div>
+      </>
     );
   }
 
@@ -225,4 +228,4 @@ class Drawing160 extends Component {
   }
 }
 
-export default Drawing160;
+export default withDrawingContainer(withRandomizer(Drawing160));

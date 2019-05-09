@@ -4,6 +4,8 @@ import Sketch from './Sketch';
 import Slider from './Slider';
 import Checkbox from './Checkbox';
 import RowGroup from './RowGroup';
+import withRandomizer from './Randomizer';
+import withDrawingContainer from './DrawingContainer.js';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
   horizMidLineFrom, risingDiagMidLine } from '../util';
 
@@ -33,6 +35,10 @@ class Drawing164 extends Component {
       diagLineLen: getRandomInt(Drawing164.minLineLen, diagLineMax),
 		};
 	}
+
+  componentDidMount() {
+    this.props.randomizer(this.randomize);
+  }
 
   diagLineLenChange(e) {
     let diagLineLen = Number(e.target.value);
@@ -64,7 +70,7 @@ class Drawing164 extends Component {
     this.setState(this.recalcMaxFromCanExtend(canExtend));
   }
 
-  randomize() {
+  randomize = () => {
     let canExtend = getRandomBool();
     let squareSize = getRandomInt(Drawing164.minSquareSize,
       Drawing164.maxSquareSize);
@@ -103,13 +109,13 @@ class Drawing164 extends Component {
     }
   }
 
-  calcHorizLineMax(squareSize, canExtend) {
+  calcHorizLineMax = (squareSize, canExtend) => {
     // If line can extend beyond square, set its max to the full canvas width.
     // Otherwise, limit it to the size of the square
     return canExtend ? Drawing164.canvasWidth : squareSize;
   }
 
-  getRandomState(squareSize, canExtend) {
+  getRandomState = (squareSize, canExtend) => {
     return (previousState, currentProps) => {
       let horizLineMax = this.calcHorizLineMax(squareSize, canExtend);
       let horizLineLen = getRandomInt(Drawing164.minLineLen, horizLineMax);
@@ -124,7 +130,7 @@ class Drawing164 extends Component {
     };
   }
 
-  getState(squareSize, canExtend, scaled, horizLineLen, diagLineLen) {
+  getState = (squareSize, canExtend, scaled, horizLineLen, diagLineLen) => {
     let horizLineMax = this.calcHorizLineMax(squareSize, canExtend);
     let diagLineMax = calcDiagLineMax(Drawing164.canvasWidth,
       Drawing164.canvasHeight,squareSize, canExtend);
@@ -149,7 +155,7 @@ class Drawing164 extends Component {
 
   render() {
     return (
-      <div className="drawing-container col">
+      <>
         <P5Wrapper sketch={this.state.stateSketch}
           squareSize={this.state.squareSize}
           horizLineLen={this.state.horizLineLen}
@@ -194,10 +200,7 @@ class Drawing164 extends Component {
             changeHandler={this.toggleScaleProportionally.bind(this)}
             id="scale"/>
         </RowGroup>
-
-        <button onClick={this.randomize.bind(this)}
-          className="btn btn-primary">Randomize</button>
-      </div>
+      </>
     );
   }
 
@@ -238,4 +241,4 @@ class Drawing164 extends Component {
   }
 }
 
-export default Drawing164;
+export default withDrawingContainer(withRandomizer(Drawing164));

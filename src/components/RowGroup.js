@@ -4,8 +4,8 @@ class RowGroup extends React.Component {
   render() {
     return (
       <div className="row">
-        {this.props.children.map((c) =>
-          <div className="col">
+        {this.props.children.map((c, i) =>
+          <div className="col" key={"col-" + i}>
             {c}
           </div>
         )}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Sketch from '../Sketch';
+import SquareDrawings from './SquareDrawings';
 import { Slider, Checkbox, RowGroup,
   withRandomizer, withDrawingContainer } from '../CommonComponents';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
@@ -8,26 +9,20 @@ import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
 class Drawing159 extends Component {
 
   static drawingId = "drawing-159";
-  static initSquareSize = 300;
-  static minSquareSize = 10;
-  static maxSquareSize = 380;
-  static minLineLen = 5;
-  static canvasWidth = 600;
-  static canvasHeight = 400;
 
   constructor(props) {
 		super(props);
 
-    let lineMax = calcDiagLineMax(Drawing159.canvasWidth,
-      Drawing159.canvasHeight, Drawing159.initSquareSize, false);
+    let lineMax = calcDiagLineMax(SquareDrawings.canvasWidth,
+      SquareDrawings.canvasHeight, SquareDrawings.initSquareSize, false);
 		this.state = {
 			stateSketch: this.sketch,
-      squareSize: Drawing159.initSquareSize,
+      squareSize: SquareDrawings.initSquareSize,
       lineExtendsBeyondSquare: false,
       scaleProportionally: false,
       lineMax: lineMax,
-      fallLineLen: getRandomInt(Drawing159.minLineLen, lineMax),
-      riseLineLen: getRandomInt(Drawing159.minLineLen, lineMax),
+      fallLineLen: getRandomInt(SquareDrawings.minLineLen, lineMax),
+      riseLineLen: getRandomInt(SquareDrawings.minLineLen, lineMax),
 		};
 	}
 
@@ -67,8 +62,8 @@ class Drawing159 extends Component {
 
   randomize = () => {
     let canExtend = getRandomBool();
-    let squareSize = getRandomInt(Drawing159.minSquareSize,
-      Drawing159.maxSquareSize);
+    let squareSize = getRandomInt(SquareDrawings.minSquareSize,
+      SquareDrawings.maxSquareSize);
 
     this.setState(this.getRandomState(squareSize, canExtend));
   }
@@ -81,9 +76,9 @@ class Drawing159 extends Component {
       if (previousState.scaleProportionally) {
         // Maintain previous scale of lineLens to squareSize
         let prevRiseRatio = previousState.riseLineLen / previousState.squareSize;
-        riseLineLen = Math.max(Math.round(prevRiseRatio * squareSize), Drawing159.minLineLen);
+        riseLineLen = Math.max(Math.round(prevRiseRatio * squareSize), SquareDrawings.minLineLen);
         let prevFallRatio = previousState.fallLineLen / previousState.squareSize;
-        fallLineLen = Math.max(Math.round(prevFallRatio * squareSize), Drawing159.minLineLen);
+        fallLineLen = Math.max(Math.round(prevFallRatio * squareSize), SquareDrawings.minLineLen);
       }
 
       return this.getState(squareSize,
@@ -106,10 +101,10 @@ class Drawing159 extends Component {
 
   getRandomState = (squareSize, canExtend) => {
     return (previousState, currentProps) => {
-      let lineMax = calcDiagLineMax(Drawing159.canvasWidth,
-        Drawing159.canvasHeight, squareSize, canExtend);
-      let fallLineLen = getRandomInt(Drawing159.minLineLen, lineMax);
-      let riseLineLen = getRandomInt(Drawing159.minLineLen, lineMax);
+      let lineMax = calcDiagLineMax(SquareDrawings.canvasWidth,
+        SquareDrawings.canvasHeight, squareSize, canExtend);
+      let fallLineLen = getRandomInt(SquareDrawings.minLineLen, lineMax);
+      let riseLineLen = getRandomInt(SquareDrawings.minLineLen, lineMax);
       let scaled = getRandomBool();
 
       return this.getState(squareSize, canExtend, scaled, fallLineLen, riseLineLen);
@@ -117,8 +112,8 @@ class Drawing159 extends Component {
   }
 
   getState = (squareSize, canExtend, scaled, fallLineLen, riseLineLen) => {
-    let lineMax = calcDiagLineMax(Drawing159.canvasWidth,
-      Drawing159.canvasHeight, squareSize, canExtend);
+    let lineMax = calcDiagLineMax(SquareDrawings.canvasWidth,
+      SquareDrawings.canvasHeight, squareSize, canExtend);
 
     if (fallLineLen > lineMax) {
       fallLineLen = lineMax;
@@ -160,17 +155,17 @@ class Drawing159 extends Component {
             label="Line Length (Falling Line):"
             value={this.state.fallLineLen}
             changeHandler={this.fallLineLenChange.bind(this)}
-            min={Drawing159.minLineLen} max={this.state.lineMax}/>
+            min={SquareDrawings.minLineLen} max={this.state.lineMax}/>
           <Slider sliderId="riseLineLen"
             label="Line Length (Rising Line):"
             value={this.state.riseLineLen}
             changeHandler={this.riseLineLenChange.bind(this)}
-            min={Drawing159.minLineLen} max={this.state.lineMax}/>
+            min={SquareDrawings.minLineLen} max={this.state.lineMax}/>
           <Slider sliderId="squareSize"
             label="Square Size:"
             value={this.state.squareSize}
             changeHandler={this.squareSizeChange.bind(this)}
-            min={Drawing159.minSquareSize} max={Drawing159.maxSquareSize}/>
+            min={SquareDrawings.minSquareSize} max={SquareDrawings.maxSquareSize}/>
         </RowGroup>
 
         <RowGroup>
@@ -196,7 +191,7 @@ class Drawing159 extends Component {
     let riseLineLen;
 
     p.setup = function () {
-      var canvas = p.createCanvas(Drawing159.canvasWidth, Drawing159.canvasHeight);
+      var canvas = p.createCanvas(SquareDrawings.canvasWidth, SquareDrawings.canvasHeight);
       canvas.parent(Drawing159.drawingId);
     };
 

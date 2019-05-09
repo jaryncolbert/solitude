@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Sketch from '../Sketch';
+import SquareDrawings from './SquareDrawings';
 import { Slider, Checkbox, RowGroup,
   withRandomizer, withDrawingContainer } from '../CommonComponents';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
@@ -8,27 +9,21 @@ import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
 class Drawing164 extends Component {
 
   static drawingId = "drawing-164";
-  static initSquareSize = 300;
-  static minSquareSize = 10;
-  static maxSquareSize = 380;
-  static minLineLen = 5;
-  static canvasWidth = 600;
-  static canvasHeight = 400;
 
   constructor(props) {
 		super(props);
 
-    let diagLineMax = calcDiagLineMax(Drawing164.canvasWidth,
-      Drawing164.canvasHeight, Drawing164.initSquareSize, false);
+    let diagLineMax = calcDiagLineMax(SquareDrawings.canvasWidth,
+      SquareDrawings.canvasHeight, SquareDrawings.initSquareSize, false);
 		this.state = {
 			stateSketch: this.sketch,
-      squareSize: Drawing164.initSquareSize,
+      squareSize: SquareDrawings.initSquareSize,
       lineExtendsBeyondSquare: false,
       scaleProportionally: false,
-      horizLineMax: Drawing164.initSquareSize,
-      horizLineLen: getRandomInt(Drawing164.minLineLen, Drawing164.initSquareSize),
+      horizLineMax: SquareDrawings.initSquareSize,
+      horizLineLen: getRandomInt(SquareDrawings.minLineLen, SquareDrawings.initSquareSize),
       diagLineMax: diagLineMax,
-      diagLineLen: getRandomInt(Drawing164.minLineLen, diagLineMax),
+      diagLineLen: getRandomInt(SquareDrawings.minLineLen, diagLineMax),
 		};
 	}
 
@@ -68,8 +63,8 @@ class Drawing164 extends Component {
 
   randomize = () => {
     let canExtend = getRandomBool();
-    let squareSize = getRandomInt(Drawing164.minSquareSize,
-      Drawing164.maxSquareSize);
+    let squareSize = getRandomInt(SquareDrawings.minSquareSize,
+      SquareDrawings.maxSquareSize);
 
     this.setState(this.getRandomState(squareSize, canExtend));
   }
@@ -82,9 +77,9 @@ class Drawing164 extends Component {
       if (previousState.scaleProportionally) {
         // Maintain previous scale of lineLens to squareSize
         let prevDiagRatio = previousState.diagLineLen / previousState.squareSize;
-        diagLineLen = Math.max(Math.round(prevDiagRatio * squareSize), Drawing164.minLineLen);
+        diagLineLen = Math.max(Math.round(prevDiagRatio * squareSize), SquareDrawings.minLineLen);
         let prevHorizRatio = previousState.horizLineLen / previousState.squareSize;
-        horizLineLen = Math.max(Math.round(prevHorizRatio * squareSize), Drawing164.minLineLen);
+        horizLineLen = Math.max(Math.round(prevHorizRatio * squareSize), SquareDrawings.minLineLen);
       }
 
       return this.getState(squareSize,
@@ -108,17 +103,17 @@ class Drawing164 extends Component {
   calcHorizLineMax = (squareSize, canExtend) => {
     // If line can extend beyond square, set its max to the full canvas width.
     // Otherwise, limit it to the size of the square
-    return canExtend ? Drawing164.canvasWidth : squareSize;
+    return canExtend ? SquareDrawings.canvasWidth : squareSize;
   }
 
   getRandomState = (squareSize, canExtend) => {
     return (previousState, currentProps) => {
       let horizLineMax = this.calcHorizLineMax(squareSize, canExtend);
-      let horizLineLen = getRandomInt(Drawing164.minLineLen, horizLineMax);
+      let horizLineLen = getRandomInt(SquareDrawings.minLineLen, horizLineMax);
 
-      let diagLineMax = calcDiagLineMax(Drawing164.canvasWidth,
-        Drawing164.canvasHeight, squareSize, canExtend);
-      let diagLineLen = getRandomInt(Drawing164.minLineLen, diagLineMax);
+      let diagLineMax = calcDiagLineMax(SquareDrawings.canvasWidth,
+        SquareDrawings.canvasHeight, squareSize, canExtend);
+      let diagLineLen = getRandomInt(SquareDrawings.minLineLen, diagLineMax);
 
       let scaled = getRandomBool();
 
@@ -128,8 +123,8 @@ class Drawing164 extends Component {
 
   getState = (squareSize, canExtend, scaled, horizLineLen, diagLineLen) => {
     let horizLineMax = this.calcHorizLineMax(squareSize, canExtend);
-    let diagLineMax = calcDiagLineMax(Drawing164.canvasWidth,
-      Drawing164.canvasHeight,squareSize, canExtend);
+    let diagLineMax = calcDiagLineMax(SquareDrawings.canvasWidth,
+      SquareDrawings.canvasHeight,squareSize, canExtend);
 
     if (horizLineLen > horizLineMax) {
       horizLineLen = horizLineMax;
@@ -171,17 +166,17 @@ class Drawing164 extends Component {
             label="Line Length (Horiz):"
             value={this.state.horizLineLen}
             changeHandler={this.horizLineLenChange.bind(this)}
-            min={Drawing164.minLineLen} max={this.state.horizLineMax}/>
+            min={SquareDrawings.minLineLen} max={this.state.horizLineMax}/>
           <Slider sliderId="diagLineLen"
             label="Line Length (Diag):"
             value={this.state.diagLineLen}
             changeHandler={this.diagLineLenChange.bind(this)}
-            min={Drawing164.minLineLen} max={this.state.diagLineMax}/>
+            min={SquareDrawings.minLineLen} max={this.state.diagLineMax}/>
           <Slider sliderId="squareSize"
             label="Square Size:"
             value={this.state.squareSize}
             changeHandler={this.squareSizeChange.bind(this)}
-            min={Drawing164.minSquareSize} max={Drawing164.maxSquareSize}/>
+            min={SquareDrawings.minSquareSize} max={SquareDrawings.maxSquareSize}/>
         </RowGroup>
 
         <RowGroup>
@@ -207,7 +202,7 @@ class Drawing164 extends Component {
     let diagLineLen;
 
     p.setup = function () {
-      var canvas = p.createCanvas(Drawing164.canvasWidth, Drawing164.canvasHeight);
+      var canvas = p.createCanvas(SquareDrawings.canvasWidth, SquareDrawings.canvasHeight);
       canvas.parent(Drawing164.drawingId);
     };
 

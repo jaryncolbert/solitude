@@ -1,29 +1,36 @@
 import React from 'react';
 import p5 from 'p5';
+import PropTypes from 'prop-types';
 
-class Line extends React.Component {
-  componentWillMount() {
-
-  }
+class Drawable extends React.Component {
+  static contextTypes = {
+    subscribe: PropTypes.func,
+    unsubscribe: PropTypes.func
+  };
 
   componentDidMount() {
-
-  }
-
-  componentDidUpdate(prevProps) {
-    this.draw();
+    this.context.subscribe(this.draw);
   }
 
   componentWillUnmount() {
-
+    this.context.unsubscribe(this.draw);
   }
 
-  draw(p) {
+  draw = (p) => {
+    throw `Unimplemented draw method!`;
+  }
+
+  render() {
+    return null;
+  }
+}
+
+class Line extends Drawable {
+  draw = (p) => {
     const { x0, y0, x1, y1 } = this.props;
-    p.stroke(255,0,0);
+    p.stroke(255, 0, 0);
     p.line(x0, y0, x1, y1);
   }
-
 }
 
 class Canvas extends React.Component {
@@ -32,18 +39,32 @@ class Canvas extends React.Component {
     height: 400
   }
 
+  static childContextTypes = {
+    subscribe: PropTypes.func,
+    unsubscribe: PropTypes.func
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.drawables = [];
+  }
+
+  getChildContext() {
+    return {
+      subscribe: this.subscribe,
+      unsubscribe: this.unsubscribe
+    }
+  }
+
   componentDidMount() {
     const { setup, draw } = this;
-    //this.drawables = [];
 
     const sketch = (p) => {
       p.setup = () => setup(p);
       p.draw = () => draw(p);
     };
     this.p = new p5(sketch, this.container);
-
-    // DEBUG!
-    window.mycanvas = this;
   }
 
   setup = (p) => {
@@ -51,18 +72,19 @@ class Canvas extends React.Component {
     p.createCanvas(width, height);
   }
 
-  draw(p) {
-    p.background(0);
-    /*
-    if (Array.isArray(children)) {
-      children.map((c) => c.draw && c.draw(p));
-    } else {
-      children.draw && children.draw(p);
-    }*/
+  subscribe = (childFn) => {
+    this.drawables.push(childFn);
+    console.log("subscribed! ", childFn);
   }
 
-  componentDidUpdate(prevProps) {
+  unsubscribe = (childFn) => {
+    this.drawables = this.drawables.filter(c => c !== childFn);
+    console.log("unsubscribed! ", childFn);
+  }
 
+  draw = (p) => {
+    p.background(0);
+    this.drawables.forEach(c => c(p));
   }
 
   componentWillUnmount() {
@@ -70,9 +92,11 @@ class Canvas extends React.Component {
   }
 
   render() {
-    const { width, height } = this.props;
+    const { children } = this.props;
     return (
-      <div ref={(e) => this.container = e}/>
+      <div ref={(e) => this.container = e}>
+        {children}
+      </div>
     )
   }
 }
@@ -80,7 +104,7 @@ class Canvas extends React.Component {
 export class Test extends React.Component {
   render() {
     return <Canvas width={400} height={400}>
-      <Line x0={0} y0={0} x1={100} y1={100} color="red" />
+      <Line x0={0} y0={0} x1={100} y1={100} />
     </Canvas>
   }
 }

@@ -102,8 +102,21 @@ class Canvas extends React.Component {
 }
 
 export class Test extends React.Component {
+  state  = { mouseX: 0, mouseY: 0};
+  onMouseMove = e => this.setState({ mouseX: e.x, mouseY: e.y });
+
+  componentDidMount() {
+    window.addEventListener('mousemove', this.onMouseMove);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousemove', this.onMouseMove);
+  }
+
   render() {
+    const { mouseX, mouseY } = this.state;
     return <Canvas width={400} height={400}>
+      <Line x0={0} y0={0} x1={mouseX} y1={mouseY} />
       <Line x0={0} y0={0} x1={100} y1={100} />
     </Canvas>
   }

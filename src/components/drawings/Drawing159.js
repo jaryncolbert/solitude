@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Sketch from '../Sketch';
 import SquareDrawings from './SquareDrawings';
 import { Slider, Checkbox, RowGroup,
-  withRandomizer, withDrawingContainer } from '../CommonComponents';
+  withRandomizer, DrawingContainer, Button } from '../CommonComponents';
 import { getRandomInt, getRandomBool, centerSquare, calcDiagLineMax,
   risingDiagMidLineFrom, fallingDiagMidLineFrom } from '../util';
 
@@ -25,10 +25,6 @@ class Drawing159 extends Component {
       riseLineLen: getRandomInt(SquareDrawings.minLineLen, lineMax),
 		};
 	}
-
-  componentDidMount() {
-    this.props.randomizer(this.randomize);
-  }
 
   riseLineLenChange(e) {
     let riseLineLen = Number(e.target.value);
@@ -134,7 +130,7 @@ class Drawing159 extends Component {
 
   render() {
     return (
-      <>
+      <DrawingContainer className={this.props.className}>
         <Sketch drawingId={Drawing159.drawingId}
           title="Wall Drawing 159"
           instructions="A black outlined square
@@ -180,7 +176,9 @@ class Drawing159 extends Component {
             changeHandler={this.toggleScaleProportionally.bind(this)}
             id="scale"/>
         </RowGroup>
-      </>
+
+        <Button onClick={this.randomize}/>
+      </DrawingContainer>
     );
   }
 
@@ -222,4 +220,4 @@ class Drawing159 extends Component {
   }
 }
 
-export default withDrawingContainer(withRandomizer(Drawing159));
+export default Drawing159;

@@ -1,5 +1,15 @@
 import React from 'react';
 
+export const DrawingContainer = ({children, className}) =>
+  <div className={"drawing-container " + className}>
+   {children}
+  </div>;
+
+export const Button = ({onClick, text}) =>
+  <button onClick={onClick}
+    className="btn btn-primary">{text || "Randomize"}
+  </button>
+
 export function withDrawingContainer(Component) {
   return class WithDrawingContainer extends React.Component {
     render() {

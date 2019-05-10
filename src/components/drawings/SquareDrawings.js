@@ -17,7 +17,7 @@ class SquareDrawings extends Component {
     return (
       <>
         <RowGroup>
-          <Drawing154 />
+          <Drawing154/>
           <Drawing159 />
         </RowGroup>
         <RowGroup>

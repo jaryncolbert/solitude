@@ -1,32 +1,31 @@
-import React from 'react';
+import React from "react";
+import { toCamelCase } from "./util";
 
-export function withDrawingContainer(Component) {
-  return class WithDrawingContainer extends React.Component {
-    render() {
-      const { className, ...otherProps } = this.props;
-      return (
-        <div className={"drawing-container " + className}>
-          <Component {...otherProps}/>
-        </div>
-      );
+export const DrawingContainer = ({ children, className }) => (
+  <div
+    className={
+      className ? "drawing-container " + className : "drawing-container"
     }
-  }
-}
+  >
+    {children}
+  </div>
+);
 
-export function withRandomizer(Component) {
-  return class WithRandomizer extends React.Component {
-    render() {
-      return (
-        <>
-          <Component randomizer={click => this.randomizer = click}
-            {...this.props}/>
-          <button onClick={() => this.randomizer()}
-            className="btn btn-primary">Randomize</button>
-        </>
-      );
-    }
-  }
-}
+export const Button = ({ onClick, text }) => (
+  <button onClick={onClick} className="btn btn-primary">
+    {text || "Randomize"}
+  </button>
+);
+
+export const DrawingInfo = ({ title, instructions, year }) => (
+  <div className="sketch">
+    <h2 className="sketch-title">{title}</h2>
+    <p className="sketch-instructions">
+      {instructions}
+      <span className="sketch-year">({year})</span>
+    </p>
+  </div>
+);
 
 export class RowGroup extends React.Component {
   render() {
@@ -45,29 +44,40 @@ export class RowGroup extends React.Component {
 }
 
 export function Slider(props) {
+  const sliderId = toCamelCase(props.label);
   return (
     <div className={"slider-container form-group " + props.className}>
-      <label htmlFor={props.sliderId}>{props.label}</label>
+      <label htmlFor={sliderId}>{props.label}</label>
       <output className="slider-output">{props.value}</output>
-      <input className="form-control-range"
+      <input
+        className="form-control-range"
         type="range"
-        min={props.min}  max={props.max} step="1"
+        min={props.min}
+        max={props.max}
+        step="1"
         value={props.value}
-        id={props.sliderId}
-        onChange={props.changeHandler}/>
+        id={sliderId}
+        onChange={props.changeHandler}
+      />
     </div>
   );
 }
 
-export function Checkbox({ isSelected, changeHandler, checkboxId, label, className }) {
+export function Checkbox({ isSelected, changeHandler, label, className }) {
+  const checkboxId = toCamelCase(label);
+
   return (
     <div className={"checkbox-container form-check " + className}>
-      <input className="form-check-input"
+      <input
+        className="form-check-input"
         type="checkbox"
         id={checkboxId}
         checked={isSelected}
-        onChange={changeHandler}/>
-      <label className="form-check-label" htmlFor={checkboxId}>{label}</label>
+        onChange={changeHandler}
+      />
+      <label className="form-check-label" htmlFor={checkboxId}>
+        {label}
+      </label>
     </div>
   );
 }

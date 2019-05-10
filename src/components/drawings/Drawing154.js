@@ -1,206 +1,237 @@
-import React, { Component } from 'react';
-import Sketch from '../Sketch';
-import SquareDrawings from './SquareDrawings';
-import { Slider, Checkbox, RowGroup,
-  withRandomizer, withDrawingContainer } from '../CommonComponents';
-import { getRandomInt, getRandomBool,
-  centerSquare, horizMidLineFrom } from '../util';
+import React from "react";
+import {
+  Canvas,
+  Rectangle,
+  RectangleDrawer,
+  LineDrawer,
+  Point
+} from "../Shapes";
+import {
+  Button,
+  Slider,
+  Checkbox,
+  RowGroup,
+  DrawingInfo,
+  DrawingContainer
+} from "../CommonComponents";
+import { getRandomInt, getRandomBool } from "../util";
 
-class Drawing154 extends Component {
-
-  static drawingId = "drawing-154";
+export default class Drawing154 extends React.Component {
+  minLen = 5;
 
   constructor(props) {
-		super(props);
+    super(props);
 
-		this.state = {
-			stateSketch: this.sketch,
-      squareSize: SquareDrawings.initSquareSize,
-      lineExtendsBeyondSquare: false,
-      scaleProportionally: false,
-      lineMax: SquareDrawings.initSquareSize,
-      lineLen: getRandomInt(SquareDrawings.minLineLen, SquareDrawings.initSquareSize),
-		};
-	}
+    const initialSquare = 300;
 
-  componentDidMount() {
-    this.props.randomizer(this.randomize);
+    this.state = {
+      randomized: false,
+      lineMax: initialSquare,
+      lineStart: new Point(0, 0),
+      midpoint: new Point(0, 0),
+      // Initial state of sliders
+      lineLen: getRandomInt(this.minLen, initialSquare),
+      sideLen: initialSquare,
+      // Initial state of checkboxes
+      canExtend: false,
+      scaled: false
+    };
   }
 
-	lineLenChange(e) {
-    let lineLen = Number(e.target.value);
-		this.setState({lineLen: lineLen});
-	}
+  componentDidUpdate(prevProps, prevState) {
+    const prevLineLen = prevState.lineLen;
+    const prevSideLen = prevState.sideLen;
+    const prevLineMax = prevState.lineMax;
+    const prevLineStart = prevState.lineStart;
+    const prevSquareExtent = prevState.squareExtent;
+    const prevRandomized = prevState.randomized;
+    let {
+      lineMax,
+      lineStart,
+      lineLen,
+      sideLen,
+      squareExtent,
+      scaled,
+      randomized
+    } = this.state;
 
-  squareSizeChange(e) {
-    let squareSize = Number(e.target.value);
+    lineMax = this.getLineMax();
+    if (
+      randomized &&
+      (!lineStart.equals(prevLineStart) || prevSquareExtent !== squareExtent)
+    ) {
+      // If trigger is set to randomize, generate new value for lineLen
+      lineLen = getRandomInt(this.minLen, lineMax);
+      randomized = false;
+    } else {
+      if (scaled && (lineLen !== prevLineLen || sideLen !== prevSideLen)) {
+        // Maintain previous scale of lineLen to squareSize
+        const prevRatio = prevLineLen / prevSideLen;
+        lineLen = Math.max(Math.round(prevRatio * sideLen), this.minLen);
+      }
+      if (lineLen > lineMax) {
+        lineLen = lineMax;
+      }
+    }
 
-    // Recalculate maximum line length based on updates to square size
-    this.setState(this.recalcMaxFromSquareSize(squareSize));
-	}
-
-  toggleScaleProportionally(e) {
-    this.setState({scaleProportionally: !!e.target.checked});
+    if (
+      lineMax !== prevLineMax ||
+      lineLen !== prevLineLen ||
+      randomized !== prevRandomized
+    ) {
+      this.setState({
+        lineMax: lineMax,
+        lineLen: lineLen,
+        randomized: randomized
+      });
+    }
   }
 
-  toggleLineExtension(e) {
-    this.setLineExtension(!!e.target.checked);
-  }
+  setPointX = (point, propName) => {
+    this.setState({
+      [propName]: point.x
+    });
+  };
 
-  setLineExtension(canExtend) {
-    // Recalculate maximum line length based on update to line extension
-    this.setState(this.recalcMaxFromCanExtend(canExtend));
-  }
+  setPointY = (point, propName) => {
+    this.setState({
+      [propName]: point.y
+    });
+  };
+
+  setPoint = (point, propName) => {
+    this.setState({
+      [propName]: point
+    });
+  };
+
+  setTargetValue = (e, propName) => {
+    this.setState({
+      [propName]: Number(e.target.value)
+    });
+  };
+
+  toggleValue = (e, propName) => {
+    this.setState({
+      [propName]: !!e.target.checked
+    });
+  };
 
   randomize = () => {
-    let canExtend = getRandomBool();
-    let squareSize = getRandomInt(SquareDrawings.minSquareSize,
-      SquareDrawings.maxSquareSize);
+    this.setState({
+      randomized: true,
+      sideLen: getRandomInt(this.minLen, this.state.canvasHeight),
+      scaled: getRandomBool(),
+      canExtend: getRandomBool()
+    });
+  };
 
-    this.setState(this.getRandomState(squareSize, canExtend));
-  }
+  getLineMax = () => {
+    let { lineStart, squareExtent, canvasWidth, canExtend } = this.state;
 
-  recalcMaxFromSquareSize(squareSize) {
-    return (previousState, currentProps) => {
-      let lineLen = previousState.lineLen;
+    const extent = canExtend ? canvasWidth : squareExtent;
+    return extent - lineStart.x;
+  };
 
-      if (previousState.scaleProportionally) {
-        // Maintain previous scale of lineLen to squareSize
-        let prevRatio = previousState.lineLen / previousState.squareSize;
-        lineLen = Math.max(Math.round(prevRatio * squareSize), SquareDrawings.minLineLen);
+  // Save coordinates for mid left and mid right of square
+  getRectPoints = () => {
+    return [
+      {
+        target: Rectangle.Points.MID_LEFT,
+        callback: point => this.setPoint(point, "lineStart")
+      },
+      {
+        target: Rectangle.Points.MID_RIGHT,
+        callback: point => this.setPointX(point, "squareExtent")
       }
+    ];
+  };
 
-      return this.getState(squareSize,
-        previousState.lineExtendsBeyondSquare,
-        previousState.scaleProportionally,
-        lineLen);
-    };
-  }
-
-  recalcMaxFromCanExtend = (canExtend) => {
-    return (previousState, currentProps) => {
-      return this.getState(previousState.squareSize,
-        canExtend,
-        previousState.lineExtendsBeyondSquare,
-        previousState.lineLen);
-    }
-  }
-
-  calcLineMax = (squareSize, canExtend) => {
-    const canvasMax = SquareDrawings.canvasWidth -
-      ((SquareDrawings.canvasWidth - squareSize) / 2)
-    return canExtend ? canvasMax : squareSize;
-  }
-
-  getRandomState = (squareSize, canExtend) => {
-    return (previousState, currentProps) => {
-
-      // If line can extend beyond square, set its max to the full canvas width.
-      // Otherwise, limit it to the size of the square
-      let lineMax = this.calcLineMax(squareSize, canExtend);
-
-      // Regenerate random line length using new maximum length
-      let lineLen = getRandomInt(SquareDrawings.minLineLen, lineMax);
-
-      let scaled = getRandomBool();
-
-      return this.getState(squareSize, canExtend, scaled, lineLen);
-    };
-  }
-
-  getState = (squareSize, canExtend, scaled, lineLen) => {
-    // If line can extend beyond square, set its max to the full canvas width.
-    // Otherwise, limit it to the size of the square
-    let lineMax = this.calcLineMax(squareSize, canExtend);
-
-    // If line extends beyond max, crop it to new max value
-    if (lineLen > lineMax) {
-      lineLen = lineMax;
-    }
-
-    return {
-      lineMax: lineMax,
-      lineLen: lineLen,
-      squareSize: squareSize,
-      lineExtendsBeyondSquare: canExtend,
-      scaleProportionally: scaled
-    };
-  }
+  // Save coordinates for midpoint and mid right of canvas
+  getCanvasPoints = () => {
+    return [
+      {
+        target: Rectangle.Points.MIDPOINT,
+        callback: point => this.setPoint(point, "midpoint")
+      },
+      {
+        target: Rectangle.Points.MID_RIGHT,
+        callback: point => this.setPointX(point, "canvasWidth")
+      },
+      {
+        target: Rectangle.Points.BTM_RIGHT,
+        callback: point => this.setPointY(point, "canvasHeight")
+      }
+    ];
+  };
 
   render() {
+    const {
+      lineMax,
+      lineStart,
+      lineLen,
+      sideLen,
+      canExtend,
+      scaled
+    } = this.state;
+
     return (
-      <>
-        <Sketch drawingId={Drawing154.drawingId}
-          title="Wall Drawing 154"
-          instructions="A black outlined square with a red
-          horizontal line from the midpoint of the left side toward the
-          middle of the right side."
-          year="1973"
-          sketch={this.state.stateSketch}
-          squareSize={this.state.squareSize}
-          lineLen={this.state.lineLen}/>
+      <DrawingContainer {...this.props}>
+        <Canvas targetPoints={this.getCanvasPoints()}>
+          <DrawingInfo
+            title="Wall Drawing 154"
+            instructions="A black outlined square with a red
+        horizontal line from the midpoint of the left side toward the
+        middle of the right side."
+            year="1973"
+          />
+          <RectangleDrawer
+            start={this.state.midpoint}
+            centered
+            width={sideLen}
+            height={sideLen}
+            targetPoints={this.getRectPoints()}
+          />
+          <LineDrawer
+            type="horizontal"
+            color={"#FF0000"}
+            start={lineStart}
+            lineLen={lineLen}
+          />
+        </Canvas>
 
         <RowGroup>
-          <Slider sliderId="lineLength"
-            label="Line Length:"
-            value={this.state.lineLen}
-            changeHandler={this.lineLenChange.bind(this)}
-            min={SquareDrawings.minLineLen} max={this.state.lineMax}/>
-          <Slider sliderId="squareSize"
+          <Slider
             label="Square Size:"
-            value={this.state.squareSize}
-            changeHandler={this.squareSizeChange.bind(this)}
-            min={SquareDrawings.minSquareSize} max={SquareDrawings.maxSquareSize}/>
+            value={sideLen}
+            changeHandler={e => this.setTargetValue(e, "sideLen")}
+            min={this.minLen}
+            max={this.state.canvasHeight}
+          />
+          <Slider
+            label="Line Length:"
+            value={lineLen}
+            changeHandler={e => this.setTargetValue(e, "lineLen")}
+            min={this.minLen}
+            max={lineMax}
+          />
         </RowGroup>
 
         <RowGroup>
           <Checkbox
             label="Can line extend beyond square?"
-            isSelected={this.state.lineExtendsBeyondSquare}
-            changeHandler={this.toggleLineExtension.bind(this)}
-            id="extension"/>
+            isSelected={canExtend}
+            changeHandler={e => this.toggleValue(e, "canExtend")}
+          />
           <Checkbox
             label="Scale square proportionally?"
-            isSelected={this.state.scaleProportionally}
-            changeHandler={this.toggleScaleProportionally.bind(this)}
-            id="scale"/>
+            isSelected={scaled}
+            changeHandler={e => this.toggleValue(e, "scaled")}
+          />
         </RowGroup>
-      </>
+
+        <Button onClick={this.randomize} />
+      </DrawingContainer>
     );
   }
-
-  sketch (p) {
-    // User-variable properties
-    let squareSize;
-    let lineLen;
-
-    p.setup = function () {
-      var canvas = p.createCanvas(SquareDrawings.canvasWidth, SquareDrawings.canvasHeight);
-      canvas.parent(Drawing154.drawingId);
-    };
-
-    p.myCustomRedrawAccordingToNewPropsHandler = function (props) {
-        lineLen = props.lineLen;
-        squareSize = props.squareSize;
-    };
-
-    p.draw = function () {
-
-      p.clear();
-
-      // Black square
-      p.stroke(0,0,0);
-      p.rect(...centerSquare(p.width, p.height, squareSize));
-
-      // Red line of random length bisecting left side of square
-      // and extending toward right side
-      let canvasMidX = p.width / 2;
-      let canvasMidY = p.height / 2;
-      let squareX = canvasMidX - squareSize / 2;
-      p.stroke(255,0,0);
-      p.line(...horizMidLineFrom(squareX, canvasMidY, lineLen));
-    };
-  }
 }
-
-export default withDrawingContainer(withRandomizer(Drawing154));

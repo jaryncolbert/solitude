@@ -69,9 +69,9 @@ export function calcDiagLineMax(canvasWidth, canvasHeight, squareSize, canExtend
 }
 
 export function calcHypotenuse(sideA, sideB) {
-  return Math.floor(Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2)));
+  return Math.round(Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2)));
 }
 
 function calcSquareSideFromHypotenuse(hypotenuse) {
-  return Math.floor(hypotenuse / Math.sqrt(2));
+  return Math.round(hypotenuse / Math.sqrt(2));
 }

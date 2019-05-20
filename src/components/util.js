@@ -8,16 +8,16 @@ export function getRandomBool() {
   return !!getRandomInt(0, 1);
 }
 
+export function Point(x, y) {
+  this.x = x;
+  this.y = y;
+}
+
 export function getMidpoint(x0, y0, xSideLen, ySideLen) {
   let midX = Math.round(xSideLen / 2);
   let midY = Math.round(ySideLen / 2);
 
-  return { x: x0 + midX, y: y0 + midY };
-}
-
-export function getSquareStart(midX, midY, sideLen) {
-  let diff = Math.round(sideLen / 2);
-  return { x: midX - diff, y: midY - diff };
+  return new Point(x0 + midX, y0 + midY);
 }
 
 export function centerSquare(canvasWidth, canvasHeight, squareSize) {

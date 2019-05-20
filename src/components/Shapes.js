@@ -1,7 +1,6 @@
 import React from 'react';
 import p5 from 'p5';
 import PropTypes from 'prop-types';
-import { getSquareStartFromMidpoint } from './util';
 
 class Drawable extends React.Component {
   static defaultProps = {
@@ -43,19 +42,9 @@ export class Line extends Drawable {
 
 export class Square extends Drawable {
   draw = (p) => {
-    const { sideLen, isCentered,
-      color, strokeWeight } = this.props;
+    const { x0, y0, sideLen, color, strokeWeight } = this.props;
     p.stroke(color);
     p.strokeWeight(strokeWeight);
-
-    let x0 = this.props.x0;
-    let y0 = this.props.y0;
-    if (isCentered) {
-      // If centered, interpret x and y as midpoints
-      // Otherwise, interpret x and y as top-left corner
-      let { x, y } = getSquareStartFromMidpoint(x0, y0, sideLen);
-      x0 = x; y0 = y;
-    }
     p.rect(x0, y0, sideLen, sideLen);
   }
 }

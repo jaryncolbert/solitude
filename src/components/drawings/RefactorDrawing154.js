@@ -21,17 +21,14 @@ export class Drawing154 extends React.Component {
   render() {
     let canvasWidth = 600;
     let canvasHeight = 400;
+    let sideLen = 300;
     let midpoint = getMidpoint(0, 0, canvasWidth, canvasHeight);
     let lineLen = getRandomInt(0, canvasWidth);
 
-    let sideLen = 300;
-    let halfSideLen = Math.round(sideLen / 2);
-    let sqOriginX = midpoint.x - halfSideLen;
-    let sqOriginY = midpoint.y - halfSideLen;
 
     return (<>
       <Canvas canvasWidth={canvasWidth} canvasHeight={canvasHeight}>
-        <Square x0={sqOriginX} y0={sqOriginY} sideLen={sideLen}
+        <Square centered x0={midpoint.x} y0={midpoint.y} sideLen={sideLen}
           targetPoint={Square.Points.MID_LEFT}
           registerPoint={this.setLineOrigin}/>
         <Line x0={this.state.lineOrigin.x} y0={this.state.lineOrigin.y}

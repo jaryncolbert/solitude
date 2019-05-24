@@ -66,9 +66,15 @@ export class Square extends Drawable {
   }
 
   getPoint = (targetPoint) => {
-    const { x0, y0, sideLen } = this.props;
-    let halfSideLen = Math.round(sideLen / 2);
+    let { x0, y0, sideLen, centered } = this.props;
 
+    if (centered) {
+      const newOrigin = this.getOriginFromMidpoint(new Point(x0, y0), sideLen);
+      x0 = newOrigin.x;
+      y0 = newOrigin.y;
+    }
+
+    const halfSideLen = Math.round(sideLen / 2);
     const rightX = x0 + sideLen;
     const midX = x0 + halfSideLen;
     const midY = y0 + halfSideLen;
@@ -94,10 +100,21 @@ export class Square extends Drawable {
   }
 
   draw = (p) => {
-    const { x0, y0, sideLen, color, strokeWeight } = this.props;
+    let { x0, y0, sideLen, color, strokeWeight, centered } = this.props;
     p.stroke(color);
     p.strokeWeight(strokeWeight);
+
+    if (centered) {
+      const newOrigin = this.getOriginFromMidpoint(new Point(x0, y0), sideLen);
+      x0 = newOrigin.x;
+      y0 = newOrigin.y;
+    }
     p.rect(x0, y0, sideLen, sideLen);
+  }
+
+  getOriginFromMidpoint = (midpoint, sideLen) => {
+    const halfSideLen = Math.round(sideLen / 2);
+    return new Point(midpoint.x - halfSideLen, midpoint.y - halfSideLen);
   }
 }
 

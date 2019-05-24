@@ -39,11 +39,10 @@ export class Point {
 
 export class Line extends Drawable {
   draw = (p) => {
-    const { x0, y0, x1, y1,
-      color, strokeWeight } = this.props;
+    const { start, end, color, strokeWeight } = this.props;
     p.stroke(color);
     p.strokeWeight(strokeWeight);
-    p.line(x0, y0, x1, y1);
+    p.line(start.x, start.y, end.x, end.y);
   }
 }
 
@@ -66,33 +65,31 @@ export class Square extends Drawable {
   }
 
   getPoint = (targetPoint) => {
-    let { x0, y0, sideLen, centered } = this.props;
+    let { start, sideLen, centered } = this.props;
 
     if (centered) {
-      const newOrigin = this.getOriginFromMidpoint(new Point(x0, y0), sideLen);
-      x0 = newOrigin.x;
-      y0 = newOrigin.y;
+      start = this.getOriginFromMidpoint(start, sideLen);
     }
 
     const halfSideLen = Math.round(sideLen / 2);
-    const rightX = x0 + sideLen;
-    const midX = x0 + halfSideLen;
-    const midY = y0 + halfSideLen;
-    const btmY = y0 + sideLen;
+    const rightX = start.x + sideLen;
+    const midX = start.x + halfSideLen;
+    const midY = start.y + halfSideLen;
+    const btmY = start.y + sideLen;
 
     switch(targetPoint) {
       case Square.Points.TOP_LEFT:
-        return new Point(x0, y0);
+        return new Point(start.x, start.y);
       case Square.Points.TOP_RIGHT:
-        return new Point(rightX, y0);
+        return new Point(rightX, start.y);
       case Square.Points.BTM_LEFT:
-        return new Point(x0, btmY);
+        return new Point(start.x, btmY);
       case Square.Points.BTM_RIGHT:
         return new Point(rightX, btmY);
       case Square.Points.MIDPOINT:
         return new Point(midX, midY);
       case Square.Points.MID_LEFT:
-        return new Point(x0, midY);
+        return new Point(start.x, midY);
       case Square.Points.MID_RIGHT:
         return new Point(rightX, midY);
       default: throw new Error("Unknown Square point ", targetPoint);
@@ -100,16 +97,14 @@ export class Square extends Drawable {
   }
 
   draw = (p) => {
-    let { x0, y0, sideLen, color, strokeWeight, centered } = this.props;
+    let { start, sideLen, color, strokeWeight, centered } = this.props;
     p.stroke(color);
     p.strokeWeight(strokeWeight);
 
     if (centered) {
-      const newOrigin = this.getOriginFromMidpoint(new Point(x0, y0), sideLen);
-      x0 = newOrigin.x;
-      y0 = newOrigin.y;
+      start = this.getOriginFromMidpoint(start, sideLen);
     }
-    p.rect(x0, y0, sideLen, sideLen);
+    p.rect(start.x, start.y, sideLen, sideLen);
   }
 
   getOriginFromMidpoint = (midpoint, sideLen) => {

@@ -8,13 +8,13 @@ export class Drawing154 extends React.Component {
     super(props);
 
     this.state = {
-      lineOrigin: new Point(0, 0)
+      lineStart: new Point(0, 0)
     };
   }
 
-  setLineOrigin = (point) => {
+  setLineStart = (point) => {
     this.setState({
-      lineOrigin: point
+      lineStart: point
     });
   }
 
@@ -24,15 +24,15 @@ export class Drawing154 extends React.Component {
     let sideLen = 300;
     let midpoint = getMidpoint(0, 0, canvasWidth, canvasHeight);
     let lineLen = getRandomInt(0, canvasWidth);
-
+    let lineEnd = new Point(this.state.lineStart.x + lineLen,
+      this.state.lineStart.y);
 
     return (<>
       <Canvas canvasWidth={canvasWidth} canvasHeight={canvasHeight}>
-        <Square centered x0={midpoint.x} y0={midpoint.y} sideLen={sideLen}
+        <Square start={midpoint} centered sideLen={sideLen}
           targetPoint={Square.Points.MID_LEFT}
-          registerPoint={this.setLineOrigin}/>
-        <Line x0={this.state.lineOrigin.x} y0={this.state.lineOrigin.y}
-          x1={this.state.lineOrigin.x + lineLen} y1={this.state.lineOrigin.y}
+          registerPoint={this.setLineStart}/>
+        <Line start={this.state.lineStart} end={lineEnd}
           color={"#FF0000"}/>
       </Canvas>
       <Button/>

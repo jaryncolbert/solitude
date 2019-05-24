@@ -30,6 +30,13 @@ class Drawable extends React.Component {
   }
 }
 
+export class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
 export class Line extends Drawable {
   draw = (p) => {
     const { x0, y0, x1, y1,
@@ -69,19 +76,19 @@ export class Square extends Drawable {
 
     switch(targetPoint) {
       case Square.Points.TOP_LEFT:
-        return { x: x0, y: y0 };
+        return new Point(x0, y0);
       case Square.Points.TOP_RIGHT:
-        return { x: rightX, y: y0 };
+        return new Point(rightX, y0);
       case Square.Points.BTM_LEFT:
-        return { x: x0, y: btmY };
+        return new Point(x0, btmY);
       case Square.Points.BTM_RIGHT:
-        return { x: rightX, y: btmY };
+        return new Point(rightX, btmY);
       case Square.Points.MIDPOINT:
-        return { x: midX, y: midY };
+        return new Point(midX, midY);
       case Square.Points.MID_LEFT:
-        return { x: x0, y: midY };
+        return new Point(x0, midY);
       case Square.Points.MID_RIGHT:
-        return { x: rightX, y: midY };
+        return new Point(rightX, midY);
       default: throw new Error("Unknown Square point ", targetPoint);
     }
   }

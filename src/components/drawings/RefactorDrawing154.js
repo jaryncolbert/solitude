@@ -1,5 +1,5 @@
 import React from 'react';
-import { Canvas, Square, Line } from '../Shapes';
+import { Canvas, Square, Line, Point } from '../Shapes';
 import { Button } from '../CommonComponents';
 import { getMidpoint, getRandomInt } from '../util';
 
@@ -8,15 +8,13 @@ export class Drawing154 extends React.Component {
     super(props);
 
     this.state = {
-      lineOriginX: 0,
-      lineOriginY: 0
+      lineOrigin: new Point(0, 0)
     };
   }
 
-  setLineOrigin = ({x, y}) => {
+  setLineOrigin = (point) => {
     this.setState({
-      lineOriginX: x,
-      lineOriginY: y
+      lineOrigin: point
     });
   }
 
@@ -36,8 +34,8 @@ export class Drawing154 extends React.Component {
         <Square x0={sqOriginX} y0={sqOriginY} sideLen={sideLen}
           targetPoint={Square.Points.MID_LEFT}
           registerPoint={this.setLineOrigin}/>
-        <Line x0={this.state.lineOriginX} y0={this.state.lineOriginY}
-          x1={this.state.lineOriginX + lineLen} y1={this.state.lineOriginY}
+        <Line x0={this.state.lineOrigin.x} y0={this.state.lineOrigin.y}
+          x1={this.state.lineOrigin.x + lineLen} y1={this.state.lineOrigin.y}
           color={"#FF0000"}/>
       </Canvas>
       <Button/>

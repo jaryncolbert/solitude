@@ -1,3 +1,5 @@
+import { Point } from './Shapes';
+
 export function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -6,12 +8,6 @@ export function getRandomInt(min, max) {
 
 export function getRandomBool() {
   return !!getRandomInt(0, 1);
-}
-
-export function Point(x, y) {
-  this.x = x;
-  this.y = y;
-  return this;
 }
 
 export function getMidpoint(x0, y0, xSideLen, ySideLen) {

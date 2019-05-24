@@ -4,11 +4,15 @@ import { Button } from '../CommonComponents';
 import { getMidpoint, getRandomInt } from '../util';
 
 export class Drawing154 extends React.Component {
+  canvasWidth = 600;
+  canvasHeight = 400;
+
   constructor(props) {
     super(props);
 
     this.state = {
-      lineStart: new Point(0, 0)
+      lineStart: new Point(0, 0),
+      lineLen: getRandomInt(0, this.canvasWidth)
     };
   }
 
@@ -18,24 +22,28 @@ export class Drawing154 extends React.Component {
     });
   }
 
+  randomize = () => {
+    let lineMax = this.canvasWidth - this.state.lineStart.x;
+    
+    this.setState({
+      lineLen: getRandomInt(0, lineMax)
+    });
+  }
+
   render() {
-    let canvasWidth = 600;
-    let canvasHeight = 400;
     let sideLen = 300;
-    let midpoint = getMidpoint(0, 0, canvasWidth, canvasHeight);
-    let lineLen = getRandomInt(0, canvasWidth);
-    let lineEnd = new Point(this.state.lineStart.x + lineLen,
+    let midpoint = getMidpoint(0, 0, this.canvasWidth, this.canvasHeight);
+    let lineEnd = new Point(this.state.lineStart.x + this.state.lineLen,
       this.state.lineStart.y);
 
     return (<>
-      <Canvas canvasWidth={canvasWidth} canvasHeight={canvasHeight}>
+      <Canvas canvasWidth={this.canvasWidth} canvasHeight={this.canvasHeight}>
         <Square start={midpoint} centered sideLen={sideLen}
           targetPoint={Square.Points.MID_LEFT}
           registerPoint={this.setLineStart}/>
-        <Line start={this.state.lineStart} end={lineEnd}
-          color={"#FF0000"}/>
+        <Line start={this.state.lineStart} end={lineEnd} color={"#FF0000"}/>
       </Canvas>
-      <Button/>
+      <Button onClick={this.randomize}/>
     </>)
   }
 }

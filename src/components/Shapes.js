@@ -59,14 +59,12 @@ export class Square extends Drawable {
 
   constructor(props) {
     super(props);
-    const { targetPoint, registerPoint } = this.props;
-    const point = this.getPoint(targetPoint);
+    const { start, sideLen, centered, targetPoint, registerPoint } = this.props;
+    const point = this.getPoint(targetPoint, start, sideLen, centered);
     registerPoint(point);
   }
 
-  getPoint = (targetPoint) => {
-    let { start, sideLen, centered } = this.props;
-
+  getPoint = (targetPoint, start, sideLen, centered) => {
     if (centered) {
       start = this.getOriginFromMidpoint(start, sideLen);
     }
@@ -110,6 +108,16 @@ export class Square extends Drawable {
   getOriginFromMidpoint = (midpoint, sideLen) => {
     const halfSideLen = Math.round(sideLen / 2);
     return new Point(midpoint.x - halfSideLen, midpoint.y - halfSideLen);
+  }
+
+  componentDidUpdate(prevProps) {
+    let { start, sideLen, centered, targetPoint, registerPoint } = this.props;
+
+    if (sideLen !== prevProps.sideLen) {
+      // Re-register the target point based on the new start location
+      const point = this.getPoint(targetPoint, start, sideLen, centered);
+      registerPoint(point);
+    }
   }
 }
 

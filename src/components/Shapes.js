@@ -41,6 +41,51 @@ export class Line extends Drawable {
 }
 
 export class Square extends Drawable {
+  static Points = Object.freeze({
+    TOP_LEFT: "top_left",
+    TOP_RIGHT: "top_right",
+    BTM_LEFT: "btm_left",
+    BTM_RIGHT: "btm_right",
+    MIDPOINT: "midpoint",
+    MID_LEFT: "mid_left",
+    MID_RIGHT: "mid_right"
+  });
+
+  constructor(props) {
+    super(props);
+    const { targetPoint, registerPoint } = this.props;
+    const point = this.getPoint(targetPoint);
+    registerPoint(point);
+  }
+
+  getPoint = (targetPoint) => {
+    const { x0, y0, sideLen } = this.props;
+    let halfSideLen = Math.round(sideLen / 2);
+
+    const rightX = x0 + sideLen;
+    const midX = x0 + halfSideLen;
+    const midY = y0 + halfSideLen;
+    const btmY = y0 + sideLen;
+
+    switch(targetPoint) {
+      case Square.Points.TOP_LEFT:
+        return { x: x0, y: y0 };
+      case Square.Points.TOP_RIGHT:
+        return { x: rightX, y: y0 };
+      case Square.Points.BTM_LEFT:
+        return { x: x0, y: btmY };
+      case Square.Points.BTM_RIGHT:
+        return { x: rightX, y: btmY };
+      case Square.Points.MIDPOINT:
+        return { x: midX, y: midY };
+      case Square.Points.MID_LEFT:
+        return { x: x0, y: midY };
+      case Square.Points.MID_RIGHT:
+        return { x: rightX, y: midY };
+      default: throw new Error("Unknown Square point ", targetPoint);
+    }
+  }
+
   draw = (p) => {
     const { x0, y0, sideLen, color, strokeWeight } = this.props;
     p.stroke(color);

@@ -11,6 +11,7 @@ export function getRandomBool() {
 export function Point(x, y) {
   this.x = x;
   this.y = y;
+  return this;
 }
 
 export function getMidpoint(x0, y0, xSideLen, ySideLen) {

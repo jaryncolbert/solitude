@@ -1,4 +1,5 @@
 import React from 'react';
+import { toCamelCase } from './util';
 
 export const DrawingContainer = ({children, className}) =>
   <div className={"drawing-container " + className}>
@@ -55,21 +56,24 @@ export class RowGroup extends React.Component {
 }
 
 export function Slider(props) {
+  const sliderId = toCamelCase(props.label);
   return (
     <div className={"slider-container form-group " + props.className}>
-      <label htmlFor={props.sliderId}>{props.label}</label>
+      <label htmlFor={sliderId}>{props.label}</label>
       <output className="slider-output">{props.value}</output>
       <input className="form-control-range"
         type="range"
         min={props.min}  max={props.max} step="1"
         value={props.value}
-        id={props.sliderId}
+        id={sliderId}
         onChange={props.changeHandler}/>
     </div>
   );
 }
 
-export function Checkbox({ isSelected, changeHandler, checkboxId, label, className }) {
+export function Checkbox({ isSelected, changeHandler, label, className }) {
+  const checkboxId = toCamelCase(label);
+
   return (
     <div className={"checkbox-container form-check " + className}>
       <input className="form-check-input"

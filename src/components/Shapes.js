@@ -59,9 +59,18 @@ export class Square extends Drawable {
 
   constructor(props) {
     super(props);
-    const { start, sideLen, centered, targetPoint, registerPoint } = this.props;
-    const point = this.getPoint(targetPoint, start, sideLen, centered);
-    registerPoint(point);
+
+    this.registerPoints(this.props.targetPoints);
+  }
+
+  registerPoints = () => {
+    const { start, sideLen, centered, targetPoints } = this.props;
+
+    // Register each target point and its callback function to pass to parent
+    targetPoints.forEach(({ target, callback }) => {
+      const point = this.getPoint(target, start, sideLen, centered);
+      callback(point);
+    });
   }
 
   getPoint = (targetPoint, start, sideLen, centered) => {
@@ -90,7 +99,7 @@ export class Square extends Drawable {
         return new Point(start.x, midY);
       case Square.Points.MID_RIGHT:
         return new Point(rightX, midY);
-      default: throw new Error("Unknown Square point ", targetPoint);
+      default: throw new Error("Unknown Square point " + targetPoint);
     }
   }
 
@@ -111,12 +120,9 @@ export class Square extends Drawable {
   }
 
   componentDidUpdate(prevProps) {
-    let { start, sideLen, centered, targetPoint, registerPoint } = this.props;
-
-    if (sideLen !== prevProps.sideLen) {
+    if (this.props.sideLen !== prevProps.sideLen) {
       // Re-register the target point based on the new start location
-      const point = this.getPoint(targetPoint, start, sideLen, centered);
-      registerPoint(point);
+      this.registerPoints();
     }
   }
 }

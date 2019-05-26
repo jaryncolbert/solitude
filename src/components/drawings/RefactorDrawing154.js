@@ -1,7 +1,8 @@
 import React from 'react';
 import { Canvas, Square, Line, Point } from '../Shapes';
-import { Button, Slider, RowGroup } from '../CommonComponents';
+import { Button, Slider, Checkbox, RowGroup } from '../CommonComponents';
 import { getMidpoint, getRandomInt } from '../util';
+
 
 export class Drawing154 extends React.Component {
   canvasWidth = 600;
@@ -12,37 +13,43 @@ export class Drawing154 extends React.Component {
   constructor(props) {
     super(props);
 
-    const extent = this.canvasWidth;
-    const lineLen = getRandomInt(this.minLen, extent);
-    const lineStart = new Point(0, 0);
+    const initialSquare = 300;
 
     this.state = {
-      lineStart: lineStart,
-      lineLen: lineLen,
-      sideLen: 300,
-      extent: extent,
+      lineMax: initialSquare,
+      lineStart: new Point(0, 0),
+      // Initial state of sliders
+      lineLen: getRandomInt(this.minLen, initialSquare),
+      sideLen: initialSquare,
+      // Initial state of checkboxes
+      canExtend: false,
+      scaled: true,
     };
   }
 
-  setExtent = (max) => {
-    // Signifies the greatest x value to which the line can extend
+  setSquareExtent = (point) => {
+    // Signifies the max x value of the square (its right side)
     this.setState({
-      extent: max
-    });
+      squareExtent: point.x
+    }, () => this.updateStateDependencies());
   }
 
   setLineStart = (point) => {
     this.setState({
       lineStart: point
-    });
+    }, () => this.updateStateDependencies());
   }
 
   setTargetValue = (e, propName) => {
-    let value = Number(e.target.value);
-
     this.setState({
-      [propName]: value
-    });
+      [propName]: Number(e.target.value)
+    }, () => this.updateStateDependencies());
+  }
+
+  toggleValue = (e, propName) => {
+    this.setState({
+      [propName]: !!(e.target.checked)
+    }, () => this.updateStateDependencies());
   }
 
   randomize = () => {
@@ -51,23 +58,45 @@ export class Drawing154 extends React.Component {
     this.setState({
       lineLen: getRandomInt(this.minLen, lineMax),
       sideLen: getRandomInt(this.minLen, this.canvasHeight)
+    }, () => this.updateStateDependencies());
+  }
+
+  updateStateDependencies = () => {
+    const lineMax = this.getLineMax();
+    let trimLine = !this.state.canExtend && this.state.lineLen > lineMax;
+
+    this.setState({
+      lineMax: lineMax,
+      lineLen: trimLine ? lineMax : this.state.lineLen,
     });
   }
 
   getLineMax = () => {
-    return this.state.extent - this.state.lineStart.x;
+    const extent = this.state.canExtend ?
+      this.canvasWidth : this.state.squareExtent;
+    return extent - this.state.lineStart.x;
   };
 
+  // Save coordinates for mid left and mid right of square
+  getTargetPoints = () => {
+    return [{
+      target: Square.Points.MID_LEFT,
+      callback: this.setLineStart
+    },
+    {
+      target: Square.Points.MID_RIGHT,
+      callback: this.setSquareExtent
+    }];
+  }
+
   render() {
-    const lineEnd = new Point(this.state.lineStart.x + this.state.lineLen,
-      this.state.lineStart.y);
-    const lineMax = this.getLineMax();
+    const lineEndX = Number(this.state.lineStart.x + this.state.lineLen);
+    const lineEnd = new Point(lineEndX, this.state.lineStart.y);
 
     return (<>
       <Canvas canvasWidth={this.canvasWidth} canvasHeight={this.canvasHeight}>
         <Square start={this.midpoint} centered sideLen={this.state.sideLen}
-          targetPoint={Square.Points.MID_LEFT}
-          registerPoint={this.setLineStart}/>
+          targetPoints={this.getTargetPoints()}/>
         <Line start={this.state.lineStart} end={lineEnd} color={"#FF0000"}/>
       </Canvas>
 
@@ -79,7 +108,16 @@ export class Drawing154 extends React.Component {
         <Slider label="Line Length:"
           value={this.state.lineLen}
           changeHandler={(e) => this.setTargetValue(e, "lineLen")}
-          min={this.minLen} max={lineMax}/>
+          min={this.minLen} max={this.state.lineMax}/>
+      </RowGroup>
+
+      <RowGroup>
+        <Checkbox label="Can line extend beyond square?"
+          isSelected={this.state.canExtend}
+          changeHandler={(e) => this.toggleValue(e, "canExtend")}/>
+        <Checkbox label="Scale square proportionally?"
+          isSelected={this.state.scaled}
+          changeHandler={(e) => this.toggleValue(e, "scaled")}/>
       </RowGroup>
 
       <Button onClick={this.randomize}/>

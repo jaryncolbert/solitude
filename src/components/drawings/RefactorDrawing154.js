@@ -1,7 +1,7 @@
 import React from 'react';
-import { Canvas, Rectangle, Line, Point } from '../Shapes';
+import { Canvas, Rectangle, LineDrawer, Point } from '../Shapes';
 import { Button, Slider, Checkbox, RowGroup, DrawingInfo } from '../CommonComponents';
-import { getMidpoint, getRandomInt, getRandomBool } from '../util';
+import { getRandomInt, getRandomBool } from '../util';
 
 
 export class Drawing154 extends React.Component {
@@ -31,9 +31,6 @@ export class Drawing154 extends React.Component {
     const prevSideLen = prevState.sideLen;
     const prevLineMax = prevState.lineMax;
     const prevLineStart = prevState.lineStart;
-    const prevMidpoint = prevState.midpoint;
-    const prevCanvasWidth = prevState.canvasWidth;
-    const prevCanvasHeight = prevState.canvasHeight;
     const prevSquareExtent = prevState.squareExtent;
     const prevRandomized = prevState.randomized;
     let { lineMax, lineStart, lineLen, sideLen, squareExtent,
@@ -141,9 +138,6 @@ export class Drawing154 extends React.Component {
     const { lineMax, lineStart, lineLen, sideLen,
       canExtend, scaled } = this.state;
 
-    const lineEndX = Number(lineStart.x + lineLen);
-    const lineEnd = new Point(lineEndX, lineStart.y);
-
     return (<>
       <Canvas targetPoints={this.getCanvasPoints()}>
         <DrawingInfo title="Wall Drawing 154"
@@ -154,7 +148,8 @@ export class Drawing154 extends React.Component {
         <Rectangle start={this.state.midpoint} centered
           width={sideLen} height={sideLen}
           targetPoints={this.getRectPoints()}/>
-        <Line start={lineStart} end={lineEnd} color={"#FF0000"}/>
+        <LineDrawer type="horizontal" color={"#FF0000"}
+          start={lineStart} lineLen={lineLen}/>
       </Canvas>
 
       <RowGroup>

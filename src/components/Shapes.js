@@ -62,7 +62,7 @@ export const LineDrawer = ({type, rising, centered, start, lineLen,
       if (centered) {
         lineStart = new Point(lineStart.x - Math.round(lineLen / 2), lineStart.y);
       }
-      lineEnd = new Point(lineStart + lineLen, lineStart.y);
+      lineEnd = new Point(lineStart.x + lineLen, lineStart.y);
       break;
     case "diagonal":
       if (centered) {

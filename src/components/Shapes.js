@@ -35,6 +35,11 @@ export class Point {
     this.x = x;
     this.y = y;
   }
+
+  equals(point) {
+    return Number.isInteger(point.x) && (this.x === point.x) &&
+      Number.isInteger(point.y) && (this.y === point.y);
+  }
 }
 
 export class Line extends Drawable {
@@ -46,7 +51,13 @@ export class Line extends Drawable {
   }
 }
 
-export class Square extends Drawable {
+export class Rectangle extends Drawable {
+  static defaultProps = {
+    targetPoints: [],
+    strokeWeight: 4,
+    color: "#000000"
+  }
+
   static Points = Object.freeze({
     TOP_LEFT: "top_left",
     TOP_RIGHT: "top_right",
@@ -64,65 +75,67 @@ export class Square extends Drawable {
   }
 
   registerPoints = () => {
-    const { start, sideLen, centered, targetPoints } = this.props;
+    const { start, height, width, centered, targetPoints } = this.props;
 
     // Register each target point and its callback function to pass to parent
     targetPoints.forEach(({ target, callback }) => {
-      const point = this.getPoint(target, start, sideLen, centered);
+      const point = this.getPoint(target, start, height, width, centered);
       callback(point);
     });
   }
 
-  getPoint = (targetPoint, start, sideLen, centered) => {
+  getPoint = (targetPoint, start, height, width, centered) => {
     if (centered) {
-      start = this.getOriginFromMidpoint(start, sideLen);
+      start = this.getOriginFromMidpoint(start, height, width);
     }
 
-    const halfSideLen = Math.round(sideLen / 2);
-    const rightX = start.x + sideLen;
-    const midX = start.x + halfSideLen;
-    const midY = start.y + halfSideLen;
-    const btmY = start.y + sideLen;
+    const rightX = start.x + width;
+    const midX = start.x + Math.round(width / 2);
+    const midY = start.y + Math.round(height / 2);
+    const btmY = start.y + height;
 
     switch(targetPoint) {
-      case Square.Points.TOP_LEFT:
+      case Rectangle.Points.TOP_LEFT:
         return new Point(start.x, start.y);
-      case Square.Points.TOP_RIGHT:
+      case Rectangle.Points.TOP_RIGHT:
         return new Point(rightX, start.y);
-      case Square.Points.BTM_LEFT:
+      case Rectangle.Points.BTM_LEFT:
         return new Point(start.x, btmY);
-      case Square.Points.BTM_RIGHT:
+      case Rectangle.Points.BTM_RIGHT:
         return new Point(rightX, btmY);
-      case Square.Points.MIDPOINT:
+      case Rectangle.Points.MIDPOINT:
         return new Point(midX, midY);
-      case Square.Points.MID_LEFT:
+      case Rectangle.Points.MID_LEFT:
         return new Point(start.x, midY);
-      case Square.Points.MID_RIGHT:
+      case Rectangle.Points.MID_RIGHT:
         return new Point(rightX, midY);
       default: throw new Error("Unknown Square point " + targetPoint);
     }
   }
 
   draw = (p) => {
-    let { start, sideLen, color, strokeWeight, centered } = this.props;
+    let { start, width, height, color, strokeWeight, centered } = this.props;
     p.stroke(color);
     p.strokeWeight(strokeWeight);
 
     if (centered) {
-      start = this.getOriginFromMidpoint(start, sideLen);
+      start = this.getOriginFromMidpoint(start, width, height);
     }
-    p.rect(start.x, start.y, sideLen, sideLen);
+    p.rect(start.x, start.y, width, height);
   }
 
-  getOriginFromMidpoint = (midpoint, sideLen) => {
-    const halfSideLen = Math.round(sideLen / 2);
-    return new Point(midpoint.x - halfSideLen, midpoint.y - halfSideLen);
+  getOriginFromMidpoint = (midpoint, width, height) => {
+    const originX = midpoint.x - Math.round(width / 2);
+    const originY = midpoint.y - Math.round(height / 2);
+    return new Point(originX, originY);
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.sideLen !== prevProps.sideLen ||
-      this.props.start !== prevProps.start) {
-      // Re-register the target point based on the new start location
+    if (this.props.width !== prevProps.width ||
+      this.props.height !== prevProps.height ||
+      !prevProps.start.equals(this.props.start)) {
+      // Re-register the target points based on the new start location
+      // or rectangle dimensions
       this.registerPoints();
     }
   }
@@ -185,9 +198,11 @@ export class Canvas extends React.Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, width, height, targetPoints } = this.props;
     return (
       <div ref={(e) => this.container = e}>
+        <Rectangle start={new Point(0, 0)} color="#FFFFFF"
+          targetPoints={targetPoints} width={width} height={height}/>
         {children}
       </div>
     )

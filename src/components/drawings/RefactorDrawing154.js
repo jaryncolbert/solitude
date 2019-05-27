@@ -1,13 +1,10 @@
 import React from 'react';
-import { Canvas, Square, Line, Point } from '../Shapes';
+import { Canvas, Rectangle, Line, Point } from '../Shapes';
 import { Button, Slider, Checkbox, RowGroup, DrawingInfo } from '../CommonComponents';
 import { getMidpoint, getRandomInt, getRandomBool } from '../util';
 
 
 export class Drawing154 extends React.Component {
-  canvasWidth = 600;
-  canvasHeight = 400;
-  midpoint = getMidpoint(0, 0, this.canvasWidth, this.canvasHeight);
   minLen = 5;
 
   constructor(props) {
@@ -19,6 +16,7 @@ export class Drawing154 extends React.Component {
       randomized: false,
       lineMax: initialSquare,
       lineStart: new Point(0, 0),
+      midpoint: new Point(0, 0),
       // Initial state of sliders
       lineLen: getRandomInt(this.minLen, initialSquare),
       sideLen: initialSquare,
@@ -33,14 +31,17 @@ export class Drawing154 extends React.Component {
     const prevSideLen = prevState.sideLen;
     const prevLineMax = prevState.lineMax;
     const prevLineStart = prevState.lineStart;
+    const prevMidpoint = prevState.midpoint;
+    const prevCanvasWidth = prevState.canvasWidth;
+    const prevCanvasHeight = prevState.canvasHeight;
     const prevSquareExtent = prevState.squareExtent;
     const prevRandomized = prevState.randomized;
     let { lineMax, lineStart, lineLen, sideLen, squareExtent,
       scaled, randomized } = this.state;
 
     lineMax = this.getLineMax();
-    if (randomized &&
-      (prevLineStart !== lineStart || prevSquareExtent !== squareExtent)) {
+    if (randomized && (!lineStart.equals(prevLineStart) ||
+       prevSquareExtent !== squareExtent)) {
       // If trigger is set to randomize, generate new value for lineLen
       lineLen = getRandomInt(this.minLen, lineMax);
       randomized = false;
@@ -65,16 +66,21 @@ export class Drawing154 extends React.Component {
     }
   }
 
-  setSquareExtent = (point) => {
-    // Signifies the max x value of the square (its right side)
+  setPointX = (point, propName) => {
     this.setState({
-      squareExtent: point.x
+      [propName]: point.x
     });
   }
 
-  setLineStart = (point) => {
+  setPointY = (point, propName) => {
     this.setState({
-      lineStart: point
+      [propName]: point.y
+    });
+  }
+
+  setPoint = (point, propName) => {
+    this.setState({
+      [propName]: point
     });
   }
 
@@ -93,28 +99,41 @@ export class Drawing154 extends React.Component {
   randomize = () => {
     this.setState({
       randomized: true,
-      sideLen: getRandomInt(this.minLen, this.canvasHeight),
+      sideLen: getRandomInt(this.minLen, this.state.canvasHeight),
       scaled: getRandomBool(),
       canExtend: getRandomBool(),
     });
   }
 
   getLineMax = () => {
-    let { lineStart, squareExtent, canExtend } = this.state;
+    let { lineStart, squareExtent, canvasWidth, canExtend } = this.state;
 
-    const extent = canExtend ? this.canvasWidth : squareExtent;
+    const extent = canExtend ? canvasWidth : squareExtent;
     return extent - lineStart.x;
   };
 
   // Save coordinates for mid left and mid right of square
-  getTargetPoints = () => {
+  getRectPoints = () => {
     return [{
-      target: Square.Points.MID_LEFT,
-      callback: this.setLineStart
-    },
-    {
-      target: Square.Points.MID_RIGHT,
-      callback: this.setSquareExtent
+      target: Rectangle.Points.MID_LEFT,
+      callback: (point) => this.setPoint(point, "lineStart")
+    }, {
+      target: Rectangle.Points.MID_RIGHT,
+      callback: (point) => this.setPointX(point, "squareExtent")
+    }];
+  }
+
+  // Save coordinates for midpoint and mid right of canvas
+  getCanvasPoints = () => {
+    return [{
+      target: Rectangle.Points.MIDPOINT,
+      callback: (point) => this.setPoint(point, "midpoint"),
+    }, {
+      target: Rectangle.Points.MID_RIGHT,
+      callback: (point) => this.setPointX(point, "canvasWidth"),
+    }, {
+      target: Rectangle.Points.BTM_RIGHT,
+      callback: (point) => this.setPointY(point, "canvasHeight"),
     }];
   }
 
@@ -126,14 +145,15 @@ export class Drawing154 extends React.Component {
     const lineEnd = new Point(lineEndX, lineStart.y);
 
     return (<>
-      <Canvas canvasWidth={this.canvasWidth} canvasHeight={this.canvasHeight}>
+      <Canvas targetPoints={this.getCanvasPoints()}>
         <DrawingInfo title="Wall Drawing 154"
         instructions="A black outlined square with a red
         horizontal line from the midpoint of the left side toward the
         middle of the right side."
         year="1973"/>
-        <Square start={this.midpoint} centered sideLen={sideLen}
-          targetPoints={this.getTargetPoints()}/>
+        <Rectangle start={this.state.midpoint} centered
+          width={sideLen} height={sideLen}
+          targetPoints={this.getRectPoints()}/>
         <Line start={lineStart} end={lineEnd} color={"#FF0000"}/>
       </Canvas>
 
@@ -141,7 +161,7 @@ export class Drawing154 extends React.Component {
         <Slider label="Square Size:"
           value={sideLen}
           changeHandler={(e) => this.setTargetValue(e, "sideLen")}
-          min={this.minLen} max={this.canvasHeight}/>
+          min={this.minLen} max={this.state.canvasHeight}/>
         <Slider label="Line Length:"
           value={lineLen}
           changeHandler={(e) => this.setTargetValue(e, "lineLen")}

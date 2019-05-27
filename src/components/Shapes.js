@@ -120,7 +120,8 @@ export class Square extends Drawable {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.sideLen !== prevProps.sideLen) {
+    if (this.props.sideLen !== prevProps.sideLen ||
+      this.props.start !== prevProps.start) {
       // Re-register the target point based on the new start location
       this.registerPoints();
     }

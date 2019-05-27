@@ -51,6 +51,60 @@ export class Line extends Drawable {
   }
 }
 
+export const LineDrawer = ({type, rising, centered, start, lineLen,
+  ...otherProps}) => {
+
+  let lineStart = start;
+  let lineEnd = new Point(0, 0);
+
+  switch(type) {
+    case "horizontal":
+      if (centered) {
+        lineStart = new Point(lineStart.x - Math.round(lineLen / 2), lineStart.y);
+      }
+      lineEnd = new Point(lineStart + lineLen, lineStart.y);
+      break;
+    case "diagonal":
+      if (centered) {
+        //Calculate new start point from midpoint
+        /* Half of lineLen is hypotenuse, line extends equally to/from midpoint
+         * to the start and end of the line
+         */
+        let hypotenuse = lineLen / 2;
+        let squareSizeFromDiag = calcSquareSideFromHypotenuse(hypotenuse);
+        let newStartX = lineStart.x - squareSizeFromDiag;
+
+        if (rising) {
+          lineStart = new Point(newStartX, lineStart.y + squareSizeFromDiag);
+        } else {
+          lineStart = new Point(newStartX, lineStart.y - squareSizeFromDiag);
+        }
+      }
+
+      /* Get width/height of square that comprises this diagonal line
+       * to find line end point
+       */
+      let hypotenuse = lineLen;
+      let squareSizeFromDiag = calcSquareSideFromHypotenuse(hypotenuse);
+
+      if (rising) {
+        lineEnd = new Point(lineStart.x + squareSizeFromDiag,
+          lineStart.y - squareSizeFromDiag);
+      } else {
+        lineEnd = new Point(lineStart.x - squareSizeFromDiag,
+          lineStart.y - squareSizeFromDiag);
+      }
+      break;
+    default: throw new Error("Unknown Line Type: " + type);
+  }
+
+  return <Line start={lineStart} end={lineEnd} {...otherProps}/>;
+}
+
+function calcSquareSideFromHypotenuse(hypotenuse) {
+  return Math.round(hypotenuse / Math.sqrt(2));
+}
+
 export class Rectangle extends Drawable {
   static defaultProps = {
     targetPoints: [],
@@ -75,13 +129,22 @@ export class Rectangle extends Drawable {
   }
 
   registerPoints = () => {
-    const { start, height, width, centered, targetPoints } = this.props;
+    const { start, height, width, centered,
+      targetPoints, getDiagonal } = this.props;
 
     // Register each target point and its callback function to pass to parent
     targetPoints.forEach(({ target, callback }) => {
       const point = this.getPoint(target, start, height, width, centered);
       callback(point);
     });
+
+    if (getDiagonal) {
+      getDiagonal(this.getDiagonal(width, height));
+    }
+  }
+
+  getDiagonal = (height, width) => {
+    return Math.round(Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
   }
 
   getPoint = (targetPoint, start, height, width, centered) => {
@@ -198,11 +261,10 @@ export class Canvas extends React.Component {
   }
 
   render() {
-    const { children, width, height, targetPoints } = this.props;
+    const { children, ...otherProps } = this.props;
     return (
       <div ref={(e) => this.container = e}>
-        <Rectangle start={new Point(0, 0)} color="#FFFFFF"
-          targetPoints={targetPoints} width={width} height={height}/>
+        <Rectangle start={new Point(0, 0)} color="#FFFFFF" {...otherProps}/>
         {children}
       </div>
     )

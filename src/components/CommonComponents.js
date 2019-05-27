@@ -11,6 +11,13 @@ export const Button = ({onClick, text}) =>
     className="btn btn-primary">{text || "Randomize"}
   </button>
 
+export const DrawingInfo = ({ title, instructions, year }) =>
+  <div className="sketch">
+    <h2 className="sketch-title">{title}</h2>
+    <p className="sketch-instructions">{instructions}
+      <span className="sketch-year">({year})</span></p>
+  </div>
+
 export function withDrawingContainer(Component) {
   return class WithDrawingContainer extends React.Component {
     render() {

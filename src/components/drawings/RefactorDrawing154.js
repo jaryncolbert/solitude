@@ -1,6 +1,6 @@
 import React from 'react';
 import { Canvas, Square, Line, Point } from '../Shapes';
-import { Button, Slider, Checkbox, RowGroup } from '../CommonComponents';
+import { Button, Slider, Checkbox, RowGroup, DrawingInfo } from '../CommonComponents';
 import { getMidpoint, getRandomInt, getRandomBool } from '../util';
 
 
@@ -127,6 +127,11 @@ export class Drawing154 extends React.Component {
 
     return (<>
       <Canvas canvasWidth={this.canvasWidth} canvasHeight={this.canvasHeight}>
+        <DrawingInfo title="Wall Drawing 154"
+        instructions="A black outlined square with a red
+        horizontal line from the midpoint of the left side toward the
+        middle of the right side."
+        year="1973"/>
         <Square start={this.midpoint} centered sideLen={sideLen}
           targetPoints={this.getTargetPoints()}/>
         <Line start={lineStart} end={lineEnd} color={"#FF0000"}/>

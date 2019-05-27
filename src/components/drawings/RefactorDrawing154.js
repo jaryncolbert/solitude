@@ -1,5 +1,11 @@
 import React from "react";
-import { Canvas, Rectangle, LineDrawer, Point } from "../Shapes";
+import {
+  Canvas,
+  Rectangle,
+  RectangleDrawer,
+  LineDrawer,
+  Point
+} from "../Shapes";
 import {
   Button,
   Slider,
@@ -178,7 +184,7 @@ export class Drawing154 extends React.Component {
         middle of the right side."
             year="1973"
           />
-          <Rectangle
+          <RectangleDrawer
             start={this.state.midpoint}
             centered
             width={sideLen}

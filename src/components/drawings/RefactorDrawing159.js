@@ -1,8 +1,13 @@
-import React from 'react';
-import { Canvas, Rectangle, LineDrawer, Point } from '../Shapes';
-import { Button, Slider, Checkbox, RowGroup, DrawingInfo } from '../CommonComponents';
-import { getRandomInt, getRandomBool } from '../util';
-
+import React from "react";
+import { Canvas, Rectangle, LineDrawer, Point } from "../Shapes";
+import {
+  Button,
+  Slider,
+  Checkbox,
+  RowGroup,
+  DrawingInfo
+} from "../CommonComponents";
+import { getRandomInt, getRandomBool } from "../util";
 
 export class Drawing159 extends React.Component {
   minLen = 5;
@@ -24,7 +29,7 @@ export class Drawing159 extends React.Component {
       sideLen: initialSquare,
       // Initial state of checkboxes
       canExtend: false,
-      scaled: false,
+      scaled: false
     };
   }
 
@@ -37,25 +42,47 @@ export class Drawing159 extends React.Component {
     const prevFallLineStart = prevState.fallLineStart;
     const prevSquareExtent = prevState.squareExtent;
     const prevRandomized = prevState.randomized;
-    let { lineMax, riseLineStart, riseLineLen, fallLineStart, fallLineLen,
-      sideLen, squareExtent, scaled, randomized } = this.state;
+    let {
+      lineMax,
+      riseLineStart,
+      riseLineLen,
+      fallLineStart,
+      fallLineLen,
+      sideLen,
+      squareExtent,
+      scaled,
+      randomized
+    } = this.state;
 
     lineMax = this.getLineMax();
-    if (randomized && (!riseLineStart.equals(prevRiseLineStart) ||
-      !fallLineStart.equals(prevFallLineStart) ||
-       prevSquareExtent !== squareExtent)) {
+    if (
+      randomized &&
+      (!riseLineStart.equals(prevRiseLineStart) ||
+        !fallLineStart.equals(prevFallLineStart) ||
+        prevSquareExtent !== squareExtent)
+    ) {
       // If trigger is set to randomize, generate new value for riseLineLen
       riseLineLen = getRandomInt(this.minLen, lineMax);
       fallLineLen = getRandomInt(this.minLen, lineMax);
       randomized = false;
     } else {
-      if (scaled && (riseLineLen !== prevRiseLineLen ||
-        fallLineLen !== prevFallLineLen || sideLen !== prevSideLen)) {
+      if (
+        scaled &&
+        (riseLineLen !== prevRiseLineLen ||
+          fallLineLen !== prevFallLineLen ||
+          sideLen !== prevSideLen)
+      ) {
         // Maintain previous scale of riseLineLen to squareSize
         const prevRiseRatio = prevRiseLineLen / prevSideLen;
         const prevFallRatio = prevFallLineLen / prevSideLen;
-        riseLineLen = Math.max(Math.round(prevRiseRatio * sideLen), this.minLen);
-        fallLineLen = Math.max(Math.round(prevFallRatio * sideLen), this.minLen);
+        riseLineLen = Math.max(
+          Math.round(prevRiseRatio * sideLen),
+          this.minLen
+        );
+        fallLineLen = Math.max(
+          Math.round(prevFallRatio * sideLen),
+          this.minLen
+        );
       }
       if (riseLineLen > lineMax) {
         riseLineLen = lineMax;
@@ -65,13 +92,17 @@ export class Drawing159 extends React.Component {
       }
     }
 
-    if (lineMax !== prevLineMax || riseLineLen !== prevRiseLineLen ||
-        fallLineLen !== prevFallLineLen || randomized !== prevRandomized) {
+    if (
+      lineMax !== prevLineMax ||
+      riseLineLen !== prevRiseLineLen ||
+      fallLineLen !== prevFallLineLen ||
+      randomized !== prevRandomized
+    ) {
       this.setState({
         lineMax: lineMax,
         riseLineLen: riseLineLen,
         fallLineLen: fallLineLen,
-        randomized: randomized,
+        randomized: randomized
       });
     }
   }
@@ -80,46 +111,46 @@ export class Drawing159 extends React.Component {
     this.setState({
       [propName]: point.x
     });
-  }
+  };
 
   setPointY = (point, propName) => {
     this.setState({
       [propName]: point.y
     });
-  }
+  };
 
   setPoint = (point, propName) => {
     this.setState({
       [propName]: point
     });
-  }
+  };
 
   setValue = (value, propName) => {
     this.setState({
       [propName]: value
     });
-  }
+  };
 
   setTargetValue = (e, propName) => {
     this.setState({
       [propName]: Number(e.target.value)
     });
-  }
+  };
 
   toggleValue = (e, propName) => {
     this.setState({
-      [propName]: !!(e.target.checked)
+      [propName]: !!e.target.checked
     });
-  }
+  };
 
   randomize = () => {
     this.setState({
       randomized: true,
       sideLen: getRandomInt(this.minLen, this.state.canvasHeight),
       scaled: getRandomBool(),
-      canExtend: getRandomBool(),
+      canExtend: getRandomBool()
     });
-  }
+  };
 
   getLineMax = () => {
     let { canExtend, squareDiag, canvasDiag } = this.state;
@@ -128,77 +159,124 @@ export class Drawing159 extends React.Component {
 
   // Save coordinates for mid left and mid right of square
   getRectPoints = () => {
-    return [{
-      target: Rectangle.Points.BTM_LEFT,
-      callback: (point) => this.setPoint(point, "riseLineStart")
-    }, {
-      target: Rectangle.Points.BTM_RIGHT,
-      callback: (point) => this.setPoint(point, "fallLineStart")
-    }];
-  }
+    return [
+      {
+        target: Rectangle.Points.BTM_LEFT,
+        callback: point => this.setPoint(point, "riseLineStart")
+      },
+      {
+        target: Rectangle.Points.BTM_RIGHT,
+        callback: point => this.setPoint(point, "fallLineStart")
+      }
+    ];
+  };
 
   // Save coordinates for midpoint and mid right of canvas
   getCanvasPoints = () => {
-    return [{
-      target: Rectangle.Points.MIDPOINT,
-      callback: (point) => this.setPoint(point, "midpoint"),
-    }, {
-      target: Rectangle.Points.BTM_RIGHT,
-      callback: (point) => this.setPointY(point, "canvasHeight"),
-    }];
-  }
+    return [
+      {
+        target: Rectangle.Points.MIDPOINT,
+        callback: point => this.setPoint(point, "midpoint")
+      },
+      {
+        target: Rectangle.Points.BTM_RIGHT,
+        callback: point => this.setPointY(point, "canvasHeight")
+      }
+    ];
+  };
 
   render() {
-    const { lineMax, riseLineStart, riseLineLen, fallLineStart, fallLineLen,
-      sideLen, canExtend, scaled } = this.state;
+    const {
+      lineMax,
+      riseLineStart,
+      riseLineLen,
+      fallLineStart,
+      fallLineLen,
+      sideLen,
+      canExtend,
+      scaled
+    } = this.state;
 
-    return (<>
-      <Canvas targetPoints={this.getCanvasPoints()}
-        getDiagonal={(v) => this.setValue(v, "canvasDiag")}>
-        <DrawingInfo title="Wall Drawing 159"
-        instructions="A black outlined square
+    return (
+      <>
+        <Canvas
+          targetPoints={this.getCanvasPoints()}
+          getDiagonal={v => this.setValue(v, "canvasDiag")}
+        >
+          <DrawingInfo
+            title="Wall Drawing 159"
+            instructions="A black outlined square
         with a red diagonal line
         from the lower left corner
         toward the upper right corner;
         and another red line
         from the lower right corner
         to the upper left."
-        year="1973"/>
-        <Rectangle start={this.state.midpoint} centered
-          width={sideLen} height={sideLen}
-          targetPoints={this.getRectPoints()}
-          getDiagonal={(v) => this.setValue(v, "squareDiag")}/>
-        <LineDrawer start={riseLineStart} lineLen={riseLineLen}
-          type="diagonal" rising color={"#FF0000"}/>
-        <LineDrawer start={fallLineStart} lineLen={fallLineLen}
-          type="diagonal" falling color={"#FF0000"}/>
-      </Canvas>
+            year="1973"
+          />
+          <Rectangle
+            start={this.state.midpoint}
+            centered
+            width={sideLen}
+            height={sideLen}
+            targetPoints={this.getRectPoints()}
+            getDiagonal={v => this.setValue(v, "squareDiag")}
+          />
+          <LineDrawer
+            start={riseLineStart}
+            lineLen={riseLineLen}
+            type="diagonal"
+            rising
+            color={"#FF0000"}
+          />
+          <LineDrawer
+            start={fallLineStart}
+            lineLen={fallLineLen}
+            type="diagonal"
+            falling
+            color={"#FF0000"}
+          />
+        </Canvas>
 
-      <RowGroup>
-        <Slider label="Square Size:"
-          value={sideLen}
-          changeHandler={(e) => this.setTargetValue(e, "sideLen")}
-          min={this.minLen} max={this.state.canvasHeight}/>
-        <Slider label="Rising Line Length:"
-          value={riseLineLen}
-          changeHandler={(e) => this.setTargetValue(e, "riseLineLen")}
-          min={this.minLen} max={lineMax}/>
-        <Slider label="Falling Line Length:"
-          value={fallLineLen}
-          changeHandler={(e) => this.setTargetValue(e, "fallLineLen")}
-          min={this.minLen} max={lineMax}/>
-      </RowGroup>
+        <RowGroup>
+          <Slider
+            label="Square Size:"
+            value={sideLen}
+            changeHandler={e => this.setTargetValue(e, "sideLen")}
+            min={this.minLen}
+            max={this.state.canvasHeight}
+          />
+          <Slider
+            label="Rising Line Length:"
+            value={riseLineLen}
+            changeHandler={e => this.setTargetValue(e, "riseLineLen")}
+            min={this.minLen}
+            max={lineMax}
+          />
+          <Slider
+            label="Falling Line Length:"
+            value={fallLineLen}
+            changeHandler={e => this.setTargetValue(e, "fallLineLen")}
+            min={this.minLen}
+            max={lineMax}
+          />
+        </RowGroup>
 
-      <RowGroup>
-        <Checkbox label="Can line extend beyond square?"
-          isSelected={canExtend}
-          changeHandler={(e) => this.toggleValue(e, "canExtend")}/>
-        <Checkbox label="Scale square proportionally?"
-          isSelected={scaled}
-          changeHandler={(e) => this.toggleValue(e, "scaled")}/>
-      </RowGroup>
+        <RowGroup>
+          <Checkbox
+            label="Can line extend beyond square?"
+            isSelected={canExtend}
+            changeHandler={e => this.toggleValue(e, "canExtend")}
+          />
+          <Checkbox
+            label="Scale square proportionally?"
+            isSelected={scaled}
+            changeHandler={e => this.toggleValue(e, "scaled")}
+          />
+        </RowGroup>
 
-      <Button onClick={this.randomize}/>
-    </>)
+        <Button onClick={this.randomize} />
+      </>
+    );
   }
 }

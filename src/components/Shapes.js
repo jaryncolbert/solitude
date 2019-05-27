@@ -1,12 +1,12 @@
-import React from 'react';
-import p5 from 'p5';
-import PropTypes from 'prop-types';
+import React from "react";
+import p5 from "p5";
+import PropTypes from "prop-types";
 
 class Drawable extends React.Component {
   static defaultProps = {
     strokeWeight: 4,
     color: "#000000"
-  }
+  };
 
   static contextTypes = {
     subscribe: PropTypes.func,
@@ -21,9 +21,9 @@ class Drawable extends React.Component {
     this.context.unsubscribe(this.draw);
   }
 
-  draw = (p) => {
-    throw new Error('Unimplemented draw method!');
-  }
+  draw = p => {
+    throw new Error("Unimplemented draw method!");
+  };
 
   render() {
     return null;
@@ -37,30 +37,42 @@ export class Point {
   }
 
   equals(point) {
-    return Number.isInteger(point.x) && (this.x === point.x) &&
-      Number.isInteger(point.y) && (this.y === point.y);
+    return (
+      Number.isInteger(point.x) &&
+      this.x === point.x &&
+      Number.isInteger(point.y) &&
+      this.y === point.y
+    );
   }
 }
 
 export class Line extends Drawable {
-  draw = (p) => {
+  draw = p => {
     const { start, end, color, strokeWeight } = this.props;
     p.stroke(color);
     p.strokeWeight(strokeWeight);
     p.line(start.x, start.y, end.x, end.y);
-  }
+  };
 }
 
-export const LineDrawer = ({type, rising, centered, start, lineLen,
-  ...otherProps}) => {
-
+export const LineDrawer = ({
+  type,
+  rising,
+  centered,
+  start,
+  lineLen,
+  ...otherProps
+}) => {
   let lineStart = start;
   let lineEnd = new Point(0, 0);
 
-  switch(type) {
+  switch (type) {
     case "horizontal":
       if (centered) {
-        lineStart = new Point(lineStart.x - Math.round(lineLen / 2), lineStart.y);
+        lineStart = new Point(
+          lineStart.x - Math.round(lineLen / 2),
+          lineStart.y
+        );
       }
       lineEnd = new Point(lineStart.x + lineLen, lineStart.y);
       break;
@@ -88,18 +100,23 @@ export const LineDrawer = ({type, rising, centered, start, lineLen,
       let squareSizeFromDiag = calcSquareSideFromHypotenuse(hypotenuse);
 
       if (rising) {
-        lineEnd = new Point(lineStart.x + squareSizeFromDiag,
-          lineStart.y - squareSizeFromDiag);
+        lineEnd = new Point(
+          lineStart.x + squareSizeFromDiag,
+          lineStart.y - squareSizeFromDiag
+        );
       } else {
-        lineEnd = new Point(lineStart.x - squareSizeFromDiag,
-          lineStart.y - squareSizeFromDiag);
+        lineEnd = new Point(
+          lineStart.x - squareSizeFromDiag,
+          lineStart.y - squareSizeFromDiag
+        );
       }
       break;
-    default: throw new Error("Unknown Line Type: " + type);
+    default:
+      throw new Error("Unknown Line Type: " + type);
   }
 
-  return <Line start={lineStart} end={lineEnd} {...otherProps}/>;
-}
+  return <Line start={lineStart} end={lineEnd} {...otherProps} />;
+};
 
 function calcSquareSideFromHypotenuse(hypotenuse) {
   return Math.round(hypotenuse / Math.sqrt(2));
@@ -110,7 +127,7 @@ export class Rectangle extends Drawable {
     targetPoints: [],
     strokeWeight: 4,
     color: "#000000"
-  }
+  };
 
   static Points = Object.freeze({
     TOP_LEFT: "top_left",
@@ -129,8 +146,14 @@ export class Rectangle extends Drawable {
   }
 
   registerPoints = () => {
-    const { start, height, width, centered,
-      targetPoints, getDiagonal } = this.props;
+    const {
+      start,
+      height,
+      width,
+      centered,
+      targetPoints,
+      getDiagonal
+    } = this.props;
 
     // Register each target point and its callback function to pass to parent
     targetPoints.forEach(({ target, callback }) => {
@@ -141,11 +164,11 @@ export class Rectangle extends Drawable {
     if (getDiagonal) {
       getDiagonal(this.getDiagonal(width, height));
     }
-  }
+  };
 
   getDiagonal = (height, width) => {
     return Math.round(Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-  }
+  };
 
   getPoint = (targetPoint, start, height, width, centered) => {
     if (centered) {
@@ -157,7 +180,7 @@ export class Rectangle extends Drawable {
     const midY = start.y + Math.round(height / 2);
     const btmY = start.y + height;
 
-    switch(targetPoint) {
+    switch (targetPoint) {
       case Rectangle.Points.TOP_LEFT:
         return new Point(start.x, start.y);
       case Rectangle.Points.TOP_RIGHT:
@@ -172,11 +195,12 @@ export class Rectangle extends Drawable {
         return new Point(start.x, midY);
       case Rectangle.Points.MID_RIGHT:
         return new Point(rightX, midY);
-      default: throw new Error("Unknown Square point " + targetPoint);
+      default:
+        throw new Error("Unknown Square point " + targetPoint);
     }
-  }
+  };
 
-  draw = (p) => {
+  draw = p => {
     let { start, width, height, color, strokeWeight, centered } = this.props;
     p.stroke(color);
     p.strokeWeight(strokeWeight);
@@ -185,18 +209,20 @@ export class Rectangle extends Drawable {
       start = this.getOriginFromMidpoint(start, width, height);
     }
     p.rect(start.x, start.y, width, height);
-  }
+  };
 
   getOriginFromMidpoint = (midpoint, width, height) => {
     const originX = midpoint.x - Math.round(width / 2);
     const originY = midpoint.y - Math.round(height / 2);
     return new Point(originX, originY);
-  }
+  };
 
   componentDidUpdate(prevProps) {
-    if (this.props.width !== prevProps.width ||
+    if (
+      this.props.width !== prevProps.width ||
       this.props.height !== prevProps.height ||
-      !prevProps.start.equals(this.props.start)) {
+      !prevProps.start.equals(this.props.start)
+    ) {
       // Re-register the target points based on the new start location
       // or rectangle dimensions
       this.registerPoints();
@@ -208,7 +234,7 @@ export class Canvas extends React.Component {
   static defaultProps = {
     width: 600,
     height: 400
-  }
+  };
 
   static childContextTypes = {
     subscribe: PropTypes.func,
@@ -225,36 +251,36 @@ export class Canvas extends React.Component {
     return {
       subscribe: this.subscribe,
       unsubscribe: this.unsubscribe
-    }
+    };
   }
 
   componentDidMount() {
     const { setup, draw } = this;
 
-    const sketch = (p) => {
+    const sketch = p => {
       p.setup = () => setup(p);
       p.draw = () => draw(p);
     };
     this.p = new p5(sketch, this.container);
   }
 
-  setup = (p) => {
+  setup = p => {
     const { width, height } = this.props;
     p.createCanvas(width, height);
-  }
+  };
 
-  subscribe = (childFn) => {
+  subscribe = childFn => {
     this.drawables.push(childFn);
-  }
+  };
 
-  unsubscribe = (childFn) => {
+  unsubscribe = childFn => {
     this.drawables = this.drawables.filter(c => c !== childFn);
-  }
+  };
 
-  draw = (p) => {
+  draw = p => {
     p.background(255, 255, 255);
     this.drawables.forEach(c => c(p));
-  }
+  };
 
   componentWillUnmount() {
     this.p.remove();
@@ -263,10 +289,10 @@ export class Canvas extends React.Component {
   render() {
     const { children, ...otherProps } = this.props;
     return (
-      <div ref={(e) => this.container = e}>
-        <Rectangle start={new Point(0, 0)} color="#FFFFFF" {...otherProps}/>
+      <div ref={e => (this.container = e)}>
+        <Rectangle start={new Point(0, 0)} color="#FFFFFF" {...otherProps} />
         {children}
       </div>
-    )
+    );
   }
 }

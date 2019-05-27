@@ -1,22 +1,25 @@
-import React from 'react';
-import { toCamelCase } from './util';
+import React from "react";
+import { toCamelCase } from "./util";
 
-export const DrawingContainer = ({children, className}) =>
-  <div className={"drawing-container " + className}>
-   {children}
-  </div>;
+export const DrawingContainer = ({ children, className }) => (
+  <div className={"drawing-container " + className}>{children}</div>
+);
 
-export const Button = ({onClick, text}) =>
-  <button onClick={onClick}
-    className="btn btn-primary">{text || "Randomize"}
+export const Button = ({ onClick, text }) => (
+  <button onClick={onClick} className="btn btn-primary">
+    {text || "Randomize"}
   </button>
+);
 
-export const DrawingInfo = ({ title, instructions, year }) =>
+export const DrawingInfo = ({ title, instructions, year }) => (
   <div className="sketch">
     <h2 className="sketch-title">{title}</h2>
-    <p className="sketch-instructions">{instructions}
-      <span className="sketch-year">({year})</span></p>
+    <p className="sketch-instructions">
+      {instructions}
+      <span className="sketch-year">({year})</span>
+    </p>
   </div>
+);
 
 export function withDrawingContainer(Component) {
   return class WithDrawingContainer extends React.Component {
@@ -24,11 +27,11 @@ export function withDrawingContainer(Component) {
       const { className, ...otherProps } = this.props;
       return (
         <div className={"drawing-container " + className}>
-          <Component {...otherProps}/>
+          <Component {...otherProps} />
         </div>
       );
     }
-  }
+  };
 }
 
 export function withRandomizer(Component) {
@@ -36,14 +39,17 @@ export function withRandomizer(Component) {
     render() {
       return (
         <>
-          <Component randomizer={click => this.randomizer = click}
-            {...this.props}/>
-          <button onClick={() => this.randomizer()}
-            className="btn btn-primary">Randomize</button>
+          <Component
+            randomizer={click => (this.randomizer = click)}
+            {...this.props}
+          />
+          <button onClick={() => this.randomizer()} className="btn btn-primary">
+            Randomize
+          </button>
         </>
       );
     }
-  }
+  };
 }
 
 export class RowGroup extends React.Component {
@@ -68,12 +74,16 @@ export function Slider(props) {
     <div className={"slider-container form-group " + props.className}>
       <label htmlFor={sliderId}>{props.label}</label>
       <output className="slider-output">{props.value}</output>
-      <input className="form-control-range"
+      <input
+        className="form-control-range"
         type="range"
-        min={props.min}  max={props.max} step="1"
+        min={props.min}
+        max={props.max}
+        step="1"
         value={props.value}
         id={sliderId}
-        onChange={props.changeHandler}/>
+        onChange={props.changeHandler}
+      />
     </div>
   );
 }
@@ -83,12 +93,16 @@ export function Checkbox({ isSelected, changeHandler, label, className }) {
 
   return (
     <div className={"checkbox-container form-check " + className}>
-      <input className="form-check-input"
+      <input
+        className="form-check-input"
         type="checkbox"
         id={checkboxId}
         checked={isSelected}
-        onChange={changeHandler}/>
-      <label className="form-check-label" htmlFor={checkboxId}>{label}</label>
+        onChange={changeHandler}
+      />
+      <label className="form-check-label" htmlFor={checkboxId}>
+        {label}
+      </label>
     </div>
   );
 }

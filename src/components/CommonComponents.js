@@ -2,7 +2,13 @@ import React from "react";
 import { toCamelCase } from "./util";
 
 export const DrawingContainer = ({ children, className }) => (
-  <div className={"drawing-container " + className}>{children}</div>
+  <div
+    className={
+      className ? "drawing-container " + className : "drawing-container"
+    }
+  >
+    {children}
+  </div>
 );
 
 export const Button = ({ onClick, text }) => (

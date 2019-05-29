@@ -11,7 +11,8 @@ import {
   Slider,
   Checkbox,
   RowGroup,
-  DrawingInfo
+  DrawingInfo,
+  DrawingContainer
 } from "../CommonComponents";
 import { getRandomInt, getRandomBool } from "../util";
 
@@ -181,7 +182,7 @@ export default class Drawing164 extends React.Component {
     } = this.state;
 
     return (
-      <>
+      <DrawingContainer {...this.props}>
         <Canvas
           targetPoints={this.getCanvasPoints()}
           getDiagonal={v => this.setValue(v, "canvasDiag")}
@@ -257,7 +258,7 @@ export default class Drawing164 extends React.Component {
         </RowGroup>
 
         <Button onClick={this.randomize} />
-      </>
+      </DrawingContainer>
     );
   }
 }

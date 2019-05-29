@@ -21,37 +21,6 @@ export const DrawingInfo = ({ title, instructions, year }) => (
   </div>
 );
 
-export function withDrawingContainer(Component) {
-  return class WithDrawingContainer extends React.Component {
-    render() {
-      const { className, ...otherProps } = this.props;
-      return (
-        <div className={"drawing-container " + className}>
-          <Component {...otherProps} />
-        </div>
-      );
-    }
-  };
-}
-
-export function withRandomizer(Component) {
-  return class WithRandomizer extends React.Component {
-    render() {
-      return (
-        <>
-          <Component
-            randomizer={click => (this.randomizer = click)}
-            {...this.props}
-          />
-          <button onClick={() => this.randomizer()} className="btn btn-primary">
-            Randomize
-          </button>
-        </>
-      );
-    }
-  };
-}
-
 export class RowGroup extends React.Component {
   render() {
     return (

@@ -61,7 +61,7 @@ export class LineDrawer extends React.Component {
   };
 
   getStartAndEnd = () => {
-    let { type, rising, centered, start, lineLen } = this.props;
+    let { type, rising, centered, rightToLeft, start, lineLen } = this.props;
 
     const knownTypes = ["horizontal", "diagonal"];
     if (!knownTypes.includes(type))
@@ -104,8 +104,10 @@ export class LineDrawer extends React.Component {
      */
     let hypotenuse = lineLen;
     let squareSizeFromDiag = this.calcSquareSideFromHypotenuse(hypotenuse);
-    let newEndY = lineStart.y - squareSizeFromDiag;
-    let newEndX = rising
+    let newEndY = (!rising && !rightToLeft) || (rising && rightToLeft)
+        ? lineStart.y + squareSizeFromDiag
+        : lineStart.y - squareSizeFromDiag;
+    let newEndX = !rightToLeft
       ? lineStart.x + squareSizeFromDiag
       : lineStart.x - squareSizeFromDiag;
     return { lineStart, lineEnd: new Point(newEndX, newEndY) };

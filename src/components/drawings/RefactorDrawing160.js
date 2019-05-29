@@ -1,5 +1,11 @@
 import React from "react";
-import { Canvas, RectangleDrawer, Rectangle, LineDrawer, Point } from "../Shapes";
+import {
+  Canvas,
+  RectangleDrawer,
+  Rectangle,
+  LineDrawer,
+  Point
+} from "../Shapes";
 import {
   Button,
   Slider,
@@ -9,7 +15,7 @@ import {
 } from "../CommonComponents";
 import { getRandomInt, getRandomBool } from "../util";
 
-export class Drawing159 extends React.Component {
+export class Drawing160 extends React.Component {
   minLen = 5;
 
   constructor(props) {
@@ -20,8 +26,6 @@ export class Drawing159 extends React.Component {
     this.state = {
       randomized: false,
       lineMax: initialSquare,
-      riseLineStart: new Point(0, 0),
-      fallLineStart: new Point(0, 0),
       midpoint: new Point(0, 0),
       // Initial state of sliders
       riseLineLen: getRandomInt(this.minLen, initialSquare),
@@ -38,28 +42,23 @@ export class Drawing159 extends React.Component {
     const prevFallLineLen = prevState.fallLineLen;
     const prevSideLen = prevState.sideLen;
     const prevLineMax = prevState.lineMax;
-    const prevRiseLineStart = prevState.riseLineStart;
-    const prevFallLineStart = prevState.fallLineStart;
-    const prevSquareExtent = prevState.squareExtent;
+    const prevSquareDiag = prevState.squareDiag;
+    const prevCanvasDiag = prevState.canvasDiag;
     const prevRandomized = prevState.randomized;
     let {
       lineMax,
-      riseLineStart,
       riseLineLen,
-      fallLineStart,
       fallLineLen,
       sideLen,
-      squareExtent,
+      squareDiag,
+      canvasDiag,
       scaled,
       randomized
     } = this.state;
 
     lineMax = this.getLineMax();
     if (
-      randomized &&
-      (!riseLineStart.equals(prevRiseLineStart) ||
-        !fallLineStart.equals(prevFallLineStart) ||
-        prevSquareExtent !== squareExtent)
+      randomized && ((prevSquareDiag !== squareDiag) || (prevCanvasDiag !== canvasDiag))
     ) {
       // If trigger is set to randomize, generate new value for riseLineLen
       riseLineLen = getRandomInt(this.minLen, lineMax);
@@ -157,20 +156,6 @@ export class Drawing159 extends React.Component {
     return canExtend ? canvasDiag : squareDiag;
   };
 
-  // Save coordinates for mid left and mid right of square
-  getRectPoints = () => {
-    return [
-      {
-        target: Rectangle.Points.BTM_LEFT,
-        callback: point => this.setPoint(point, "riseLineStart")
-      },
-      {
-        target: Rectangle.Points.BTM_RIGHT,
-        callback: point => this.setPoint(point, "fallLineStart")
-      }
-    ];
-  };
-
   // Save coordinates for midpoint and mid right of canvas
   getCanvasPoints = () => {
     return [
@@ -188,9 +173,7 @@ export class Drawing159 extends React.Component {
   render() {
     const {
       lineMax,
-      riseLineStart,
       riseLineLen,
-      fallLineStart,
       fallLineLen,
       sideLen,
       canExtend,
@@ -204,14 +187,14 @@ export class Drawing159 extends React.Component {
           getDiagonal={v => this.setValue(v, "canvasDiag")}
         >
           <DrawingInfo
-            title="Wall Drawing 159"
+            title="Wall Drawing 160"
             instructions="A black outlined square
-        with a red diagonal line
-        from the lower left corner
-        toward the upper right corner;
-        and another red line
-        from the lower right corner
-        to the upper left."
+            with a red diagonal line
+            centered on the axis
+            between the upper left and lower right corners
+            and another red diagonal line
+            centered on the axis
+            between the lower left and upper right corners."
             year="1973"
           />
           <RectangleDrawer
@@ -219,21 +202,20 @@ export class Drawing159 extends React.Component {
             centered
             width={sideLen}
             height={sideLen}
-            targetPoints={this.getRectPoints()}
             getDiagonal={v => this.setValue(v, "squareDiag")}
           />
           <LineDrawer
-            start={riseLineStart}
+            start={this.state.midpoint}
             lineLen={riseLineLen}
             type="diagonal"
-            rising
+            rising centered
             color={"#FF0000"}
           />
           <LineDrawer
-            start={fallLineStart}
+            start={this.state.midpoint}
             lineLen={fallLineLen}
             type="diagonal"
-            falling rightToLeft
+            falling centered
             color={"#FF0000"}
           />
         </Canvas>

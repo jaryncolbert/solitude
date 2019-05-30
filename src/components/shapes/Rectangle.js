@@ -58,30 +58,17 @@ function withRectPoints(RectangleComponent) {
     }
 
     registerPoints = () => {
-      let {
-        start,
-        height,
-        width,
-        centered,
-        targetPoints,
-        getDiagonal
-      } = this.props;
-
-      // If centered, reinterpret start point as midpoint
-      if (centered) {
-        start = this.getOriginFromMidpoint(start, width, height);
-      }
+      let { start, height, width, targetPoints, getDiagonal } = this.props;
 
       // Register each target point and its callback function to pass to parent
       targetPoints.forEach(({ target, callback }) => {
-        const point = this.getPoint(target, start, height, width, centered);
+        const point = this.getPoint(target, start, height, width);
         callback(point);
       });
 
       if (getDiagonal) {
         getDiagonal(this.getDiagonal(width, height));
       }
-
     };
 
     getDiagonal = (width, height) => {
@@ -114,25 +101,8 @@ function withRectPoints(RectangleComponent) {
       }
     };
 
-    getOriginFromMidpoint = (midpoint, width, height) => {
-      const originX = midpoint.x - Math.round(width / 2);
-      const originY = midpoint.y - Math.round(height / 2);
-      return new Point(originX, originY);
-    };
-
     render() {
-      let {
-        targetPoints,
-        centered,
-        start,
-        width,
-        height,
-        ...otherProps
-      } = this.props;
-      // If centered, reinterpret start point as midpoint
-      if (centered) {
-        start = this.getOriginFromMidpoint(start, width, height);
-      }
+      let { targetPoints, start, width, height, ...otherProps } = this.props;
 
       return (
         <RectangleComponent
@@ -160,7 +130,40 @@ function withEqualSides(RectangleComponent) {
   };
 }
 
+function centered(RectangleComponent) {
+  return class extends React.Component {
+    static defaultProps = RectangleComponent.defaultProps;
+
+    getOriginFromMidpoint = (midpoint, width, height) => {
+      const originX = midpoint.x - Math.round(width / 2);
+      const originY = midpoint.y - Math.round(height / 2);
+      return new Point(originX, originY);
+    };
+
+    render() {
+      const { midpoint, width, height, ...otherProps } = this.props;
+      const newStart = this.getOriginFromMidpoint(midpoint, width, height);
+
+      return (
+        <RectangleComponent
+          {...otherProps}
+          start={newStart}
+          width={width}
+          height={height}
+        />
+      );
+    }
+  };
+}
+
 export const Rectangle = withRectPoints(SimpleRectangle);
 export const Square = withEqualSides(Rectangle);
+
+export const CenteredRectangle = centered(Rectangle);
+/* CenteredSquare is withEqualSides(CenteredRectangle) instead of centered(Square)
+ * because sideLen expansion must happen before midpoint calculation, which
+ * uses width, height
+ */
+export const CenteredSquare = withEqualSides(CenteredRectangle);
 
 export default Rectangle;

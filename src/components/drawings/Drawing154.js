@@ -1,5 +1,5 @@
 import React from "react";
-import { Square, RectPoints } from "../shapes/Rectangle";
+import { CenteredSquare, RectPoints } from "../shapes/Rectangle";
 import Point from "../shapes/Point";
 import { HorizLine } from "../shapes/Line";
 import Canvas from "../P5Canvas";
@@ -184,9 +184,8 @@ export default class Drawing154 extends React.Component {
         middle of the right side."
             year="1973"
           />
-          <Square
-            start={this.state.midpoint}
-            centered
+          <CenteredSquare
+            midpoint={this.state.midpoint}
             sideLen={sideLen}
             targetPoints={this.getSquarePoints()}
           />

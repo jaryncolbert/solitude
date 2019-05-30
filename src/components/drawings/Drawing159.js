@@ -1,5 +1,5 @@
 import React from "react";
-import { Square, RectPoints } from "../shapes/Rectangle";
+import { CenteredSquare, RectPoints } from "../shapes/Rectangle";
 import Point from "../shapes/Point";
 import { DiagLine } from "../shapes/Line";
 import Canvas from "../P5Canvas";
@@ -218,9 +218,8 @@ export default class Drawing159 extends React.Component {
         to the upper left."
             year="1973"
           />
-          <Square
-            start={this.state.midpoint}
-            centered
+          <CenteredSquare
+            midpoint={this.state.midpoint}
             sideLen={sideLen}
             targetPoints={this.getSquarePoints()}
             getDiagonal={v => this.setValue(v, "squareDiag")}

@@ -1,12 +1,8 @@
 import React from "react";
-import {
-  Canvas,
-  Square,
-  RectPoints,
-  HorizLine,
-  DiagLine,
-  Point
-} from "../Shapes";
+import { Square, RectPoints } from "../shapes/Rectangle";
+import Point from "../shapes/Point";
+import { HorizLine, DiagLine } from "../shapes/Line";
+import Canvas from "../P5Canvas";
 import {
   Button,
   Slider,

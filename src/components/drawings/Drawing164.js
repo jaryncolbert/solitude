@@ -2,6 +2,7 @@ import React from "react";
 import {
   Canvas,
   Square,
+  RectPoints,
   HorizLine,
   DiagLine,
   Point
@@ -162,11 +163,11 @@ export default class Drawing164 extends React.Component {
   getCanvasPoints = () => {
     return [
       {
-        target: Canvas.Points.MIDPOINT,
+        target: RectPoints.MIDPOINT,
         callback: point => this.setPoint(point, "midpoint")
       },
       {
-        target: Canvas.Points.BTM_RIGHT,
+        target: RectPoints.BTM_RIGHT,
         callback: point => this.setPointY(point, "canvasHeight")
       }
     ];
@@ -201,8 +202,7 @@ export default class Drawing164 extends React.Component {
           <Square
             start={this.state.midpoint}
             centered
-            width={sideLen}
-            height={sideLen}
+            sideLen={sideLen}
             getDiagonal={v => this.setValue(v, "squareDiag")}
           />
           <DiagLine

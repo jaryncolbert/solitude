@@ -1,5 +1,5 @@
 import React from "react";
-import { Canvas, Square, DiagLine, Point } from "../Shapes";
+import { Canvas, Square, RectPoints, DiagLine, Point } from "../Shapes";
 import {
   Button,
   Slider,
@@ -162,11 +162,11 @@ export default class Drawing159 extends React.Component {
   getSquarePoints = () => {
     return [
       {
-        target: Square.Points.BTM_LEFT,
+        target: RectPoints.BTM_LEFT,
         callback: point => this.setPoint(point, "riseLineStart")
       },
       {
-        target: Square.Points.BTM_RIGHT,
+        target: RectPoints.BTM_RIGHT,
         callback: point => this.setPoint(point, "fallLineStart")
       }
     ];
@@ -176,11 +176,11 @@ export default class Drawing159 extends React.Component {
   getCanvasPoints = () => {
     return [
       {
-        target: Canvas.Points.MIDPOINT,
+        target: RectPoints.MIDPOINT,
         callback: point => this.setPoint(point, "midpoint")
       },
       {
-        target: Canvas.Points.BTM_RIGHT,
+        target: RectPoints.BTM_RIGHT,
         callback: point => this.setPointY(point, "canvasHeight")
       }
     ];
@@ -218,8 +218,7 @@ export default class Drawing159 extends React.Component {
           <Square
             start={this.state.midpoint}
             centered
-            width={sideLen}
-            height={sideLen}
+            sideLen={sideLen}
             targetPoints={this.getSquarePoints()}
             getDiagonal={v => this.setValue(v, "squareDiag")}
           />

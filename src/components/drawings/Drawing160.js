@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Canvas,
-  Square,
-  DiagLine,
-  Point
-} from "../Shapes";
+import { Canvas, Square, RectPoints, DiagLine, Point } from "../Shapes";
 import {
   Button,
   Slider,
@@ -58,7 +53,8 @@ export default class Drawing160 extends React.Component {
 
     lineMax = this.getLineMax();
     if (
-      randomized && ((prevSquareDiag !== squareDiag) || (prevCanvasDiag !== canvasDiag))
+      randomized &&
+      (prevSquareDiag !== squareDiag || prevCanvasDiag !== canvasDiag)
     ) {
       // If trigger is set to randomize, generate new value for riseLineLen
       riseLineLen = getRandomInt(this.minLen, lineMax);
@@ -160,11 +156,11 @@ export default class Drawing160 extends React.Component {
   getCanvasPoints = () => {
     return [
       {
-        target: Canvas.Points.MIDPOINT,
+        target: RectPoints.MIDPOINT,
         callback: point => this.setPoint(point, "midpoint")
       },
       {
-        target: Canvas.Points.BTM_RIGHT,
+        target: RectPoints.BTM_RIGHT,
         callback: point => this.setPointY(point, "canvasHeight")
       }
     ];
@@ -200,20 +196,21 @@ export default class Drawing160 extends React.Component {
           <Square
             start={this.state.midpoint}
             centered
-            width={sideLen}
-            height={sideLen}
+            sideLen={sideLen}
             getDiagonal={v => this.setValue(v, "squareDiag")}
           />
           <DiagLine
             start={this.state.midpoint}
             lineLen={riseLineLen}
-            rising centered
+            rising
+            centered
             color={"#FF0000"}
           />
           <DiagLine
             start={this.state.midpoint}
             lineLen={fallLineLen}
-            falling centered
+            falling
+            centered
             color={"#FF0000"}
           />
         </Canvas>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Canvas, Square, HorizLine, Point } from "../Shapes";
+import { Canvas, Square, RectPoints, HorizLine, Point } from "../Shapes";
 import {
   Button,
   Slider,
@@ -133,11 +133,11 @@ export default class Drawing154 extends React.Component {
   getSquarePoints = () => {
     return [
       {
-        target: Square.Points.MID_LEFT,
+        target: RectPoints.MID_LEFT,
         callback: point => this.setPoint(point, "lineStart")
       },
       {
-        target: Square.Points.MID_RIGHT,
+        target: RectPoints.MID_RIGHT,
         callback: point => this.setPointX(point, "squareExtent")
       }
     ];
@@ -147,15 +147,15 @@ export default class Drawing154 extends React.Component {
   getCanvasPoints = () => {
     return [
       {
-        target: Canvas.Points.MIDPOINT,
+        target: RectPoints.MIDPOINT,
         callback: point => this.setPoint(point, "midpoint")
       },
       {
-        target: Canvas.Points.MID_RIGHT,
+        target: RectPoints.MID_RIGHT,
         callback: point => this.setPointX(point, "canvasWidth")
       },
       {
-        target: Canvas.Points.BTM_RIGHT,
+        target: RectPoints.BTM_RIGHT,
         callback: point => this.setPointY(point, "canvasHeight")
       }
     ];
@@ -184,8 +184,7 @@ export default class Drawing154 extends React.Component {
           <Square
             start={this.state.midpoint}
             centered
-            width={sideLen}
-            height={sideLen}
+            sideLen={sideLen}
             targetPoints={this.getSquarePoints()}
           />
           <HorizLine color={"#FF0000"} start={lineStart} lineLen={lineLen} />

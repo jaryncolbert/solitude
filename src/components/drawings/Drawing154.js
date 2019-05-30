@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Canvas,
-  Rectangle,
-  RectangleDrawer,
-  HorizLine,
-  Point
-} from "../Shapes";
+import { Canvas, Square, HorizLine, Point } from "../Shapes";
 import {
   Button,
   Slider,
@@ -77,11 +71,13 @@ export default class Drawing154 extends React.Component {
     if (
       lineMax !== prevLineMax ||
       lineLen !== prevLineLen ||
+      sideLen !== prevSideLen ||
       randomized !== prevRandomized
     ) {
       this.setState({
         lineMax: lineMax,
         lineLen: lineLen,
+        sideLen: sideLen,
         randomized: randomized
       });
     }
@@ -134,14 +130,14 @@ export default class Drawing154 extends React.Component {
   };
 
   // Save coordinates for mid left and mid right of square
-  getRectPoints = () => {
+  getSquarePoints = () => {
     return [
       {
-        target: Rectangle.Points.MID_LEFT,
+        target: Square.Points.MID_LEFT,
         callback: point => this.setPoint(point, "lineStart")
       },
       {
-        target: Rectangle.Points.MID_RIGHT,
+        target: Square.Points.MID_RIGHT,
         callback: point => this.setPointX(point, "squareExtent")
       }
     ];
@@ -151,15 +147,15 @@ export default class Drawing154 extends React.Component {
   getCanvasPoints = () => {
     return [
       {
-        target: Rectangle.Points.MIDPOINT,
+        target: Canvas.Points.MIDPOINT,
         callback: point => this.setPoint(point, "midpoint")
       },
       {
-        target: Rectangle.Points.MID_RIGHT,
+        target: Canvas.Points.MID_RIGHT,
         callback: point => this.setPointX(point, "canvasWidth")
       },
       {
-        target: Rectangle.Points.BTM_RIGHT,
+        target: Canvas.Points.BTM_RIGHT,
         callback: point => this.setPointY(point, "canvasHeight")
       }
     ];
@@ -185,18 +181,14 @@ export default class Drawing154 extends React.Component {
         middle of the right side."
             year="1973"
           />
-          <RectangleDrawer
+          <Square
             start={this.state.midpoint}
             centered
             width={sideLen}
             height={sideLen}
-            targetPoints={this.getRectPoints()}
+            targetPoints={this.getSquarePoints()}
           />
-          <HorizLine
-            color={"#FF0000"}
-            start={lineStart}
-            lineLen={lineLen}
-          />
+          <HorizLine color={"#FF0000"} start={lineStart} lineLen={lineLen} />
         </Canvas>
 
         <RowGroup>

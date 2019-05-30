@@ -1,5 +1,5 @@
 import React from "react";
-import { Canvas, RectangleDrawer, Rectangle, DiagLine, Point } from "../Shapes";
+import { Canvas, Square, DiagLine, Point } from "../Shapes";
 import {
   Button,
   Slider,
@@ -159,14 +159,14 @@ export default class Drawing159 extends React.Component {
   };
 
   // Save coordinates for mid left and mid right of square
-  getRectPoints = () => {
+  getSquarePoints = () => {
     return [
       {
-        target: Rectangle.Points.BTM_LEFT,
+        target: Square.Points.BTM_LEFT,
         callback: point => this.setPoint(point, "riseLineStart")
       },
       {
-        target: Rectangle.Points.BTM_RIGHT,
+        target: Square.Points.BTM_RIGHT,
         callback: point => this.setPoint(point, "fallLineStart")
       }
     ];
@@ -176,11 +176,11 @@ export default class Drawing159 extends React.Component {
   getCanvasPoints = () => {
     return [
       {
-        target: Rectangle.Points.MIDPOINT,
+        target: Canvas.Points.MIDPOINT,
         callback: point => this.setPoint(point, "midpoint")
       },
       {
-        target: Rectangle.Points.BTM_RIGHT,
+        target: Canvas.Points.BTM_RIGHT,
         callback: point => this.setPointY(point, "canvasHeight")
       }
     ];
@@ -215,12 +215,12 @@ export default class Drawing159 extends React.Component {
         to the upper left."
             year="1973"
           />
-          <RectangleDrawer
+          <Square
             start={this.state.midpoint}
             centered
             width={sideLen}
             height={sideLen}
-            targetPoints={this.getRectPoints()}
+            targetPoints={this.getSquarePoints()}
             getDiagonal={v => this.setValue(v, "squareDiag")}
           />
           <DiagLine
@@ -232,7 +232,8 @@ export default class Drawing159 extends React.Component {
           <DiagLine
             start={fallLineStart}
             lineLen={fallLineLen}
-            falling rightToLeft
+            falling
+            rightToLeft
             color={"#FF0000"}
           />
         </Canvas>

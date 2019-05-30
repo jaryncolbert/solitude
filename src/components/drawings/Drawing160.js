@@ -1,8 +1,7 @@
 import React from "react";
 import {
   Canvas,
-  RectangleDrawer,
-  Rectangle,
+  Square,
   DiagLine,
   Point
 } from "../Shapes";
@@ -161,11 +160,11 @@ export default class Drawing160 extends React.Component {
   getCanvasPoints = () => {
     return [
       {
-        target: Rectangle.Points.MIDPOINT,
+        target: Canvas.Points.MIDPOINT,
         callback: point => this.setPoint(point, "midpoint")
       },
       {
-        target: Rectangle.Points.BTM_RIGHT,
+        target: Canvas.Points.BTM_RIGHT,
         callback: point => this.setPointY(point, "canvasHeight")
       }
     ];
@@ -198,7 +197,7 @@ export default class Drawing160 extends React.Component {
             between the lower left and upper right corners."
             year="1973"
           />
-          <RectangleDrawer
+          <Square
             start={this.state.midpoint}
             centered
             width={sideLen}

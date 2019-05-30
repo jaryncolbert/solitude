@@ -58,9 +58,7 @@ export class Line extends Drawable {
 
 export function horizontal(Line) {
   return class extends React.Component {
-    getStartAndEnd = () => {
-      let { centered, rightToLeft, start, lineLen } = this.props;
-
+    getStartAndEnd = (centered, rightToLeft, start, lineLen) => {
       let lineStart = start;
       let lineEnd = new Point(0, 0);
       if (centered) {
@@ -70,27 +68,32 @@ export function horizontal(Line) {
         );
       }
 
-      lineEnd = new Point(lineStart.x + lineLen, lineStart.y);
+      lineEnd = rightToLeft
+        ? new Point(lineStart.x - lineLen, lineStart.y)
+        : new Point(lineStart.x + lineLen, lineStart.y);
       return { lineStart, lineEnd };
     };
 
     render() {
       let { centered, rightToLeft, start, lineLen, ...otherProps } = this.props;
-      let { lineStart, lineEnd } = this.getStartAndEnd();
+      let { lineStart, lineEnd } = this.getStartAndEnd(
+        centered,
+        rightToLeft,
+        start,
+        lineLen
+      );
       return <Line start={lineStart} end={lineEnd} {...otherProps} />;
     }
-  }
+  };
 }
 
-export function diagonal(Line) {
+function diagonal(Line) {
   return class extends React.Component {
     calcSquareSideFromHypotenuse = hypotenuse => {
       return Math.round(hypotenuse / Math.sqrt(2));
     };
 
-    getStartAndEnd = () => {
-      let { rising, centered, rightToLeft, start, lineLen } = this.props;
-
+    getStartAndEnd = (rising, centered, rightToLeft, start, lineLen) => {
       let lineStart = start;
       let lineEnd = new Point(0, 0);
 
@@ -114,7 +117,8 @@ export function diagonal(Line) {
        */
       let hypotenuse = lineLen;
       let squareSizeFromDiag = this.calcSquareSideFromHypotenuse(hypotenuse);
-      let newEndY = (!rising && !rightToLeft) || (rising && rightToLeft)
+      let newEndY =
+        (!rising && !rightToLeft) || (rising && rightToLeft)
           ? lineStart.y + squareSizeFromDiag
           : lineStart.y - squareSizeFromDiag;
       let newEndX = !rightToLeft
@@ -124,17 +128,35 @@ export function diagonal(Line) {
     };
 
     render() {
-      let { rising, centered, rightToLeft, start, lineLen, ...otherProps } = this.props;
-      let { lineStart, lineEnd } = this.getStartAndEnd();
+      let {
+        rising,
+        centered,
+        rightToLeft,
+        start,
+        lineLen,
+        ...otherProps
+      } = this.props;
+      let { lineStart, lineEnd } = this.getStartAndEnd(
+        rising,
+        centered,
+        rightToLeft,
+        start,
+        lineLen
+      );
       return <Line start={lineStart} end={lineEnd} {...otherProps} />;
-    };
-  }
+    }
+  };
 }
 
 export const HorizLine = horizontal(Line);
 export const DiagLine = diagonal(Line);
 
-export class Rectangle extends Drawable {
+export class SimpleRectangle extends Drawable {
+  static defaultProps = {
+    ...Drawable.defaultProps,
+    color: "#000000",
+  };
+
   static Points = Object.freeze({
     TOP_LEFT: "top_left",
     TOP_RIGHT: "top_right",
@@ -153,122 +175,146 @@ export class Rectangle extends Drawable {
   };
 }
 
-export class RectangleDrawer extends React.Component {
-  static defaultProps = {
-    /* targetPoints is an array of objects:
-     * {
-         target: A point of interest from Square.Points,
-         callback: A function that should be called to return target value
-       }
-     */
-    targetPoints: [],
-    strokeWeight: 4,
-    color: "#000000"
-  };
+function withRectPoints(RectangleComponent) {
+  return class extends React.Component {
+    static Points = Object.freeze(SimpleRectangle.Points);
 
-  constructor(props) {
-    super(props);
-    this.registerPoints();
-  }
+    static defaultProps = {
+      /* targetPoints is an array of objects:
+       * {
+           target: A point of interest from SimpleRectangle.Points,
+           callback: A function that should be called to return target value
+         }
+       */
+      ...RectangleComponent.defaultProps,
+      targetPoints: [],
+    };
 
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.width !== prevProps.width ||
-      this.props.height !== prevProps.height ||
-      !prevProps.start.equals(this.props.start)
-    ) {
-      // Re-register the target points based on the new start location
-      // or rectangle dimensions
+    constructor(props) {
+      super(props);
       this.registerPoints();
     }
-  }
 
-  registerPoints = () => {
-    let {
-      start,
-      height,
-      width,
-      centered,
-      targetPoints,
-      getDiagonal
-    } = this.props;
-
-    // If centered, reinterpret start point as midpoint
-    if (centered) {
-      start = this.getOriginFromMidpoint(start, width, height);
+    componentDidUpdate(prevProps) {
+      if (
+        this.props.width !== prevProps.width ||
+        this.props.height !== prevProps.height ||
+        !prevProps.start.equals(this.props.start)
+      ) {
+        // Re-register the target points based on the new start location
+        // or rectangle dimensions
+        this.registerPoints();
+      }
     }
 
-    // Register each target point and its callback function to pass to parent
-    targetPoints.forEach(({ target, callback }) => {
-      const point = this.getPoint(target, start, height, width, centered);
-      callback(point);
-    });
+    registerPoints = () => {
+      let {
+        start,
+        height,
+        width,
+        centered,
+        targetPoints,
+        getDiagonal
+      } = this.props;
 
-    if (getDiagonal) {
-      getDiagonal(this.getDiagonal(width, height));
+      // If centered, reinterpret start point as midpoint
+      if (centered) {
+        start = this.getOriginFromMidpoint(start, width, height);
+      }
+
+      // Register each target point and its callback function to pass to parent
+      targetPoints.forEach(({ target, callback }) => {
+        const point = this.getPoint(target, start, height, width, centered);
+        callback(point);
+      });
+
+      if (getDiagonal) {
+        getDiagonal(this.getDiagonal(width, height));
+      }
+
+    };
+
+    getDiagonal = (width, height) => {
+      return Math.round(Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+    };
+
+    getPoint = (targetPoint, start, height, width) => {
+      const rightX = start.x + width;
+      const midX = start.x + Math.round(width / 2);
+      const midY = start.y + Math.round(height / 2);
+      const btmY = start.y + height;
+
+      switch (targetPoint) {
+        case SimpleRectangle.Points.TOP_LEFT:
+          return new Point(start.x, start.y);
+        case SimpleRectangle.Points.TOP_RIGHT:
+          return new Point(rightX, start.y);
+        case SimpleRectangle.Points.BTM_LEFT:
+          return new Point(start.x, btmY);
+        case SimpleRectangle.Points.BTM_RIGHT:
+          return new Point(rightX, btmY);
+        case SimpleRectangle.Points.MIDPOINT:
+          return new Point(midX, midY);
+        case SimpleRectangle.Points.MID_LEFT:
+          return new Point(start.x, midY);
+        case SimpleRectangle.Points.MID_RIGHT:
+          return new Point(rightX, midY);
+        default:
+          throw new Error("Unknown Square point " + targetPoint);
+      }
+    };
+
+    getOriginFromMidpoint = (midpoint, width, height) => {
+      const originX = midpoint.x - Math.round(width / 2);
+      const originY = midpoint.y - Math.round(height / 2);
+      return new Point(originX, originY);
+    };
+
+    render() {
+      let {
+        targetPoints,
+        centered,
+        start,
+        width,
+        height,
+        ...otherProps
+      } = this.props;
+      // If centered, reinterpret start point as midpoint
+      if (centered) {
+        start = this.getOriginFromMidpoint(start, width, height);
+      }
+
+      return (
+        <RectangleComponent
+          start={start}
+          width={width}
+          height={height}
+          {...otherProps}
+        />
+      );
     }
   };
-
-  getDiagonal = (width, height) => {
-    return Math.round(Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-  };
-
-  getPoint = (targetPoint, start, height, width) => {
-    const rightX = start.x + width;
-    const midX = start.x + Math.round(width / 2);
-    const midY = start.y + Math.round(height / 2);
-    const btmY = start.y + height;
-
-    switch (targetPoint) {
-      case Rectangle.Points.TOP_LEFT:
-        return new Point(start.x, start.y);
-      case Rectangle.Points.TOP_RIGHT:
-        return new Point(rightX, start.y);
-      case Rectangle.Points.BTM_LEFT:
-        return new Point(start.x, btmY);
-      case Rectangle.Points.BTM_RIGHT:
-        return new Point(rightX, btmY);
-      case Rectangle.Points.MIDPOINT:
-        return new Point(midX, midY);
-      case Rectangle.Points.MID_LEFT:
-        return new Point(start.x, midY);
-      case Rectangle.Points.MID_RIGHT:
-        return new Point(rightX, midY);
-      default:
-        throw new Error("Unknown Square point " + targetPoint);
-    }
-  };
-
-  getOriginFromMidpoint = (midpoint, width, height) => {
-    const originX = midpoint.x - Math.round(width / 2);
-    const originY = midpoint.y - Math.round(height / 2);
-    return new Point(originX, originY);
-  };
-
-  render() {
-    let {
-      targetPoints,
-      centered,
-      start,
-      width,
-      height,
-      ...otherProps
-    } = this.props;
-    // If centered, reinterpret start point as midpoint
-    if (centered) {
-      start = this.getOriginFromMidpoint(start, width, height);
-    }
-
-    return (
-      <Rectangle start={start} width={width} height={height} {...otherProps} />
-    );
-  }
 }
 
-export class Canvas extends React.Component {
+function withEqualSides(RectangleComponent) {
+  return class extends React.Component {
+    static defaultProps = RectangleComponent.defaultProps;
+
+    render() {
+      let { sideLen, ...otherProps } = this.props;
+
+      return (
+        <RectangleComponent width={sideLen} height={sideLen} {...otherProps} />
+      );
+    }
+  };
+}
+
+class SimpleCanvas extends React.Component {
   static defaultProps = {
     width: 600,
-    height: 400
+    height: 400,
+    start: new Point(0, 0),
   };
 
   static childContextTypes = {
@@ -325,13 +371,13 @@ export class Canvas extends React.Component {
     const { children, ...otherProps } = this.props;
     return (
       <div ref={e => (this.container = e)}>
-        <RectangleDrawer
-          start={new Point(0, 0)}
-          color="#FFFFFF"
-          {...otherProps}
-        />
+        <SimpleRectangle color="#FFFFFF" {...otherProps} />
         {children}
       </div>
     );
   }
 }
+
+export const Canvas = withRectPoints(SimpleCanvas);
+export const Rectangle = withRectPoints(SimpleRectangle);
+export const Square = withRectPoints(SimpleRectangle);

@@ -1,8 +1,7 @@
 import React from "react";
 import {
   Canvas,
-  RectangleDrawer,
-  Rectangle,
+  Square,
   HorizLine,
   DiagLine,
   Point
@@ -60,7 +59,8 @@ export default class Drawing164 extends React.Component {
 
     lineMax = this.getLineMax();
     if (
-      randomized && ((prevSquareDiag !== squareDiag) || (prevCanvasDiag !== canvasDiag))
+      randomized &&
+      (prevSquareDiag !== squareDiag || prevCanvasDiag !== canvasDiag)
     ) {
       // If trigger is set to randomize, generate new value for riseLineLen
       riseLineLen = getRandomInt(this.minLen, lineMax);
@@ -162,11 +162,11 @@ export default class Drawing164 extends React.Component {
   getCanvasPoints = () => {
     return [
       {
-        target: Rectangle.Points.MIDPOINT,
+        target: Canvas.Points.MIDPOINT,
         callback: point => this.setPoint(point, "midpoint")
       },
       {
-        target: Rectangle.Points.BTM_RIGHT,
+        target: Canvas.Points.BTM_RIGHT,
         callback: point => this.setPointY(point, "canvasHeight")
       }
     ];
@@ -198,7 +198,7 @@ export default class Drawing164 extends React.Component {
             between the lower left and upper right corners."
             year="1973"
           />
-          <RectangleDrawer
+          <Square
             start={this.state.midpoint}
             centered
             width={sideLen}
@@ -208,7 +208,8 @@ export default class Drawing164 extends React.Component {
           <DiagLine
             start={this.state.midpoint}
             lineLen={riseLineLen}
-            rising centered
+            rising
+            centered
             color={"#FF0000"}
           />
           <HorizLine

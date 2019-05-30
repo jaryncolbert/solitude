@@ -29,10 +29,14 @@ export const DrawingInfo = ({ title, instructions, year }) => (
 
 export class RowGroup extends React.Component {
   render() {
+    let children = Array.isArray(this.props.children)
+      ? this.props.children
+      : [this.props.children];
+
     return (
       // Surround element with 'row' div and add 'col' class to existing elem
       <div className="row">
-        {this.props.children.map((c, i) =>
+        {children.map((c, i) =>
           React.cloneElement(c, {
             className: c.props.className ? c.props.className + " col" : "col",
             key: "col-" + i

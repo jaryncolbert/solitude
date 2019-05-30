@@ -2,10 +2,27 @@ import React from "react";
 import p5 from "p5";
 import PropTypes from "prop-types";
 
+export class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  equals(point) {
+    return (
+      Number.isInteger(point.x) &&
+      this.x === point.x &&
+      Number.isInteger(point.y) &&
+      this.y === point.y
+    );
+  }
+}
+
 class Drawable extends React.Component {
   static defaultProps = {
     strokeWeight: 4,
-    color: "#000000"
+    color: "#000000",
+    start: new Point(0, 0),
   };
 
   static contextTypes = {
@@ -30,22 +47,6 @@ class Drawable extends React.Component {
   }
 }
 
-export class Point {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-
-  equals(point) {
-    return (
-      Number.isInteger(point.x) &&
-      this.x === point.x &&
-      Number.isInteger(point.y) &&
-      this.y === point.y
-    );
-  }
-}
-
 export class Line extends Drawable {
   draw = p => {
     const { start, end, color, strokeWeight } = this.props;
@@ -55,23 +56,13 @@ export class Line extends Drawable {
   };
 }
 
-export class LineDrawer extends React.Component {
-  calcSquareSideFromHypotenuse = hypotenuse => {
-    return Math.round(hypotenuse / Math.sqrt(2));
-  };
+export function horizontal(Line) {
+  return class extends React.Component {
+    getStartAndEnd = () => {
+      let { centered, rightToLeft, start, lineLen } = this.props;
 
-  getStartAndEnd = () => {
-    let { type, rising, centered, rightToLeft, start, lineLen } = this.props;
-
-    const knownTypes = ["horizontal", "diagonal"];
-    if (!knownTypes.includes(type))
-      throw new Error("Unknown Line Type: " + type);
-
-    let lineStart = start;
-    let lineEnd = new Point(0, 0);
-
-    // Process horizontal line
-    if (type === "horizontal") {
+      let lineStart = start;
+      let lineEnd = new Point(0, 0);
       if (centered) {
         lineStart = new Point(
           lineStart.x - Math.round(lineLen / 2),
@@ -81,44 +72,67 @@ export class LineDrawer extends React.Component {
 
       lineEnd = new Point(lineStart.x + lineLen, lineStart.y);
       return { lineStart, lineEnd };
+    };
+
+    render() {
+      let { centered, rightToLeft, start, lineLen, ...otherProps } = this.props;
+      let { lineStart, lineEnd } = this.getStartAndEnd();
+      return <Line start={lineStart} end={lineEnd} {...otherProps} />;
     }
-
-    // Process diagonal line
-    if (centered) {
-      //Calculate new start point from midpoint
-      /* Half of lineLen is hypotenuse, line extends equally to/from midpoint
-       * to the start and end of the line
-       */
-      let hypotenuse = lineLen / 2;
-      let squareSizeFromDiag = this.calcSquareSideFromHypotenuse(hypotenuse);
-      let newStartX = lineStart.x - squareSizeFromDiag;
-      let newStartY = rising
-        ? lineStart.y + squareSizeFromDiag
-        : lineStart.y - squareSizeFromDiag;
-
-      lineStart = new Point(newStartX, newStartY);
-    }
-
-    /* Get width/height of square that comprises this diagonal line
-     * to find line end point
-     */
-    let hypotenuse = lineLen;
-    let squareSizeFromDiag = this.calcSquareSideFromHypotenuse(hypotenuse);
-    let newEndY = (!rising && !rightToLeft) || (rising && rightToLeft)
-        ? lineStart.y + squareSizeFromDiag
-        : lineStart.y - squareSizeFromDiag;
-    let newEndX = !rightToLeft
-      ? lineStart.x + squareSizeFromDiag
-      : lineStart.x - squareSizeFromDiag;
-    return { lineStart, lineEnd: new Point(newEndX, newEndY) };
-  };
-
-  render() {
-    let { type, rising, centered, start, lineLen, ...otherProps } = this.props;
-    let { lineStart, lineEnd } = this.getStartAndEnd();
-    return <Line start={lineStart} end={lineEnd} {...otherProps} />;
   }
 }
+
+export function diagonal(Line) {
+  return class extends React.Component {
+    calcSquareSideFromHypotenuse = hypotenuse => {
+      return Math.round(hypotenuse / Math.sqrt(2));
+    };
+
+    getStartAndEnd = () => {
+      let { rising, centered, rightToLeft, start, lineLen } = this.props;
+
+      let lineStart = start;
+      let lineEnd = new Point(0, 0);
+
+      if (centered) {
+        //Calculate new start point from midpoint
+        /* Half of lineLen is hypotenuse, line extends equally to/from midpoint
+         * to the start and end of the line
+         */
+        let hypotenuse = lineLen / 2;
+        let squareSizeFromDiag = this.calcSquareSideFromHypotenuse(hypotenuse);
+        let newStartX = lineStart.x - squareSizeFromDiag;
+        let newStartY = rising
+          ? lineStart.y + squareSizeFromDiag
+          : lineStart.y - squareSizeFromDiag;
+
+        lineStart = new Point(newStartX, newStartY);
+      }
+
+      /* Get width/height of square that comprises this diagonal line
+       * to find line end point
+       */
+      let hypotenuse = lineLen;
+      let squareSizeFromDiag = this.calcSquareSideFromHypotenuse(hypotenuse);
+      let newEndY = (!rising && !rightToLeft) || (rising && rightToLeft)
+          ? lineStart.y + squareSizeFromDiag
+          : lineStart.y - squareSizeFromDiag;
+      let newEndX = !rightToLeft
+        ? lineStart.x + squareSizeFromDiag
+        : lineStart.x - squareSizeFromDiag;
+      return { lineStart, lineEnd: new Point(newEndX, newEndY) };
+    };
+
+    render() {
+      let { rising, centered, rightToLeft, start, lineLen, ...otherProps } = this.props;
+      let { lineStart, lineEnd } = this.getStartAndEnd();
+      return <Line start={lineStart} end={lineEnd} {...otherProps} />;
+    };
+  }
+}
+
+export const HorizLine = horizontal(Line);
+export const DiagLine = diagonal(Line);
 
 export class Rectangle extends Drawable {
   static Points = Object.freeze({

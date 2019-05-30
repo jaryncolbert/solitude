@@ -3,7 +3,7 @@ import {
   Canvas,
   Rectangle,
   RectangleDrawer,
-  LineDrawer,
+  HorizLine,
   Point
 } from "../Shapes";
 import {
@@ -192,8 +192,7 @@ export default class Drawing154 extends React.Component {
             height={sideLen}
             targetPoints={this.getRectPoints()}
           />
-          <LineDrawer
-            type="horizontal"
+          <HorizLine
             color={"#FF0000"}
             start={lineStart}
             lineLen={lineLen}

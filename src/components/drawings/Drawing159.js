@@ -1,5 +1,5 @@
 import React from "react";
-import { Canvas, RectangleDrawer, Rectangle, LineDrawer, Point } from "../Shapes";
+import { Canvas, RectangleDrawer, Rectangle, DiagLine, Point } from "../Shapes";
 import {
   Button,
   Slider,
@@ -223,17 +223,15 @@ export default class Drawing159 extends React.Component {
             targetPoints={this.getRectPoints()}
             getDiagonal={v => this.setValue(v, "squareDiag")}
           />
-          <LineDrawer
+          <DiagLine
             start={riseLineStart}
             lineLen={riseLineLen}
-            type="diagonal"
             rising
             color={"#FF0000"}
           />
-          <LineDrawer
+          <DiagLine
             start={fallLineStart}
             lineLen={fallLineLen}
-            type="diagonal"
             falling rightToLeft
             color={"#FF0000"}
           />

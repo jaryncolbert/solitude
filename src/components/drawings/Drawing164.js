@@ -3,7 +3,8 @@ import {
   Canvas,
   RectangleDrawer,
   Rectangle,
-  LineDrawer,
+  HorizLine,
+  DiagLine,
   Point
 } from "../Shapes";
 import {
@@ -204,17 +205,15 @@ export default class Drawing164 extends React.Component {
             height={sideLen}
             getDiagonal={v => this.setValue(v, "squareDiag")}
           />
-          <LineDrawer
+          <DiagLine
             start={this.state.midpoint}
             lineLen={riseLineLen}
-            type="diagonal"
             rising centered
             color={"#FF0000"}
           />
-          <LineDrawer
+          <HorizLine
             start={this.state.midpoint}
             lineLen={horizLineLen}
-            type="horizontal"
             centered
             color={"#FF0000"}
           />

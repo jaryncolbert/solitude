@@ -16,7 +16,7 @@ export const RectPoints = Object.freeze({
 export class SimpleRectangle extends Drawable {
   static defaultProps = {
     ...Drawable.defaultProps,
-    color: "#000000",
+    color: "#000000"
   };
 
   draw = p => {
@@ -37,7 +37,7 @@ function withRectPoints(RectangleComponent) {
            callback: A function that should be called to return target value
          }
        */
-      targetPoints: [],
+      targetPoints: []
     };
 
     constructor(props) {
@@ -117,16 +117,10 @@ function withRectPoints(RectangleComponent) {
 }
 
 function withEqualSides(RectangleComponent) {
-  return class extends React.Component {
-    static defaultProps = RectangleComponent.defaultProps;
-
-    render() {
-      let { sideLen, ...otherProps } = this.props;
-
-      return (
-        <RectangleComponent width={sideLen} height={sideLen} {...otherProps} />
-      );
-    }
+  return function({ sideLen, ...otherProps }) {
+    return (
+      <RectangleComponent width={sideLen} height={sideLen} {...otherProps} />
+    );
   };
 }
 

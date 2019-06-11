@@ -2,15 +2,12 @@ import React from "react";
 import { RectPoints } from "../shapes/Rectangle";
 import Point from "../shapes/Point";
 import Line from "../shapes/Line";
+import LineOriginator from "../utilities/LineOriginator";
 import Canvas from "../P5Canvas";
-import {
-  Button,
-  DrawingInfo,
-  DrawingContainer
-} from "../CommonComponents";
+import { Button, DrawingInfo, DrawingContainer } from "../CommonComponents";
 
 export default class Drawing289 extends React.Component {
-  minLen = 20;
+  state = {};
 
   randomize = () => {
     return null;
@@ -22,6 +19,10 @@ export default class Drawing289 extends React.Component {
     });
   };
 
+  getPoint = point => {
+    return this.state[point];
+  };
+
   // Save coordinates for line origination points on canvas
   getCanvasPoints = () => {
     // For each point, create a fn that sets a state prop using its name
@@ -29,16 +30,31 @@ export default class Drawing289 extends React.Component {
       return {
         target: point,
         callback: p => this.setPoint(p, point)
-      }
+      };
     });
+  };
+
+  originateLinesFrom = (origin, numLines) => {
+    const min = this.getPoint(RectPoints.TOP_LEFT);
+    const max = this.getPoint(RectPoints.BTM_RIGHT);
+
+    if (origin && min && max) {
+      return (
+        <LineOriginator key={origin}
+          originName={origin}
+          numLines={numLines}
+          min={min}
+          max={max}
+          origin={this.getPoint(origin)}
+        />
+      );
+    }
   };
 
   render() {
     return (
       <DrawingContainer {...this.props}>
-        <Canvas
-          targetPoints={this.getCanvasPoints()}
-        >
+        <Canvas targetPoints={this.getCanvasPoints()}>
           <DrawingInfo
             title="Wall Drawing 289"
             instructions="A 6-inch (15 cm) grid covering each of the four black
@@ -48,6 +64,7 @@ export default class Drawing289 extends React.Component {
           their placement are determined by the drafter.)"
             year="1976"
           />
+          {this.originateLinesFrom(RectPoints.MIDPOINT, 24)}
         </Canvas>
         <Button onClick={this.randomize} />
       </DrawingContainer>

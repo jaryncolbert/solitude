@@ -5,10 +5,18 @@ import Canvas from "../P5Canvas";
 import { Button, DrawingInfo, DrawingContainer } from "../CommonComponents";
 
 export default class Drawing289 extends React.Component {
-  state = {};
+  state = { lines: [] }
 
   randomize = () => {
-    return null;
+    const lines = Object.values(RectPoints).map(point => {
+      if (point === RectPoints.MIDPOINT) {
+        return this.originateLinesFrom(point, 24);
+      } else {
+        return this.originateLinesFrom(point, 12);
+      }
+    });
+
+    this.setState({ lines });
   };
 
   setPoint = (point, propName) => {
@@ -36,24 +44,33 @@ export default class Drawing289 extends React.Component {
     const min = this.getPoint(RectPoints.TOP_LEFT);
     const max = this.getPoint(RectPoints.BTM_RIGHT);
 
-    if (origin && min && max) {
-      return (
-        <LineOriginator key={origin}
-          originName={origin}
-          numLines={numLines}
-          min={min}
-          max={max}
-          origin={this.getPoint(origin)}
-        />
-      );
-    }
+    return (
+      <LineOriginator
+        key={origin}
+        originName={origin}
+        numLines={numLines}
+        min={min}
+        max={max}
+        origin={this.getPoint(origin)}
+      />
+    );
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState["lines"].length === 0 && !!this.state.lines) {
+      this.randomize();
+    }
+  }
 
   render() {
     return (
       <DrawingContainer {...this.props}>
-        <Canvas targetPoints={this.getCanvasPoints()} width={1400} height={500}
-          background="#000000">
+        <Canvas
+          targetPoints={this.getCanvasPoints()}
+          width={1400}
+          height={500}
+          background="#000000"
+        >
           <DrawingInfo
             title="Wall Drawing 289"
             instructions="A 6-inch (15 cm) grid covering each of the four black
@@ -63,13 +80,7 @@ export default class Drawing289 extends React.Component {
           their placement are determined by the drafter.)"
             year="1976"
           />
-          {Object.values(RectPoints).map(point => {
-            if (point === RectPoints.MIDPOINT) {
-              return this.originateLinesFrom(point, 24);
-            } else {
-              return this.originateLinesFrom(point, 12);
-            }
-          })}
+          {this.state.lines}
         </Canvas>
         <Button onClick={this.randomize} />
       </DrawingContainer>

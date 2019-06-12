@@ -10,7 +10,7 @@ export default class Drawing118 extends React.Component {
   state = { lines: [] };
 
   randomize = () => {
-    const points = this.generatePoints();
+    const points = this.generatePoints(50);
     let lines = [];
 
     points.forEach((start, i) => {
@@ -18,7 +18,12 @@ export default class Drawing118 extends React.Component {
         const end = points[j];
 
         lines.push(
-          <Line key={i + "-" + j} start={start} end={end} strokeWeight={1} />
+          <Line
+            key={i + "-" + j}
+            start={start}
+            end={end}
+            strokeWeight={1}
+          />
         );
       }
     });
@@ -50,15 +55,23 @@ export default class Drawing118 extends React.Component {
     ];
   };
 
-  generatePoints = () => {
+  generatePoints = numPoints => {
     let points = [];
     let min = this.state.canvasMin;
     let max = this.state.canvasMax;
 
-    for (let i = 0; i < 50; i++) {
-      const pointX = getRandomInt(min.x, max.x);
-      const pointY = getRandomInt(min.y, max.y);
-      points.push(new Point(pointX, pointY));
+    let numSegments = 10;
+    let pointsPerSeg = numPoints / numSegments;
+    let segWidth = Math.round((max.x - min.x) / numSegments);
+
+    for (let seg = 0; seg < numSegments; seg++) {
+      const segShift = seg * segWidth;
+
+      for (let i = 0; i < pointsPerSeg; i++) {
+        const pointX = getRandomInt(min.x + segShift, segWidth + segShift);
+        const pointY = getRandomInt(min.y, max.y);
+        points.push(new Point(pointX, pointY));
+      }
     }
 
     return points;

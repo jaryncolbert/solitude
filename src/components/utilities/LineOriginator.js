@@ -17,8 +17,10 @@ export default function LineOriginator({
     const endY = getRandomInt(min.y, max.y);
     lines.push(
       <Line
-        key={originName + i.toString()}
+        key={originName + "-" + i.toString()}
         start={origin}
+        strokeWeight={2}
+        color={"#FFFFFF"}
         end={new Point(endX, endY)}
       />
     );

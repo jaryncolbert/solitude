@@ -5,11 +5,13 @@ import Drawable from "./Drawable";
 
 export const RectPoints = Object.freeze({
   TOP_LEFT: "top_left",
+  TOP_MID: "top_mid",
   TOP_RIGHT: "top_right",
   BTM_LEFT: "btm_left",
+  BTM_MID: "btm_mid",
   BTM_RIGHT: "btm_right",
-  MIDPOINT: "midpoint",
   MID_LEFT: "mid_left",
+  MIDPOINT: "midpoint",
   MID_RIGHT: "mid_right"
 });
 
@@ -20,10 +22,11 @@ export class SimpleRectangle extends Drawable {
   };
 
   draw = p => {
-    let { start, width, height, color, strokeWeight } = this.props;
+    let { start, width, height, color, fillColor, strokeWeight } = this.props;
     p.stroke(color);
     p.strokeWeight(strokeWeight);
     p.rect(start.x, start.y, width, height);
+    fillColor && p.fill(fillColor);
   };
 }
 
@@ -84,16 +87,20 @@ function withRectPoints(RectangleComponent) {
       switch (targetPoint) {
         case RectPoints.TOP_LEFT:
           return new Point(start.x, start.y);
+        case RectPoints.TOP_MID:
+          return new Point(midX, start.y);
         case RectPoints.TOP_RIGHT:
           return new Point(rightX, start.y);
         case RectPoints.BTM_LEFT:
           return new Point(start.x, btmY);
+        case RectPoints.BTM_MID:
+          return new Point(midX, btmY);
         case RectPoints.BTM_RIGHT:
           return new Point(rightX, btmY);
-        case RectPoints.MIDPOINT:
-          return new Point(midX, midY);
         case RectPoints.MID_LEFT:
           return new Point(start.x, midY);
+        case RectPoints.MIDPOINT:
+          return new Point(midX, midY);
         case RectPoints.MID_RIGHT:
           return new Point(rightX, midY);
         default:

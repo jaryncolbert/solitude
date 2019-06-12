@@ -1,7 +1,5 @@
 import React from "react";
 import { RectPoints } from "../shapes/Rectangle";
-import Point from "../shapes/Point";
-import Line from "../shapes/Line";
 import LineOriginator from "../utilities/LineOriginator";
 import Canvas from "../P5Canvas";
 import { Button, DrawingInfo, DrawingContainer } from "../CommonComponents";
@@ -54,7 +52,8 @@ export default class Drawing289 extends React.Component {
   render() {
     return (
       <DrawingContainer {...this.props}>
-        <Canvas targetPoints={this.getCanvasPoints()}>
+        <Canvas targetPoints={this.getCanvasPoints()} width={1400} height={500}
+          background="#000000">
           <DrawingInfo
             title="Wall Drawing 289"
             instructions="A 6-inch (15 cm) grid covering each of the four black
@@ -64,7 +63,13 @@ export default class Drawing289 extends React.Component {
           their placement are determined by the drafter.)"
             year="1976"
           />
-          {this.originateLinesFrom(RectPoints.MIDPOINT, 24)}
+          {Object.values(RectPoints).map(point => {
+            if (point === RectPoints.MIDPOINT) {
+              return this.originateLinesFrom(point, 24);
+            } else {
+              return this.originateLinesFrom(point, 12);
+            }
+          })}
         </Canvas>
         <Button onClick={this.randomize} />
       </DrawingContainer>

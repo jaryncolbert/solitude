@@ -10,6 +10,7 @@ export default class Canvas extends React.Component {
     width: 600,
     height: 400,
     start: new Point(0, 0),
+    background: "#FFFFFF"
   };
 
   static childContextTypes = {
@@ -32,7 +33,6 @@ export default class Canvas extends React.Component {
 
   componentDidMount() {
     const { setup, draw } = this;
-
     const sketch = p => {
       p.setup = () => setup(p);
       p.draw = () => draw(p);
@@ -54,7 +54,9 @@ export default class Canvas extends React.Component {
   };
 
   draw = p => {
-    p.background(255, 255, 255);
+    const { background } = this.props;
+
+    p.background(background);
     this.drawables.forEach(c => c(p));
   };
 
@@ -63,10 +65,11 @@ export default class Canvas extends React.Component {
   }
 
   render() {
-    const { children, ...otherProps } = this.props;
+    const { children, background, ...otherProps } = this.props;
+
     return (
       <div ref={e => (this.container = e)}>
-        <Rectangle color="#FFFFFF" {...otherProps} />
+        <Rectangle color={background} fillColor={background} {...otherProps} />
         {children}
       </div>
     );

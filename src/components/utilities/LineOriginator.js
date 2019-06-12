@@ -6,6 +6,7 @@ import { getRandomInt } from "../util";
 export default function LineOriginator({
   originName,
   numLines,
+  color,
   origin,
   min,
   max,
@@ -20,7 +21,7 @@ export default function LineOriginator({
         key={originName + "-" + i.toString()}
         start={origin}
         strokeWeight={2}
-        color={"#FFFFFF"}
+        color={color}
         end={new Point(endX, endY)}
       />
     );

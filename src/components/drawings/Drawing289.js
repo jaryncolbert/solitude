@@ -49,6 +49,7 @@ export default class Drawing289 extends React.Component {
         key={origin}
         originName={origin}
         numLines={numLines}
+        color="#FFFFFF"
         min={min}
         max={max}
         origin={this.getPoint(origin)}

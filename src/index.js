@@ -1,42 +1,80 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
-import './index.css';
-import App from './components/App';
-import Drawing118 from './components/drawings/Drawing118';
-import Drawing289 from './components/drawings/Drawing289';
-import SquareDrawings from './components/drawings/SquareDrawings';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Route, Link, BrowserRouter as Router } from "react-router-dom";
+import App from "./components/App";
+import Drawing118 from "./components/drawings/Drawing118";
+import Drawing289 from "./components/drawings/Drawing289";
+import SquareDrawings from "./components/drawings/SquareDrawings";
+import * as serviceWorker from "./serviceWorker";
+import Sol391 from "./assets/sol_lewitt_391_color.svg";
 
 // Bootstrap dependencies
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
+import "./index.css";
+
 
 const router = (
   <Router>
-    <div>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/square-wall-drawings">Drawings 154, 159, 160 & 164: Red Lines in Squares</Link>
-        </li>
-        <li>
-          <Link to="/wall-drawing-118">Drawing 118: 50 Points & Lines</Link>
-        </li>
-        <li>
-          <Link to="/wall-drawing-289">Drawing 289: White Lines to Grid Points</Link>
-        </li>
-      </ul>
-      <Route exact path="/" component={App} />
-      <Route path="/wall-drawing-118" component={Drawing118} />
-      <Route path="/wall-drawing-289" component={Drawing289} />
-      <Route path="/square-wall-drawings" component={SquareDrawings} />
-    </div>
+    <nav className="navbar navbar-light">
+      <Link to="/" className="navbar-brand">
+        <img
+          src={Sol391}
+          width="75"
+          height="75"
+          alt="Sol Drawing 391"
+        />
+        Sol-itude
+      </Link>
+      <span className="navbar-text">
+        An Exploration of Randomness through the Art of Sol LeWitt
+      </span>
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbar-top"
+        aria-controls="navbar-top"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon" />
+      </button>
+
+      <div className="collapse navbar-collapse" id="navbar-top">
+        <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li className="nav-item">
+            <Link to="/" className="nav-link">
+              Home
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/square-wall-drawings" className="nav-link">
+              Drawings 154, 159, 160 & 164: Red Lines from Square Points
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/wall-drawing-118" className="nav-link">
+              Drawing 118: 50 Random Points & Lines Between Them
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/wall-drawing-289" className="nav-link">
+              Drawing 289: White Lines from Canvas Points to Grid Points
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <Route exact path="/" component={App} />
+    <Route path="/wall-drawing-118" component={Drawing118} />
+    <Route path="/wall-drawing-289" component={Drawing289} />
+    <Route path="/square-wall-drawings" component={SquareDrawings} />
   </Router>
-)
-ReactDOM.render(router, document.getElementById('root'))
+);
+
+ReactDOM.render(router, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

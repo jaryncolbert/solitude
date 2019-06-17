@@ -7,6 +7,7 @@
   border: 1px solid lightgray;
   background: white;
   box-shadow: 0 0 0 5px rgba(0,0,0,0.03);
+  text-align: center;
 }
 .sketch {
   padding: 1rem;

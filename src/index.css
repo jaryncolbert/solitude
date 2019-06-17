@@ -12,3 +12,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.navbar {
+  background-color: #ECE3E1;
+}
+
+ul.navbar-nav {
+  text-align: right;
+}
+
+.navbar-brand img {
+  margin: .5em;
+}
+
+.navbar {
+  font-size: 1vw;
+}
+
+.navbar-text {
+  font-size: 1.5vw;
+}
+
+.navbar-brand {
+  font-size: 2.5vw;
+}

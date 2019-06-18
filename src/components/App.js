@@ -30,7 +30,7 @@ class App extends Component {
 
         <RowGroup>
           <Link to="/wall-drawing-85" className="drawing-thumbnail">
-            <Thumbnail85 width={500} height={300}/>
+            <Thumbnail85 width={800} height={300}/>
           </Link>
         </RowGroup>
 
@@ -41,6 +41,8 @@ class App extends Component {
           <Link to="/square-wall-drawings" className="drawing-thumbnail">
             <Thumbnail159 />
           </Link>
+        </RowGroup>
+        <RowGroup>
           <Link to="/square-wall-drawings" className="drawing-thumbnail">
             <Thumbnail160 />
           </Link>

@@ -1,41 +1,68 @@
 import React from "react";
-import { RectPoints, LineFilledRectangle } from "../shapes/Rectangle";
+import { RectPoints } from "../shapes/Rectangle";
+import { LineTypes } from "../shapes/Line";
+import { RowOfRectangles } from "../utilities/LineFilledRectangle";
+import { Colors } from "../utilities/Colors";
+import Point from "../shapes/Point";
 import Canvas from "../P5Canvas";
 import { Button, DrawingInfo, DrawingContainer } from "../CommonComponents";
+import { shuffleArray } from "../util";
 
 export default class Drawing85 extends React.Component {
-  state = { lines: [] };
+  state = { rows: [] };
 
   randomize = () => {
-    let lines = [];
+    // Shallow clone of objects to shuffle in-place
+    const colors = [Colors.RED, Colors.BLUE, Colors.BLACK, Colors.YELLOW];
+    shuffleArray(colors);
+    const lineTypes = Object.values({ ...LineTypes });
+    shuffleArray(lineTypes);
+    let rows = [];
 
-    this.setState({ lines });
-  };
-
-  setPoint = (point, propName) => {
-    this.setState({
-      [propName]: point
+    // Zip colors with line types to get random properties
+    const rectProps = colors.map((c, i) => {
+      return [{ lineColor: c, lineType: lineTypes[i] }];
     });
+
+    // Get all combinations of randomized properties
+    if (this.state.canvasWidth) {
+      let rectWidth = Math.round(this.state.canvasWidth / rectProps.length);
+      rows.push(
+        <RowOfRectangles
+          key={"rect-row-1"}
+          rowStart={new Point(0, 0)}
+          rectWidth={rectWidth}
+          rectProps={rectProps}
+        />
+      );
+
+      this.setState({ rows });
+    }
   };
 
-  getPoint = point => {
-    return this.state[point];
+  setValue = (value, propName) => {
+    this.setState({
+      [propName]: value
+    });
   };
 
   // Save coordinates for line origination points on canvas
   getCanvasPoints = () => {
     return [
       {
-        target: RectPoints.TOP_LEFT,
-        callback: point => this.setPoint(point, "canvasMin")
-      },
-      {
         target: RectPoints.BTM_RIGHT,
-        callback: point => this.setPoint(point, "canvasMax")
+        callback: point => {
+          this.setValue(point.x, "canvasWidth");
+        }
       }
     ];
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState["rows"].length === 0 && !!this.state.rows) {
+      this.randomize();
+    }
+  }
 
   render() {
     let asThumbnail = this.props.asThumbnail;
@@ -44,7 +71,11 @@ export default class Drawing85 extends React.Component {
 
     return (
       <DrawingContainer {...this.props}>
-        <Canvas targetPoints={this.getCanvasPoints()} width={width} height={height}>
+        <Canvas
+          targetPoints={this.getCanvasPoints()}
+          width={width}
+          height={height}
+        >
           <DrawingInfo
             titleOnly={asThumbnail}
             title="Wall Drawing 85"
@@ -56,9 +87,9 @@ export default class Drawing85 extends React.Component {
             in the bottom row, all four combinations superimposed."
             year="1971"
           />
-          <LineFilledRectangle width={300} height={300} lineType="horizontal" lineColor="#FF0000"/>
+          {this.state.rows}
         </Canvas>
-        { !asThumbnail && <Button onClick={this.randomize} /> }
+        {!asThumbnail && <Button onClick={this.randomize} />}
       </DrawingContainer>
     );
   }

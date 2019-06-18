@@ -3,6 +3,13 @@ import React from "react";
 import Point from "./Point";
 import Drawable from "./Drawable";
 
+export const LineTypes = Object.freeze({
+  DIAG_RISING: "rising",
+  DIAG_FALLING: "falling",
+  VERTICAL: "vertical",
+  HORIZONTAL: "horizontal",
+});
+
 export default class Line extends Drawable {
   draw = p => {
     const { start, end, color, strokeWeight } = this.props;
@@ -35,6 +42,37 @@ export function horizontal(Line) {
       let { lineStart, lineEnd } = this.getStartAndEnd(
         centered,
         rightToLeft,
+        start,
+        lineLen
+      );
+      return <Line start={lineStart} end={lineEnd} {...otherProps} />;
+    }
+  };
+}
+
+export function vertical(Line) {
+  return class extends React.Component {
+    getStartAndEnd = (centered, btmToTop, start, lineLen) => {
+      let lineStart = start;
+      let lineEnd = new Point(0, 0);
+      if (centered) {
+        lineStart = new Point(
+          lineStart.x,
+          lineStart.y - Math.round(lineLen / 2)
+        );
+      }
+
+      lineEnd = btmToTop
+        ? new Point(lineStart.x, lineStart.y - lineLen)
+        : new Point(lineStart.x, lineStart.y + lineLen);
+      return { lineStart, lineEnd };
+    };
+
+    render() {
+      let { centered, btmToTop, start, lineLen, ...otherProps } = this.props;
+      let { lineStart, lineEnd } = this.getStartAndEnd(
+        centered,
+        btmToTop,
         start,
         lineLen
       );
@@ -104,5 +142,6 @@ function diagonal(Line) {
   };
 }
 
+export const VertLine = vertical(Line);
 export const HorizLine = horizontal(Line);
 export const DiagLine = diagonal(Line);

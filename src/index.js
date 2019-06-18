@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Route, Link, BrowserRouter as Router } from "react-router-dom";
 import App from "./components/App";
 import About from "./components/About";
+import Drawing85 from "./components/drawings/Drawing85";
 import Drawing118 from "./components/drawings/Drawing118";
 import Drawing289 from "./components/drawings/Drawing289";
 import SquareDrawings from "./components/drawings/SquareDrawings";
@@ -63,6 +64,7 @@ const router = (
 
     <Route exact path="/" component={App} />
     <Route path="/about" component={About} />
+    <Route path="/wall-drawing-85" component={Drawing85} />
     <Route path="/wall-drawing-118" component={Drawing118} />
     <Route path="/wall-drawing-289" component={Drawing289} />
     <Route path="/square-wall-drawings" component={SquareDrawings} />

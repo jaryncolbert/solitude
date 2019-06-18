@@ -43,20 +43,20 @@ const router = (
           <NavListItem path="/" text="Home" />
           <NavListItem path="/about" text="About" />
           <NavListItem
-            path="/wall-drawing-85"
-            text="Drawing 85: Superimposing Colors"
-          />
-          <NavListItem
-            path="/square-wall-drawings"
-            text="Drawings 154, 159, 160 & 164: Red Lines from Square Points"
-          />
-          <NavListItem
             path="/wall-drawing-118"
             text="Drawing 118: 50 Random Points & Lines Between Them"
           />
           <NavListItem
             path="/wall-drawing-289"
             text="Drawing 289: White Lines from Canvas Points to Grid Points"
+          />
+          <NavListItem
+            path="/square-wall-drawings"
+            text="Drawings 154, 159, 160 & 164: Red Lines from Square Points"
+          />
+          <NavListItem
+            path="/wall-drawing-85"
+            text="Drawing 85: Superimposing Colors"
           />
         </ul>
       </div>

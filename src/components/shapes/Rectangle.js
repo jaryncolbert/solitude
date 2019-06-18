@@ -1,6 +1,7 @@
 import React from "react";
 
 import Point from "./Point";
+import { HorizLine } from "./Line";
 import Drawable from "./Drawable";
 
 export const RectPoints = Object.freeze({
@@ -28,6 +29,83 @@ export class SimpleRectangle extends Drawable {
     p.rect(start.x, start.y, width, height);
     fillColor && p.fill(fillColor);
   };
+}
+
+export class LineFilledRectangle extends React.Component {
+  static defaultProps = {
+    rectStart: new Point(0, 0),
+    lineSpacing: 10,
+    color: "#FFFFFF"
+  };
+
+  generateHorizLines = (rectStart, width, height, lineSpacing, lineColor) => {
+    let lines = [];
+
+    for (
+      let y = rectStart.y + lineSpacing;
+      y < rectStart.y + height;
+      y = y + lineSpacing
+    ) {
+      lines.push(
+        <HorizLine
+          key={rectStart.x + "-" + y}
+          color={lineColor}
+          start={new Point(rectStart.x, y)}
+          lineLen={width}
+        />
+      );
+    }
+    return lines;
+  };
+
+  render() {
+    const {
+      rectStart,
+      lineType,
+      lineWeight,
+      lineColor,
+      lineSpacing,
+      width,
+      height,
+      color,
+      ...otherProps
+    } = this.props;
+
+    let lines = [];
+
+    switch (lineType) {
+      case "horizontal":
+        lines = this.generateHorizLines(
+          rectStart,
+          width,
+          height,
+          lineSpacing,
+          lineColor
+        );
+        break;
+      case "vertical":
+        break;
+      case "rising":
+        break;
+      case "falling":
+        break;
+      default:
+        throw new Error("Unknown line type: ", lineType);
+    }
+
+    return (
+      <>
+        <SimpleRectangle
+          width={width}
+          height={height}
+          start={rectStart}
+          {...otherProps}
+          color={color}
+        />
+        {lines}
+      </>
+    );
+  }
 }
 
 function withRectPoints(RectangleComponent) {

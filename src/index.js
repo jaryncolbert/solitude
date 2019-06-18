@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Route, Link, BrowserRouter as Router } from "react-router-dom";
 import App from "./components/App";
+import Drawing85 from "./components/drawings/Drawing85";
 import Drawing118 from "./components/drawings/Drawing118";
 import Drawing289 from "./components/drawings/Drawing289";
 import SquareDrawings from "./components/drawings/SquareDrawings";
@@ -49,8 +50,8 @@ const router = (
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/square-wall-drawings" className="nav-link">
-              Drawings 154, 159, 160 & 164: Red Lines from Square Points
+            <Link to="/wall-drawing-85" className="nav-link">
+              Drawing 85: Superimposing Colors
             </Link>
           </li>
           <li className="nav-item">
@@ -63,11 +64,17 @@ const router = (
               Drawing 289: White Lines from Canvas Points to Grid Points
             </Link>
           </li>
+          <li className="nav-item">
+            <Link to="/square-wall-drawings" className="nav-link">
+              Drawings 154, 159, 160 & 164: Red Lines from Square Points
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>
 
     <Route exact path="/" component={App} />
+    <Route path="/wall-drawing-85" component={Drawing85} />
     <Route path="/wall-drawing-118" component={Drawing118} />
     <Route path="/wall-drawing-289" component={Drawing289} />
     <Route path="/square-wall-drawings" component={SquareDrawings} />

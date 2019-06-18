@@ -6,6 +6,8 @@ import "../css/drawings.css";
 
 import { RowGroup } from "./CommonComponents";
 import asThumbnail from "./utilities/Thumbnail";
+
+import Drawing85 from "./drawings/Drawing85";
 import Drawing118 from "./drawings/Drawing118";
 import Drawing154 from "./drawings/Drawing154";
 import Drawing159 from "./drawings/Drawing159";
@@ -23,6 +25,12 @@ class App extends Component {
           </Link>
           <Link to="/wall-drawing-289" className="drawing-thumbnail">
             <Thumbnail289 width={500} height={300}/>
+          </Link>
+        </RowGroup>
+
+        <RowGroup>
+          <Link to="/wall-drawing-85" className="drawing-thumbnail">
+            <Thumbnail85 width={500} height={300}/>
           </Link>
         </RowGroup>
 
@@ -46,6 +54,7 @@ class App extends Component {
 }
 
 export default App;
+const Thumbnail85 = asThumbnail(Drawing85);
 const Thumbnail118 = asThumbnail(Drawing118);
 const Thumbnail154 = asThumbnail(Drawing154);
 const Thumbnail159 = asThumbnail(Drawing159);

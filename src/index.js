@@ -14,17 +14,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./css/index.css";
 
-
 const router = (
   <Router>
     <nav className="navbar navbar-light">
       <Link to="/" className="navbar-brand">
-        <img
-          src={Sol391}
-          width="75"
-          height="75"
-          alt="Sol Drawing 391"
-        />
+        <img src={Sol391} width="75" height="75" alt="Sol Drawing 391" />
         Sol-itude
       </Link>
       <span className="navbar-text">
@@ -44,31 +38,23 @@ const router = (
 
       <div className="collapse navbar-collapse" id="navbar-top">
         <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-          <li className="nav-item">
-            <Link to="/" className="nav-link">
-              Home
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/wall-drawing-85" className="nav-link">
-              Drawing 85: Superimposing Colors
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/wall-drawing-118" className="nav-link">
-              Drawing 118: 50 Random Points & Lines Between Them
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/wall-drawing-289" className="nav-link">
-              Drawing 289: White Lines from Canvas Points to Grid Points
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/square-wall-drawings" className="nav-link">
-              Drawings 154, 159, 160 & 164: Red Lines from Square Points
-            </Link>
-          </li>
+          <NavListItem path="/" text="Home" />
+          <NavListItem
+            path="/wall-drawing-85"
+            text="Drawing 85: Superimposing Colors"
+          />
+          <NavListItem
+            path="/square-wall-drawings"
+            text="Drawings 154, 159, 160 & 164: Red Lines from Square Points"
+          />
+          <NavListItem
+            path="/wall-drawing-118"
+            text="Drawing 118: 50 Random Points & Lines Between Them"
+          />
+          <NavListItem
+            path="/wall-drawing-289"
+            text="Drawing 289: White Lines from Canvas Points to Grid Points"
+          />
         </ul>
       </div>
     </nav>
@@ -80,6 +66,20 @@ const router = (
     <Route path="/square-wall-drawings" component={SquareDrawings} />
   </Router>
 );
+
+function NavListItem({ path, text }) {
+  return (
+    <li
+      className="nav-item"
+      data-toggle="collapse"
+      data-target=".navbar-collapse.show"
+    >
+      <Link to={path} className="nav-link">
+        {text}
+      </Link>
+    </li>
+  );
+}
 
 ReactDOM.render(router, document.getElementById("root"));
 

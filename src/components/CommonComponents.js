@@ -17,13 +17,15 @@ export const Button = ({ onClick, text }) => (
   </button>
 );
 
-export const DrawingInfo = ({ title, instructions, year }) => (
+export const DrawingInfo = ({ title, instructions, year, titleOnly }) => (
   <div className="sketch">
     <h2 className="sketch-title">{title}</h2>
-    <p className="sketch-instructions">
-      {instructions}
-      <span className="sketch-year">({year})</span>
-    </p>
+    {!titleOnly && (
+      <p className="sketch-instructions">
+        {instructions}
+        <span className="sketch-year">({year})</span>
+      </p>
+    )}
   </div>
 );
 

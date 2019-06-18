@@ -64,15 +64,20 @@ export default class Drawing289 extends React.Component {
   }
 
   render() {
+    let asThumbnail = this.props.asThumbnail;
+    const width = asThumbnail ? this.props.width : 1400;
+    const height = asThumbnail ? this.props.height : 500;
+
     return (
       <DrawingContainer {...this.props}>
         <Canvas
           targetPoints={this.getCanvasPoints()}
-          width={1400}
-          height={500}
+          width={width}
+          height={height}
           background="#000000"
         >
           <DrawingInfo
+            titleOnly={asThumbnail}
             title="Wall Drawing 289"
             instructions="A 6-inch (15 cm) grid covering each of the four black
           walls. White lines to points on the grids. Fourth wall: twenty-four
@@ -83,7 +88,7 @@ export default class Drawing289 extends React.Component {
           />
           {this.state.lines}
         </Canvas>
-        <Button onClick={this.randomize} />
+        { !asThumbnail && <Button onClick={this.randomize} /> }
       </DrawingContainer>
     );
   }

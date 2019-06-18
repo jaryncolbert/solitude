@@ -174,10 +174,15 @@ export default class Drawing154 extends React.Component {
       scaled
     } = this.state;
 
+    const asThumbnail = this.props.asThumbnail;
+    const width = asThumbnail ? this.props.width : 600;
+    const height = asThumbnail ? this.props.height : 400;
+
     return (
       <DrawingContainer {...this.props}>
-        <Canvas targetPoints={this.getCanvasPoints()}>
+        <Canvas targetPoints={this.getCanvasPoints()} width={width} height={height}>
           <DrawingInfo
+            titleOnly={asThumbnail}
             title="Wall Drawing 154"
             instructions="A black outlined square with a red
         horizontal line from the midpoint of the left side toward the
@@ -192,37 +197,40 @@ export default class Drawing154 extends React.Component {
           <HorizLine color={"#FF0000"} start={lineStart} lineLen={lineLen} />
         </Canvas>
 
-        <RowGroup>
-          <Slider
-            label="Square Size:"
-            value={sideLen}
-            changeHandler={e => this.setTargetValue(e, "sideLen")}
-            min={this.minLen}
-            max={this.state.canvasHeight}
-          />
-          <Slider
-            label="Line Length:"
-            value={lineLen}
-            changeHandler={e => this.setTargetValue(e, "lineLen")}
-            min={this.minLen}
-            max={lineMax}
-          />
-        </RowGroup>
+        {!asThumbnail && (
+        <>
+          <RowGroup>
+            <Slider
+              label="Square Size:"
+              value={sideLen}
+              changeHandler={e => this.setTargetValue(e, "sideLen")}
+              min={this.minLen}
+              max={this.state.canvasHeight}
+            />
+            <Slider
+              label="Line Length:"
+              value={lineLen}
+              changeHandler={e => this.setTargetValue(e, "lineLen")}
+              min={this.minLen}
+              max={lineMax}
+            />
+          </RowGroup>
+          <RowGroup>
+            <Checkbox
+              label="Can line extend beyond square?"
+              isSelected={canExtend}
+              changeHandler={e => this.toggleValue(e, "canExtend")}
+            />
+            <Checkbox
+              label="Scale square proportionally?"
+              isSelected={scaled}
+              changeHandler={e => this.toggleValue(e, "scaled")}
+            />
+          </RowGroup>
 
-        <RowGroup>
-          <Checkbox
-            label="Can line extend beyond square?"
-            isSelected={canExtend}
-            changeHandler={e => this.toggleValue(e, "canExtend")}
-          />
-          <Checkbox
-            label="Scale square proportionally?"
-            isSelected={scaled}
-            changeHandler={e => this.toggleValue(e, "scaled")}
-          />
-        </RowGroup>
-
-        <Button onClick={this.randomize} />
+          <Button onClick={this.randomize} />
+        </>
+      )}
       </DrawingContainer>
     );
   }

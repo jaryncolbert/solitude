@@ -84,10 +84,15 @@ export default class Drawing118 extends React.Component {
   }
 
   render() {
+    let asThumbnail = this.props.asThumbnail;
+    const width = asThumbnail ? this.props.width : 1400;
+    const height = asThumbnail ? this.props.height : 500;
+
     return (
       <DrawingContainer {...this.props}>
-        <Canvas targetPoints={this.getCanvasPoints()} width={1400} height={500}>
+        <Canvas targetPoints={this.getCanvasPoints()} width={width} height={height}>
           <DrawingInfo
+            titleOnly={asThumbnail}
             title="Wall Drawing 118"
             instructions="On a wall surface, any continuous stretch of wall,
             using a hard pencil, place fifty points at random. The points
@@ -97,7 +102,7 @@ export default class Drawing118 extends React.Component {
           />
           {this.state.lines}
         </Canvas>
-        <Button onClick={this.randomize} />
+        { !asThumbnail && <Button onClick={this.randomize} /> }
       </DrawingContainer>
     );
   }

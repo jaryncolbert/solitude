@@ -16,14 +16,14 @@ export default function About() {
 
       <div className="About content">
         <p>
-          This project was insipred by Conceptual Artist{" "}
+          This project was inspired by Conceptual Artist{" "}
           <a href="https://www.nytimes.com/2007/04/09/arts/design/09lewitt.html">
             Solomon "Sol" LeWitt
           </a>
           . Sol worked with various media, but this project explores his{" "}
           <a href="https://massmoca.org/sol-lewitt/">wall drawings</a>, where
           each piece is defined by a set of instructions that are left open to
-          interpretion by other artists that execute the works.
+          interpretation by other artists that execute the works.
         </p>
         <p>
           Because of the collaborative nature of these wall drawings, Sol

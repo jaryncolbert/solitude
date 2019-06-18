@@ -40,3 +40,19 @@ ul.navbar-nav {
 .nav-item.about  {
   font-size: 2vw;
 }
+
+.footer-container {
+  width: auto;
+  max-width: 680px;
+  padding: 0 15px;
+  text-align: center;
+  margin: auto;
+}
+.footer-container a img {
+  margin: .5em;
+}
+
+.footer {
+  background-color: #f5f5f5;
+  text-align: center;
+}

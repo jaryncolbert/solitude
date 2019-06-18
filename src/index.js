@@ -8,6 +8,7 @@ import Drawing289 from "./components/drawings/Drawing289";
 import SquareDrawings from "./components/drawings/SquareDrawings";
 import * as serviceWorker from "./serviceWorker";
 import Sol391 from "./assets/sol_lewitt_391_color.svg";
+import Footer from "./components/Footer";
 
 // Bootstrap dependencies
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -65,6 +66,8 @@ const router = (
     <Route path="/wall-drawing-118" component={Drawing118} />
     <Route path="/wall-drawing-289" component={Drawing289} />
     <Route path="/square-wall-drawings" component={SquareDrawings} />
+
+    <Footer />
   </Router>
 );
 

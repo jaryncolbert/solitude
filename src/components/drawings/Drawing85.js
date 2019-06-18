@@ -26,6 +26,7 @@ export default class Drawing85 extends React.Component {
 
     // Get all combinations of randomized properties
     if (this.state.canvasWidth) {
+      let prevWidth = 0;
       let rectWidth = Math.round(this.state.canvasWidth / rectProps.length);
       rows.push(
         <RowOfRectangles
@@ -35,6 +36,23 @@ export default class Drawing85 extends React.Component {
           rectProps={rectProps}
         />
       );
+      prevWidth = rectWidth;
+
+      const secondRow = [
+        [...rectProps[0], ...rectProps[1]],
+        [...rectProps[0], ...rectProps[2]],
+        [...rectProps[0], ...rectProps[3]]
+      ];
+      rectWidth = Math.round(this.state.canvasWidth / secondRow.length);
+      rows.push(
+        <RowOfRectangles
+          key={"rect-row-2"}
+          rowStart={new Point(0, prevWidth)}
+          rectWidth={rectWidth}
+          rectProps={secondRow}
+        />
+      );
+      prevWidth = rectWidth;
 
       this.setState({ rows });
     }
@@ -67,7 +85,7 @@ export default class Drawing85 extends React.Component {
   render() {
     let asThumbnail = this.props.asThumbnail;
     const width = asThumbnail ? this.props.width : 1400;
-    const height = asThumbnail ? this.props.height : 500;
+    const height = asThumbnail ? this.props.height : 1400;
 
     return (
       <DrawingContainer {...this.props}>

@@ -11,7 +11,7 @@ import Sol391 from "./assets/sol_lewitt_391_color.svg";
 // Bootstrap dependencies
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import "./index.css";
+import "./css/index.css";
 
 
 const router = (

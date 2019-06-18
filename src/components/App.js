@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import "../App.css";
+
+import "../css/App.css";
+import "../css/drawings.css";
+
 import { RowGroup } from "./CommonComponents";
 import asThumbnail from "./utilities/Thumbnail";
 import Drawing118 from "./drawings/Drawing118";

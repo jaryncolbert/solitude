@@ -4,7 +4,6 @@ import Drawing159 from "./Drawing159";
 import Drawing160 from "./Drawing160";
 import Drawing164 from "./Drawing164";
 import { RowGroup } from "../CommonComponents";
-import "../../square-drawings.css";
 
 class SquareDrawings extends Component {
   render() {

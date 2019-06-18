@@ -1,5 +1,4 @@
 import React from "react";
-import "../../thumbnail.css";
 
 export default function asThumbnail(DrawingComponent) {
   return class extends React.Component {

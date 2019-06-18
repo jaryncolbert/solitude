@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Route, Link, BrowserRouter as Router } from "react-router-dom";
 import App from "./components/App";
-import Drawing85 from "./components/drawings/Drawing85";
+import About from "./components/About";
 import Drawing118 from "./components/drawings/Drawing118";
 import Drawing289 from "./components/drawings/Drawing289";
 import SquareDrawings from "./components/drawings/SquareDrawings";
@@ -39,6 +39,7 @@ const router = (
       <div className="collapse navbar-collapse" id="navbar-top">
         <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
           <NavListItem path="/" text="Home" />
+          <NavListItem path="/about" text="About" />
           <NavListItem
             path="/wall-drawing-85"
             text="Drawing 85: Superimposing Colors"
@@ -60,7 +61,7 @@ const router = (
     </nav>
 
     <Route exact path="/" component={App} />
-    <Route path="/wall-drawing-85" component={Drawing85} />
+    <Route path="/about" component={About} />
     <Route path="/wall-drawing-118" component={Drawing118} />
     <Route path="/wall-drawing-289" component={Drawing289} />
     <Route path="/square-wall-drawings" component={SquareDrawings} />

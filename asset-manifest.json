@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/sol-itude/static/css/main.fbeee0ce.chunk.css",
-    "main.js": "/sol-itude/static/js/main.8877bdb5.chunk.js",
-    "main.js.map": "/sol-itude/static/js/main.8877bdb5.chunk.js.map",
-    "runtime~main.js": "/sol-itude/static/js/runtime~main.edc8ef9a.js",
-    "runtime~main.js.map": "/sol-itude/static/js/runtime~main.edc8ef9a.js.map",
-    "static/css/2.1e66eaca.chunk.css": "/sol-itude/static/css/2.1e66eaca.chunk.css",
-    "static/js/2.d09c5d94.chunk.js": "/sol-itude/static/js/2.d09c5d94.chunk.js",
-    "static/js/2.d09c5d94.chunk.js.map": "/sol-itude/static/js/2.d09c5d94.chunk.js.map",
-    "index.html": "/sol-itude/index.html",
-    "precache-manifest.03f04f1c184317b2038809e8598e0be7.js": "/sol-itude/precache-manifest.03f04f1c184317b2038809e8598e0be7.js",
-    "service-worker.js": "/sol-itude/service-worker.js",
-    "static/css/2.1e66eaca.chunk.css.map": "/sol-itude/static/css/2.1e66eaca.chunk.css.map",
-    "static/css/main.fbeee0ce.chunk.css.map": "/sol-itude/static/css/main.fbeee0ce.chunk.css.map",
-    "static/media/sol_lewitt_391_color.svg": "/sol-itude/static/media/sol_lewitt_391_color.a9fcb9bc.svg"
+    "main.css": "/solitude/static/css/main.fbeee0ce.chunk.css",
+    "main.js": "/solitude/static/js/main.52754899.chunk.js",
+    "main.js.map": "/solitude/static/js/main.52754899.chunk.js.map",
+    "runtime~main.js": "/solitude/static/js/runtime~main.985fdbb5.js",
+    "runtime~main.js.map": "/solitude/static/js/runtime~main.985fdbb5.js.map",
+    "static/css/2.1e66eaca.chunk.css": "/solitude/static/css/2.1e66eaca.chunk.css",
+    "static/js/2.d09c5d94.chunk.js": "/solitude/static/js/2.d09c5d94.chunk.js",
+    "static/js/2.d09c5d94.chunk.js.map": "/solitude/static/js/2.d09c5d94.chunk.js.map",
+    "index.html": "/solitude/index.html",
+    "precache-manifest.386792a78216710aa6524a8173fe73db.js": "/solitude/precache-manifest.386792a78216710aa6524a8173fe73db.js",
+    "service-worker.js": "/solitude/service-worker.js",
+    "static/css/2.1e66eaca.chunk.css.map": "/solitude/static/css/2.1e66eaca.chunk.css.map",
+    "static/css/main.fbeee0ce.chunk.css.map": "/solitude/static/css/main.fbeee0ce.chunk.css.map",
+    "static/media/sol_lewitt_391_color.svg": "/solitude/static/media/sol_lewitt_391_color.a9fcb9bc.svg"
   }
 }

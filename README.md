@@ -35,3 +35,5 @@ to explore the constraints of each work.
   * [Solving Sol](https://solvingsol.com): An open project
   to implement Sol LeWitt's instructions in JavaScript
   * [Sol LeWitt: A Wall Drawing Retrospective](https://massmoca.org/sol-lewitt/) at the Massachusetts Museum of Contemporary Art (MassMOCA)
+
+<a href='http://www.recurse.com' title='Made with love at the Recurse Center'><img src='https://cloud.githubusercontent.com/assets/2883345/11325206/336ea5f4-9150-11e5-9e90-d86ad31993d8.png' height='20px'/>

@@ -14,7 +14,7 @@ code {
 }
 
 .navbar {
-  background-color: #ECE3E1;
+  background-color: #ece3e1;
 }
 
 ul.navbar-nav {
@@ -22,7 +22,9 @@ ul.navbar-nav {
 }
 
 .navbar-brand img {
-  margin: .5em;
+  margin: 0.5em;
+  width: 40px;
+  height: 40px;
 }
 
 .navbar {
@@ -34,11 +36,17 @@ ul.navbar-nav {
 }
 
 .navbar-brand {
-  font-size: 2.5vw;
+  font-size: 2vw;
 }
 
-.nav-item.about  {
+.nav-item.about {
   font-size: 2vw;
+}
+
+.navbar-nav > li > a,
+.navbar-brand {
+  padding-top: 0.1125rem;
+  padding-bottom: 0.1125rem;
 }
 
 .footer-container {
@@ -49,7 +57,7 @@ ul.navbar-nav {
   margin: auto;
 }
 .footer-container a img {
-  margin: .5em;
+  margin: 0.5em;
 }
 
 .footer {

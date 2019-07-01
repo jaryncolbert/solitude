@@ -1,9 +1,11 @@
 {
   "name": "sol-itude",
-  "version": "0.1.0",
+  "homepage": "https://jaryncolbert.github.io/sol-itude",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",
+    "gh-pages": "^2.0.1",
     "jquery": "^3.4.1",
     "p5": "^0.8.0",
     "popper.js": "^1.15.0",
@@ -19,7 +21,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"

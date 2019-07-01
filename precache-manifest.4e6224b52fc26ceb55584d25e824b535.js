@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4ae6173b24eaf8c5386fbd6bc0dfcb3a",
+    "revision": "746f63ddbda3bcade8e068a943303287",
     "url": "/solitude/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/solitude/static/css/2.1e66eaca.chunk.css"
   },
   {
-    "revision": "634ea93731979ce3d4f6",
+    "revision": "4a069519ab1d56612e36",
     "url": "/solitude/static/css/main.0f8d72f5.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/solitude/static/js/2.826838f9.chunk.js"
   },
   {
-    "revision": "634ea93731979ce3d4f6",
-    "url": "/solitude/static/js/main.c0d5b016.chunk.js"
+    "revision": "4a069519ab1d56612e36",
+    "url": "/solitude/static/js/main.d0c8f20c.chunk.js"
   },
   {
     "revision": "4bddc5d0dd963aca53fa",

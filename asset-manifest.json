@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/solitude/static/css/main.fbeee0ce.chunk.css",
-    "main.js": "/solitude/static/js/main.52754899.chunk.js",
-    "main.js.map": "/solitude/static/js/main.52754899.chunk.js.map",
+    "main.css": "/solitude/static/css/main.d216a074.chunk.css",
+    "main.js": "/solitude/static/js/main.5689647e.chunk.js",
+    "main.js.map": "/solitude/static/js/main.5689647e.chunk.js.map",
     "runtime~main.js": "/solitude/static/js/runtime~main.985fdbb5.js",
     "runtime~main.js.map": "/solitude/static/js/runtime~main.985fdbb5.js.map",
     "static/css/2.1e66eaca.chunk.css": "/solitude/static/css/2.1e66eaca.chunk.css",
-    "static/js/2.d09c5d94.chunk.js": "/solitude/static/js/2.d09c5d94.chunk.js",
-    "static/js/2.d09c5d94.chunk.js.map": "/solitude/static/js/2.d09c5d94.chunk.js.map",
+    "static/js/2.826838f9.chunk.js": "/solitude/static/js/2.826838f9.chunk.js",
+    "static/js/2.826838f9.chunk.js.map": "/solitude/static/js/2.826838f9.chunk.js.map",
     "index.html": "/solitude/index.html",
-    "precache-manifest.386792a78216710aa6524a8173fe73db.js": "/solitude/precache-manifest.386792a78216710aa6524a8173fe73db.js",
+    "precache-manifest.85bd44c333891eddf4fe930fd882b0aa.js": "/solitude/precache-manifest.85bd44c333891eddf4fe930fd882b0aa.js",
     "service-worker.js": "/solitude/service-worker.js",
     "static/css/2.1e66eaca.chunk.css.map": "/solitude/static/css/2.1e66eaca.chunk.css.map",
-    "static/css/main.fbeee0ce.chunk.css.map": "/solitude/static/css/main.fbeee0ce.chunk.css.map",
+    "static/css/main.d216a074.chunk.css.map": "/solitude/static/css/main.d216a074.chunk.css.map",
     "static/media/sol_lewitt_391_color.svg": "/solitude/static/media/sol_lewitt_391_color.a9fcb9bc.svg"
   }
 }

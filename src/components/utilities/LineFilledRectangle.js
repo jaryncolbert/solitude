@@ -160,7 +160,7 @@ export function RowOfRectangles({
   ...otherProps
 }) {
   let rects = [];
-  console.log("props ", rectProps)
+
   for (let i = 0; i < rectProps.length; i++) {
     for (let j = 0; j < rectProps[i].length; j++) {
       rects.push(

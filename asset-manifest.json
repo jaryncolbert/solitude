@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/sol-itude/static/css/main.fbeee0ce.chunk.css",
+    "main.js": "/sol-itude/static/js/main.a7553873.chunk.js",
+    "main.js.map": "/sol-itude/static/js/main.a7553873.chunk.js.map",
+    "runtime~main.js": "/sol-itude/static/js/runtime~main.edc8ef9a.js",
+    "runtime~main.js.map": "/sol-itude/static/js/runtime~main.edc8ef9a.js.map",
+    "static/css/2.1e66eaca.chunk.css": "/sol-itude/static/css/2.1e66eaca.chunk.css",
+    "static/js/2.39e684c1.chunk.js": "/sol-itude/static/js/2.39e684c1.chunk.js",
+    "static/js/2.39e684c1.chunk.js.map": "/sol-itude/static/js/2.39e684c1.chunk.js.map",
+    "index.html": "/sol-itude/index.html",
+    "precache-manifest.f986adc89bfcb2b040809a8e8fbf5412.js": "/sol-itude/precache-manifest.f986adc89bfcb2b040809a8e8fbf5412.js",
+    "service-worker.js": "/sol-itude/service-worker.js",
+    "static/css/2.1e66eaca.chunk.css.map": "/sol-itude/static/css/2.1e66eaca.chunk.css.map",
+    "static/css/main.fbeee0ce.chunk.css.map": "/sol-itude/static/css/main.fbeee0ce.chunk.css.map",
+    "static/media/sol_lewitt_391_color.svg": "/sol-itude/static/media/sol_lewitt_391_color.a9fcb9bc.svg"
+  }
+}

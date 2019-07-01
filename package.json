@@ -1,6 +1,6 @@
 {
-  "name": "sol-itude",
-  "homepage": "https://jaryncolbert.github.io/sol-itude",
+  "name": "solitude",
+  "homepage": "https://jaryncolbert.github.io/solitude",
   "version": "1.0.0",
   "private": true,
   "dependencies": {

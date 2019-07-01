@@ -85,6 +85,18 @@ export default class Drawing85 extends React.Component {
   render() {
     let asThumbnail = this.props.asThumbnail;
 
+    const instructions = (
+      <>
+        <b>Note</b>: This drawing is a work-in-progress and does not accurately
+        convey Sol's instructions.
+        <br />
+        <br />A wall is divided into four horizontal parts. In the top row are
+        four equal divisions, each with lines in a different direction. In the
+        second row, six double combinations; in the third row, four triple
+        combinations; in the bottom row, all four combinations superimposed.
+      </>
+    );
+
     return (
       <DrawingContainer {...this.props}>
         <ResponsiveCanvas
@@ -94,13 +106,8 @@ export default class Drawing85 extends React.Component {
         >
           <DrawingInfo
             titleOnly={asThumbnail}
-            title="Wall Drawing 85"
-            instructions="A wall is divided into four horizontal parts.
-            In the top row are four equal divisions,
-            each with lines in a different direction.
-            In the second row, six double combinations;
-            in the third row, four triple combinations;
-            in the bottom row, all four combinations superimposed."
+            title="WIP: Wall Drawing 85"
+            instructions={instructions}
             year="1971"
           />
           {this.state.rows}

@@ -1,11 +1,11 @@
 import React from "react";
 import { RectPoints } from "../shapes/Rectangle";
 import LineOriginator from "../utilities/LineOriginator";
-import Canvas from "../P5Canvas";
+import ResponsiveCanvas from "../canvas/ResponsiveCanvas";
 import { Button, DrawingInfo, DrawingContainer } from "../CommonComponents";
 
 export default class Drawing289 extends React.Component {
-  state = { lines: [] }
+  state = { lines: [] };
 
   randomize = () => {
     const lines = Object.values(RectPoints).map(point => {
@@ -58,22 +58,23 @@ export default class Drawing289 extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState["lines"].length === 0 && !!this.state.lines) {
+    if (
+      (prevState["lines"].length === 0 && !!this.state.lines) ||
+      this.props.width !== prevProps.width ||
+      this.props.height !== prevProps.height ||
+      this.state.BTM_RIGHT !== prevState.BTM_RIGHT
+    ) {
       this.randomize();
     }
   }
 
   render() {
     let asThumbnail = this.props.asThumbnail;
-    const width = asThumbnail ? this.props.width : 1400;
-    const height = asThumbnail ? this.props.height : 500;
 
     return (
       <DrawingContainer {...this.props}>
-        <Canvas
+        <ResponsiveCanvas
           targetPoints={this.getCanvasPoints()}
-          width={width}
-          height={height}
           background="#000000"
         >
           <DrawingInfo
@@ -87,8 +88,8 @@ export default class Drawing289 extends React.Component {
             year="1976"
           />
           {this.state.lines}
-        </Canvas>
-        { !asThumbnail && <Button onClick={this.randomize} /> }
+        </ResponsiveCanvas>
+        {!asThumbnail && <Button onClick={this.randomize} />}
       </DrawingContainer>
     );
   }

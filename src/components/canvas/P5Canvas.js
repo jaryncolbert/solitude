@@ -2,8 +2,8 @@ import React from "react";
 import p5 from "p5";
 import PropTypes from "prop-types";
 
-import Point from "./shapes/Point";
-import Rectangle from "./shapes/Rectangle";
+import Point from "../shapes/Point";
+import Rectangle from "../shapes/Rectangle";
 
 export default class Canvas extends React.Component {
   static defaultProps = {
@@ -31,14 +31,34 @@ export default class Canvas extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const { setup, draw } = this;
-    const sketch = p => {
-      p.setup = () => setup(p);
-      p.draw = () => draw(p);
-    };
-    this.p = new p5(sketch, this.container);
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.width !== this.props.width ||
+      prevProps.height !== this.props.height ||
+      !prevProps.start.equals(this.props.start)
+    ) {
+      this.removeCanvas();
+      this.createCanvas();
+    }
   }
+
+  removeCanvas = () => {
+    if (this.p) {
+      this.p.remove();
+      this.p = null;
+    }
+  };
+
+  createCanvas = () => {
+    if (!this.p || this.p === null) {
+      const { setup, draw } = this;
+      const sketch = p => {
+        p.setup = () => setup(p);
+        p.draw = () => draw(p);
+      };
+      this.p = new p5(sketch, this.container);
+    }
+  };
 
   setup = p => {
     const { width, height } = this.props;
@@ -61,7 +81,7 @@ export default class Canvas extends React.Component {
   };
 
   componentWillUnmount() {
-    this.p.remove();
+    this.removeCanvas();
   }
 
   render() {

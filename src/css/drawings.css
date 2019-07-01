@@ -3,11 +3,11 @@
   margin-top: 2rem;
   margin-left: 2rem;
   margin-right: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding: 1rem;
   border: 1px solid lightgray;
   background: white;
-  box-shadow: 0 0 0 5px rgba(0,0,0,0.03);
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.03);
   text-align: center;
 }
 .sketch {
@@ -15,10 +15,10 @@
   font-size: 1.3em;
 }
 .sketch-year {
-  padding: .5rem;
+  padding: 0.5rem;
 }
 .slider-output {
-  padding: .2rem;
+  padding: 0.2rem;
 }
 
 .drawing-thumbnail {
@@ -28,7 +28,7 @@
   margin-bottom: 1rem;
   border: 1px solid lightgray;
   background: white;
-  box-shadow: 0 0 0 5px rgba(0,0,0,0.03);
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.03);
   text-align: center;
 }
 

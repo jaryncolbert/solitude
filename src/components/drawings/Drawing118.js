@@ -2,7 +2,7 @@ import React from "react";
 import { RectPoints } from "../shapes/Rectangle";
 import Line from "../shapes/Line";
 import Point from "../shapes/Point";
-import Canvas from "../P5Canvas";
+import ResponsiveCanvas from "../canvas/ResponsiveCanvas";
 import { Button, DrawingInfo, DrawingContainer } from "../CommonComponents";
 import { getRandomInt } from "../util";
 
@@ -18,12 +18,7 @@ export default class Drawing118 extends React.Component {
         const end = points[j];
 
         lines.push(
-          <Line
-            key={i + "-" + j}
-            start={start}
-            end={end}
-            strokeWeight={1}
-          />
+          <Line key={i + "-" + j} start={start} end={end} strokeWeight={1} />
         );
       }
     });
@@ -78,19 +73,21 @@ export default class Drawing118 extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState["lines"].length === 0 && !!this.state.lines) {
+    if (
+      (prevState["lines"].length === 0 && !!this.state.lines) ||
+      this.state.canvasMin !== prevState.canvasMin ||
+      this.state.canvasMax !== prevState.canvasMax
+    ) {
       this.randomize();
     }
   }
 
   render() {
     let asThumbnail = this.props.asThumbnail;
-    const width = asThumbnail ? this.props.width : 1400;
-    const height = asThumbnail ? this.props.height : 500;
 
     return (
-      <DrawingContainer {...this.props}>
-        <Canvas targetPoints={this.getCanvasPoints()} width={width} height={height}>
+      <DrawingContainer>
+        <ResponsiveCanvas {...this.props} targetPoints={this.getCanvasPoints()}>
           <DrawingInfo
             titleOnly={asThumbnail}
             title="Wall Drawing 118"
@@ -101,8 +98,9 @@ export default class Drawing118 extends React.Component {
             year="1971"
           />
           {this.state.lines}
-        </Canvas>
-        { !asThumbnail && <Button onClick={this.randomize} /> }
+        </ResponsiveCanvas>
+
+        {!asThumbnail && <Button onClick={this.randomize} />}
       </DrawingContainer>
     );
   }

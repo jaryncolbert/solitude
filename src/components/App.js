@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 import "../css/App.css";
@@ -15,39 +15,42 @@ import Drawing160 from "./drawings/Drawing160";
 import Drawing164 from "./drawings/Drawing164";
 import Drawing289 from "./drawings/Drawing289";
 
-class App extends Component {
+class App extends React.Component {
   render() {
     return (
       <div className="App">
         <RowGroup>
           <Link to="/wall-drawing-118" className="drawing-thumbnail">
-            <Thumbnail118 width={500} height={300}/>
+            <Thumbnail118 />
           </Link>
+        </RowGroup>
+
+        <RowGroup>
           <Link to="/wall-drawing-289" className="drawing-thumbnail">
-            <Thumbnail289 width={500} height={300}/>
+            <Thumbnail289 />
           </Link>
         </RowGroup>
 
         <RowGroup>
           <Link to="/wall-drawing-85" className="drawing-thumbnail">
-            <Thumbnail85 width={800} height={300}/>
+            <Thumbnail85 />
           </Link>
         </RowGroup>
 
         <RowGroup>
           <Link to="/square-wall-drawings" className="drawing-thumbnail">
-            <Thumbnail154 />
+            <Thumbnail154 scaleWidth={0.4} scaleHeight={0.2} />
           </Link>
           <Link to="/square-wall-drawings" className="drawing-thumbnail">
-            <Thumbnail159 />
+            <Thumbnail159 scaleWidth={0.4} scaleHeight={0.2} />
           </Link>
         </RowGroup>
         <RowGroup>
           <Link to="/square-wall-drawings" className="drawing-thumbnail">
-            <Thumbnail160 />
+            <Thumbnail160 scaleWidth={0.4} scaleHeight={0.2} />
           </Link>
           <Link to="/square-wall-drawings" className="drawing-thumbnail">
-            <Thumbnail164 />
+            <Thumbnail164 scaleWidth={0.4} scaleHeight={0.2} />
           </Link>
         </RowGroup>
       </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { CenteredSquare, RectPoints } from "../shapes/Rectangle";
 import Point from "../shapes/Point";
 import { HorizLine, DiagLine } from "../shapes/Line";
-import Canvas from "../P5Canvas";
+import ResponsiveCanvas from "../canvas/ResponsiveCanvas";
 import {
   Button,
   Slider,
@@ -180,15 +180,15 @@ export default class Drawing164 extends React.Component {
     } = this.state;
 
     const asThumbnail = this.props.asThumbnail;
-    const width = asThumbnail ? this.props.width : 600;
-    const height = asThumbnail ? this.props.height : 400;
 
     return (
       <DrawingContainer {...this.props}>
-        <Canvas
+        <ResponsiveCanvas
+          {...this.props}
+          minWidth={sideLen}
+          minHeight={sideLen}
           targetPoints={this.getCanvasPoints()}
           getDiagonal={v => this.setValue(v, "canvasDiag")}
-          width={width} height={height}
         >
           <DrawingInfo
             titleOnly={asThumbnail}
@@ -219,50 +219,50 @@ export default class Drawing164 extends React.Component {
             centered
             color={"#FF0000"}
           />
-        </Canvas>
+        </ResponsiveCanvas>
 
-        { !asThumbnail && (
-        <>
-          <RowGroup>
-            <Slider
-              label="Square Size:"
-              value={sideLen}
-              changeHandler={e => this.setTargetValue(e, "sideLen")}
-              min={this.minLen}
-              max={this.state.canvasHeight}
-            />
-            <Slider
-              label="Rising Line Length:"
-              value={riseLineLen}
-              changeHandler={e => this.setTargetValue(e, "riseLineLen")}
-              min={this.minLen}
-              max={lineMax}
-            />
-            <Slider
-              label="Horizontal Line Length:"
-              value={horizLineLen}
-              changeHandler={e => this.setTargetValue(e, "horizLineLen")}
-              min={this.minLen}
-              max={lineMax}
-            />
-          </RowGroup>
+        {!asThumbnail && (
+          <>
+            <RowGroup>
+              <Slider
+                label="Square Size:"
+                value={sideLen}
+                changeHandler={e => this.setTargetValue(e, "sideLen")}
+                min={this.minLen}
+                max={this.state.canvasHeight}
+              />
+              <Slider
+                label="Rising Line Length:"
+                value={riseLineLen}
+                changeHandler={e => this.setTargetValue(e, "riseLineLen")}
+                min={this.minLen}
+                max={lineMax}
+              />
+              <Slider
+                label="Horizontal Line Length:"
+                value={horizLineLen}
+                changeHandler={e => this.setTargetValue(e, "horizLineLen")}
+                min={this.minLen}
+                max={lineMax}
+              />
+            </RowGroup>
 
-          <RowGroup>
-            <Checkbox
-              label="Can line extend beyond square?"
-              isSelected={canExtend}
-              changeHandler={e => this.toggleValue(e, "canExtend")}
-            />
-            <Checkbox
-              label="Scale square proportionally?"
-              isSelected={scaled}
-              changeHandler={e => this.toggleValue(e, "scaled")}
-            />
-          </RowGroup>
+            <RowGroup>
+              <Checkbox
+                label="Can line extend beyond square?"
+                isSelected={canExtend}
+                changeHandler={e => this.toggleValue(e, "canExtend")}
+              />
+              <Checkbox
+                label="Scale square proportionally?"
+                isSelected={scaled}
+                changeHandler={e => this.toggleValue(e, "scaled")}
+              />
+            </RowGroup>
 
-          <Button onClick={this.randomize} />
-        </>
-      )}
+            <Button onClick={this.randomize} />
+          </>
+        )}
       </DrawingContainer>
     );
   }

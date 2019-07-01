@@ -4,7 +4,7 @@ import { LineTypes } from "../shapes/Line";
 import { RowOfRectangles } from "../utilities/LineFilledRectangle";
 import { Colors } from "../utilities/Colors";
 import Point from "../shapes/Point";
-import Canvas from "../P5Canvas";
+import ResponsiveCanvas from "../canvas/ResponsiveCanvas";
 import { Button, DrawingInfo, DrawingContainer } from "../CommonComponents";
 import { shuffleArray } from "../util";
 
@@ -84,15 +84,13 @@ export default class Drawing85 extends React.Component {
 
   render() {
     let asThumbnail = this.props.asThumbnail;
-    const width = asThumbnail ? this.props.width : 1400;
-    const height = asThumbnail ? this.props.height : 1400;
 
     return (
       <DrawingContainer {...this.props}>
-        <Canvas
+        <ResponsiveCanvas
           targetPoints={this.getCanvasPoints()}
-          width={width}
-          height={height}
+          width={this.props.width}
+          height={this.props.height}
         >
           <DrawingInfo
             titleOnly={asThumbnail}
@@ -106,7 +104,7 @@ export default class Drawing85 extends React.Component {
             year="1971"
           />
           {this.state.rows}
-        </Canvas>
+        </ResponsiveCanvas>
         {!asThumbnail && <Button onClick={this.randomize} />}
       </DrawingContainer>
     );

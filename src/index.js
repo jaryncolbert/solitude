@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Route, Link, BrowserRouter as Router } from "react-router-dom";
+import { Route, Link, HashRouter as Router } from "react-router-dom";
 import App from "./components/App";
 import About from "./components/About";
 import Drawing85 from "./components/drawings/Drawing85";
@@ -17,7 +17,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./css/index.css";
 
 const router = (
-  <Router>
+  <Router basename="/">
     <nav className="navbar navbar-light">
       <Link to="/" className="navbar-brand">
         <img src={Sol391} width="75" height="75" alt="Sol Drawing 391" />
@@ -44,7 +44,7 @@ const router = (
           <NavListItem path="/about" text="About" />
           <NavListItem
             path="/wall-drawing-118"
-            text="Drawing 118: 50 Random Points & Lines Between Them"
+            text="Drawing 118: 50 Random Points &amp; Lines Between Them"
           />
           <NavListItem
             path="/wall-drawing-289"
@@ -52,7 +52,7 @@ const router = (
           />
           <NavListItem
             path="/square-wall-drawings"
-            text="Drawings 154, 159, 160 & 164: Red Lines from Square Points"
+            text="Drawings 154, 159, 160 &amp; 164: Red Lines from Square Points"
           />
           <NavListItem
             path="/wall-drawing-85"

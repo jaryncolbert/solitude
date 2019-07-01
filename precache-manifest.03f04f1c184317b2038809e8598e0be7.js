@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f5254051a2b3d4c5579e0a2241732dd3",
+    "revision": "c1f1f95f81cb43b047b3ca3cc7f8b99e",
     "url": "/sol-itude/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/sol-itude/static/css/2.1e66eaca.chunk.css"
   },
   {
-    "revision": "5e5075593c38f475510d",
+    "revision": "88b76561966295c593b7",
     "url": "/sol-itude/static/css/main.fbeee0ce.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/sol-itude/static/js/2.d09c5d94.chunk.js"
   },
   {
-    "revision": "5e5075593c38f475510d",
-    "url": "/sol-itude/static/js/main.ba084e9a.chunk.js"
+    "revision": "88b76561966295c593b7",
+    "url": "/sol-itude/static/js/main.8877bdb5.chunk.js"
   },
   {
     "revision": "d12e3d0e137752da1a18",

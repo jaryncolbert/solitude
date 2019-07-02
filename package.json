@@ -1,7 +1,7 @@
 {
   "name": "solitude",
   "homepage": "https://jaryncolbert.github.io/solitude",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",

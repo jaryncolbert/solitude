@@ -54,7 +54,6 @@ export function Slider(props) {
   return (
     <div className={"slider-container form-group " + props.className}>
       <label htmlFor={sliderId}>{props.label}</label>
-      <output className="slider-output">{props.value}</output>
       <input
         className="form-control-range"
         type="range"
@@ -65,6 +64,7 @@ export function Slider(props) {
         id={sliderId}
         onChange={props.changeHandler}
       />
+      <output className="slider-output">{props.value}</output>
     </div>
   );
 }

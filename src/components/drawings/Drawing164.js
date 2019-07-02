@@ -239,7 +239,7 @@ export default class Drawing164 extends React.Component {
                 max={lineMax}
               />
               <Slider
-                label="Horizontal Line Length:"
+                label="Horiz. Line Length:"
                 value={horizLineLen}
                 changeHandler={e => this.setTargetValue(e, "horizLineLen")}
                 min={this.minLen}

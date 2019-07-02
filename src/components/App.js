@@ -21,7 +21,7 @@ class App extends React.Component {
       <div className="App">
         <RowGroup>
           <Link to="/wall-drawing-118" className="drawing-thumbnail">
-            <Thumbnail118 />
+            <Thumbnail118 scaleHeight={0.5} />
           </Link>
         </RowGroup>
 

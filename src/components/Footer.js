@@ -4,7 +4,7 @@ import GitHubLogo from "../assets/GitHub-Mark-32px.png";
 export default function Footer() {
   return (
     <footer className="footer mt-auto py-3">
-      <div className="footer-container">
+      <div className="footer-container container-fluid">
         <a
           href="http://www.recurse.com"
           title="Made with love at the Recurse Center"
@@ -15,7 +15,7 @@ export default function Footer() {
             height="14px"
           />
         </a>
-        {" | "}
+        <span className="divider">|</span>
         <a href="https://github.com/jaryncolbert/solitude">
           <img src={GitHubLogo} alt="github logo" />
           Fork on GitHub

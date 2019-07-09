@@ -15,7 +15,7 @@ the site will be available on `localhost:3000`.
     the work.” -- Sol LeWitt
 
 This project was inspired
-by the work Conceptualism pioneer
+by the work of Conceptualism pioneer
 [Solomon "Sol" LeWitt](https://www.nytimes.com/2007/04/09/arts/design/09lewitt.html).
 
 Sol worked with various media,

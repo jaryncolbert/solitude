@@ -12,7 +12,8 @@ export const RectPoints = Object.freeze({
   BTM_RIGHT: "btm_right",
   MID_LEFT: "mid_left",
   MIDPOINT: "midpoint",
-  MID_RIGHT: "mid_right"
+  MID_RIGHT: "mid_right",
+  DIAGONAL: "diagonal"
 });
 
 export class SimpleRectangle extends Drawable {
@@ -22,16 +23,32 @@ export class SimpleRectangle extends Drawable {
   };
 
   draw = p => {
-    let { start, width, height, color, fillColor, strokeWeight } = this.props;
-    p.stroke(color);
-    p.strokeWeight(strokeWeight);
-    p.rect(start.x, start.y, width, height);
+    let {
+      start,
+      width,
+      height,
+      color,
+      noFill,
+      noOutline,
+      fillColor,
+      strokeWeight
+    } = this.props;
+
+    if (noOutline) {
+      p.noStroke();
+    } else {
+      p.stroke(color);
+      p.strokeWeight(strokeWeight);
+    }
+    noFill && p.noFill();
     fillColor && p.fill(fillColor);
+
+    p.rect(start.x, start.y, width, height);
   };
 }
 
 function withRectPoints(RectangleComponent) {
-  return class extends React.Component {
+  return class RectangleWithPoints extends React.Component {
     static defaultProps = {
       ...RectangleComponent.defaultProps,
       /* targetPoints is an array of objects:
@@ -40,11 +57,11 @@ function withRectPoints(RectangleComponent) {
            callback: A function that should be called to return target value
          }
        */
-      targetPoints: []
+      targetPoints: [],
+      diagonalLen: 0
     };
 
-    constructor(props) {
-      super(props);
+    componentDidMount() {
       this.registerPoints();
     }
 
@@ -61,7 +78,14 @@ function withRectPoints(RectangleComponent) {
     }
 
     registerPoints = () => {
-      let { start, height, width, targetPoints, getDiagonal } = this.props;
+      let {
+        start,
+        height,
+        width,
+        targetPoints,
+        pointsCallback,
+        getDiagonal
+      } = this.props;
 
       // Register each target point and its callback function to pass to parent
       targetPoints.forEach(({ target, callback }) => {
@@ -69,8 +93,25 @@ function withRectPoints(RectangleComponent) {
         callback(point);
       });
 
+      let points = {};
+      let point;
+      Object.values(RectPoints).forEach(v => {
+        if (v === RectPoints.DIAGONAL) {
+          point = this.getDiagonal(width, height);
+        } else {
+          point = this.getPoint(v, start, height, width);
+        }
+        points[v] = point;
+      });
+      this.setState({ points });
+      if (pointsCallback) {
+        pointsCallback(points);
+      }
+
       if (getDiagonal) {
-        getDiagonal(this.getDiagonal(width, height));
+        this.setState({
+          diagonalLen: this.getDiagonal(width, height)
+        });
       }
     };
 
@@ -103,28 +144,22 @@ function withRectPoints(RectangleComponent) {
           return new Point(midX, midY);
         case RectPoints.MID_RIGHT:
           return new Point(rightX, midY);
+        case RectPoints.DIAGONAL:
+          return this.getDiagonal(width, height);
         default:
           throw new Error("Unknown Rectangle point " + targetPoint);
       }
     };
 
     render() {
-      let { targetPoints, start, width, height, ...otherProps } = this.props;
-
-      return (
-        <RectangleComponent
-          start={start}
-          width={width}
-          height={height}
-          {...otherProps}
-        />
-      );
+      let { targetPoints, pointsCallback, ...otherProps } = this.props;
+      return <RectangleComponent {...otherProps} {...this.state} />;
     }
   };
 }
 
 function withEqualSides(RectangleComponent) {
-  return function({ sideLen, ...otherProps }) {
+  return function EqualSidedRectangle({ sideLen, ...otherProps }) {
     return (
       <RectangleComponent width={sideLen} height={sideLen} {...otherProps} />
     );
@@ -132,7 +167,7 @@ function withEqualSides(RectangleComponent) {
 }
 
 function centered(RectangleComponent) {
-  return class extends React.Component {
+  return class CenteredRectangle extends React.Component {
     static defaultProps = RectangleComponent.defaultProps;
 
     getOriginFromMidpoint = (midpoint, width, height) => {
@@ -153,6 +188,21 @@ function centered(RectangleComponent) {
           height={height}
         />
       );
+    }
+  };
+}
+
+function withRectAnchors(ChildComponent) {
+  return class RectangleAnchor extends React.Component {
+    render() {
+      const { anchoredTo, anchoredAs, points, ...otherProps } = this.props;
+      let injectedProps = {};
+
+      if (points && anchoredTo) {
+        const anchorName = anchoredAs ? anchoredAs : "start";
+        injectedProps[anchorName] = points[anchoredTo];
+      }
+      return <ChildComponent {...otherProps} {...injectedProps} />;
     }
   };
 }

@@ -89,7 +89,7 @@ export default class Canvas extends React.Component {
 
     return (
       <div ref={e => (this.container = e)}>
-        <Rectangle color={background} fillColor={background} {...otherProps} />
+        <Rectangle {...otherProps} color={background} fillColor={background} />
         {children}
       </div>
     );

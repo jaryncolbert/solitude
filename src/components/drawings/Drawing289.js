@@ -2,7 +2,8 @@ import React from "react";
 import { RectPoints } from "../shapes/Rectangle";
 import LineOriginator from "../utilities/LineOriginator";
 import ResponsiveCanvas from "../canvas/ResponsiveCanvas";
-import { Button, DrawingInfo, DrawingContainer } from "../CommonComponents";
+import DrawingInfo from "../controls/DrawingInfo";
+import DrawingContainer from "../controls/DrawingContainer";
 
 export default class Drawing289 extends React.Component {
   state = { lines: [] };
@@ -11,6 +12,9 @@ export default class Drawing289 extends React.Component {
     const lines = Object.values(RectPoints).map(point => {
       if (point === RectPoints.MIDPOINT) {
         return this.originateLinesFrom(point, 24);
+      }
+      if (point === RectPoints.DIAGONAL) {
+        return null;
       } else {
         return this.originateLinesFrom(point, 12);
       }
@@ -69,10 +73,10 @@ export default class Drawing289 extends React.Component {
   }
 
   render() {
-    let asThumbnail = this.props.asThumbnail;
+    const asThumbnail = this.props.asThumbnail;
 
     return (
-      <DrawingContainer {...this.props}>
+      <DrawingContainer {...this.props} onRandomize={this.randomize}>
         <ResponsiveCanvas
           targetPoints={this.getCanvasPoints()}
           background="#000000">
@@ -88,7 +92,6 @@ export default class Drawing289 extends React.Component {
           />
           {this.state.lines}
         </ResponsiveCanvas>
-        {!asThumbnail && <Button onClick={this.randomize} />}
       </DrawingContainer>
     );
   }

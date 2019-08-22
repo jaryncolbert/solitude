@@ -6,7 +6,9 @@ export default class ResponsiveCanvas extends React.Component {
     scaleWidth: 0.9,
     scaleHeight: 0.5,
     minWidth: 0,
-    minHeight: 0
+    minHeight: 0,
+    noFill: true,
+    noOutline: true
   };
 
   state = {

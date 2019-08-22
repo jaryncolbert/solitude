@@ -4,65 +4,63 @@ import { Link } from "react-router-dom";
 import "../css/App.css";
 import "../css/drawings.css";
 
-import { RowGroup } from "./CommonComponents";
-import asThumbnail from "./utilities/Thumbnail";
+import RowGroup from "./controls/RowGroup";
 
 import Drawing85 from "./drawings/Drawing85";
 import Drawing118 from "./drawings/Drawing118";
-import Drawing154 from "./drawings/Drawing154";
-import Drawing159 from "./drawings/Drawing159";
-import Drawing160 from "./drawings/Drawing160";
-import Drawing164 from "./drawings/Drawing164";
 import Drawing289 from "./drawings/Drawing289";
+import SquareDrawings from "./drawings/SquareDrawings";
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className="App">
-        <RowGroup>
-          <Link to="/wall-drawing-118" className="drawing-thumbnail">
-            <Thumbnail118 scaleHeight={0.5} />
-          </Link>
-        </RowGroup>
+const App = () => {
+  return (
+    <div className="App">
+      <RowGroup>
+        <Thumbnail118 link="/wall-drawing-118" scaleHeight={0.5} />
+      </RowGroup>
 
-        <RowGroup>
-          <Link to="/wall-drawing-289" className="drawing-thumbnail">
-            <Thumbnail289 />
-          </Link>
-        </RowGroup>
+      <RowGroup>
+        <Thumbnail85 link="/wall-drawing-85" />
+      </RowGroup>
 
-        <RowGroup>
-          <Link to="/wall-drawing-85" className="drawing-thumbnail">
-            <Thumbnail85 />
-          </Link>
-        </RowGroup>
+      <RowGroup>
+        <Thumbnail289 link="/wall-drawing-289" />
+      </RowGroup>
 
-        <RowGroup>
-          <Link to="/square-wall-drawings" className="drawing-thumbnail">
-            <Thumbnail154 scaleWidth={0.4} scaleHeight={0.2} />
-          </Link>
-          <Link to="/square-wall-drawings" className="drawing-thumbnail">
-            <Thumbnail159 scaleWidth={0.4} scaleHeight={0.2} />
-          </Link>
-        </RowGroup>
-        <RowGroup>
-          <Link to="/square-wall-drawings" className="drawing-thumbnail">
-            <Thumbnail160 scaleWidth={0.4} scaleHeight={0.2} />
-          </Link>
-          <Link to="/square-wall-drawings" className="drawing-thumbnail">
-            <Thumbnail164 scaleWidth={0.4} scaleHeight={0.2} />
-          </Link>
-        </RowGroup>
-      </div>
-    );
-  }
-}
-
+      <RowGroup>
+        <SquareThumbnails
+          scaleWidth={0.4}
+          scaleHeight={0.2}
+          link="/square-wall-drawings"
+        />
+      </RowGroup>
+    </div>
+  );
+};
 export default App;
-const Thumbnail85 = asThumbnail(Drawing85);
-const Thumbnail118 = asThumbnail(Drawing118);
-const Thumbnail154 = asThumbnail(Drawing154);
-const Thumbnail159 = asThumbnail(Drawing159);
-const Thumbnail160 = asThumbnail(Drawing160);
-const Thumbnail164 = asThumbnail(Drawing164);
-const Thumbnail289 = asThumbnail(Drawing289);
+
+const asThumbnailLink = DrawingComponent => {
+  return function ThumbnailLink({ link, className, ...otherProps }) {
+    const defaultProps = {
+      scaleWidth: 0.9,
+      scaleHeight: 0.3
+    };
+    return (
+      <Link
+        to={link}
+        className={
+          className ? "drawing-thumbnail " + className : "drawing-thumbnail"
+        }>
+        <DrawingComponent
+          {...defaultProps}
+          {...otherProps}
+          asThumbnail={true}
+        />
+      </Link>
+    );
+  };
+};
+
+const Thumbnail85 = asThumbnailLink(Drawing85);
+const Thumbnail118 = asThumbnailLink(Drawing118);
+const Thumbnail289 = asThumbnailLink(Drawing289);
+const SquareThumbnails = asThumbnailLink(SquareDrawings);

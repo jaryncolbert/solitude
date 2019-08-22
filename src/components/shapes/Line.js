@@ -2,6 +2,7 @@ import React from "react";
 
 import Point from "./Point";
 import Drawable from "./Drawable";
+import withRandomize from "../controls/Randomizer";
 
 export const LineTypes = Object.freeze({
   DIAG_RISING: "rising",
@@ -20,7 +21,11 @@ export default class Line extends Drawable {
 }
 
 export function horizontal(Line) {
-  return class extends React.Component {
+  return class HorizontalLine extends React.Component {
+    static defaultProps = {
+      type: LineTypes.HORIZONTAL
+    };
+
     getStartAndEnd = (centered, rightToLeft, start, lineLen) => {
       let lineStart = start;
       let lineEnd = new Point(0, 0);
@@ -45,13 +50,17 @@ export function horizontal(Line) {
         start,
         lineLen
       );
-      return <Line start={lineStart} end={lineEnd} {...otherProps} />;
+      return <Line {...otherProps} start={lineStart} end={lineEnd} />;
     }
   };
 }
 
 export function vertical(Line) {
-  return class extends React.Component {
+  return class VerticalLine extends React.Component {
+    static defaultProps = {
+      type: LineTypes.VERTICAL
+    };
+
     getStartAndEnd = (centered, btmToTop, start, lineLen) => {
       let lineStart = start;
       let lineEnd = new Point(0, 0);
@@ -76,13 +85,13 @@ export function vertical(Line) {
         start,
         lineLen
       );
-      return <Line start={lineStart} end={lineEnd} {...otherProps} />;
+      return <Line {...otherProps} start={lineStart} end={lineEnd} />;
     }
   };
 }
 
 function diagonal(Line) {
-  return class extends React.Component {
+  return class DiagonalLine extends React.Component {
     calcSquareSideFromHypotenuse = hypotenuse => {
       return Math.round(hypotenuse / Math.sqrt(2));
     };
@@ -123,7 +132,7 @@ function diagonal(Line) {
 
     render() {
       let {
-        rising,
+        type,
         centered,
         rightToLeft,
         start,
@@ -131,13 +140,14 @@ function diagonal(Line) {
         ...otherProps
       } = this.props;
       let { lineStart, lineEnd } = this.getStartAndEnd(
-        rising,
+        type === LineTypes.DIAG_RISING,
         centered,
         rightToLeft,
         start,
         lineLen
       );
-      return <Line start={lineStart} end={lineEnd} {...otherProps} />;
+
+      return <Line {...otherProps} start={lineStart} end={lineEnd} />;
     }
   };
 }
@@ -145,3 +155,6 @@ function diagonal(Line) {
 export const VertLine = vertical(Line);
 export const HorizLine = horizontal(Line);
 export const DiagLine = diagonal(Line);
+export const RandomVertLine = withRandomize(VertLine);
+export const RandomHorizLine = withRandomize(HorizLine);
+export const RandomDiagLine = withRandomize(DiagLine);

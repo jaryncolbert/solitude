@@ -5,7 +5,8 @@ import { RowOfRectangles } from "../utilities/LineFilledRectangle";
 import { Colors } from "../utilities/Colors";
 import Point from "../shapes/Point";
 import ResponsiveCanvas from "../canvas/ResponsiveCanvas";
-import { Button, DrawingInfo, DrawingContainer } from "../CommonComponents";
+import DrawingInfo from "../controls/DrawingInfo";
+import DrawingContainer from "../controls/DrawingContainer";
 import { shuffleArray } from "../util";
 
 export default class Drawing85 extends React.Component {
@@ -98,7 +99,7 @@ export default class Drawing85 extends React.Component {
     );
 
     return (
-      <DrawingContainer {...this.props}>
+      <DrawingContainer {...this.props} onRandomize={this.randomize}>
         <ResponsiveCanvas
           targetPoints={this.getCanvasPoints()}
           width={this.props.width}
@@ -111,7 +112,6 @@ export default class Drawing85 extends React.Component {
           />
           {this.state.rows}
         </ResponsiveCanvas>
-        {!asThumbnail && <Button onClick={this.randomize} />}
       </DrawingContainer>
     );
   }

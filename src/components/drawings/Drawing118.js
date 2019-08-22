@@ -3,7 +3,8 @@ import { RectPoints } from "../shapes/Rectangle";
 import Line from "../shapes/Line";
 import Point from "../shapes/Point";
 import ResponsiveCanvas from "../canvas/ResponsiveCanvas";
-import { Button, DrawingInfo, DrawingContainer } from "../CommonComponents";
+import DrawingInfo from "../controls/DrawingInfo";
+import DrawingContainer from "../controls/DrawingContainer";
 import { getRandomInt } from "../util";
 
 export default class Drawing118 extends React.Component {
@@ -83,10 +84,10 @@ export default class Drawing118 extends React.Component {
   }
 
   render() {
-    let asThumbnail = this.props.asThumbnail;
+    const asThumbnail = this.props.asThumbnail;
 
     return (
-      <DrawingContainer>
+      <DrawingContainer {...this.props} onRandomize={this.randomize}>
         <ResponsiveCanvas {...this.props} targetPoints={this.getCanvasPoints()}>
           <DrawingInfo
             titleOnly={asThumbnail}
@@ -99,8 +100,6 @@ export default class Drawing118 extends React.Component {
           />
           {this.state.lines}
         </ResponsiveCanvas>
-
-        {!asThumbnail && <Button onClick={this.randomize} />}
       </DrawingContainer>
     );
   }

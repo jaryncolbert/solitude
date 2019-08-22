@@ -18,6 +18,7 @@ export default function LineOriginator({
     const endY = getRandomInt(min.y, max.y);
     lines.push(
       <Line
+        {...otherProps}
         key={originName + "-" + i.toString()}
         start={origin}
         strokeWeight={2}

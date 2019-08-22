@@ -6,7 +6,7 @@ export default class Drawable extends React.Component {
   static defaultProps = {
     strokeWeight: 4,
     color: "#000000",
-    start: new Point(0, 0),
+    start: new Point(0, 0)
   };
 
   static contextTypes = {

@@ -7,7 +7,7 @@ export const LineTypes = Object.freeze({
   DIAG_RISING: "rising",
   DIAG_FALLING: "falling",
   VERTICAL: "vertical",
-  HORIZONTAL: "horizontal",
+  HORIZONTAL: "horizontal"
 });
 
 export default class Line extends Drawable {

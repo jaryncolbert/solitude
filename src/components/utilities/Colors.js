@@ -1,4 +1,3 @@
-
 export const Colors = Object.freeze({
   RED: "#FF0000",
   YELLOW: "#FFFF00",

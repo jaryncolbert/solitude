@@ -33,8 +33,7 @@ const router = (
         data-target="#navbar-top"
         aria-controls="navbar-top"
         aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+        aria-label="Toggle navigation">
         <span className="navbar-toggler-icon" />
       </button>
 
@@ -78,8 +77,7 @@ function NavListItem({ path, text }) {
     <li
       className="nav-item"
       data-toggle="collapse"
-      data-target=".navbar-collapse.show"
-    >
+      data-target=".navbar-collapse.show">
       <Link to={path} className="nav-link">
         {text}
       </Link>

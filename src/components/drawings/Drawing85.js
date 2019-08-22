@@ -102,8 +102,7 @@ export default class Drawing85 extends React.Component {
         <ResponsiveCanvas
           targetPoints={this.getCanvasPoints()}
           width={this.props.width}
-          height={this.props.height}
-        >
+          height={this.props.height}>
           <DrawingInfo
             titleOnly={asThumbnail}
             title="WIP: Wall Drawing 85"

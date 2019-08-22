@@ -182,8 +182,7 @@ export default class Drawing154 extends React.Component {
           {...this.props}
           minWidth={sideLen}
           minHeight={sideLen}
-          targetPoints={this.getCanvasPoints()}
-        >
+          targetPoints={this.getCanvasPoints()}>
           <DrawingInfo
             titleOnly={asThumbnail}
             title="Wall Drawing 154"

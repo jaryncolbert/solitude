@@ -40,7 +40,8 @@ export default function About() {
           <li>
             <a href="https://massmoca.org/sol-lewitt/">
               Sol LeWitt: A Wall Drawing Retrospective
-            </a> at the Massachusetts Museum of Contemporary Art
+            </a>{" "}
+            at the Massachusetts Museum of Contemporary Art
           </li>
         </ul>
       </div>

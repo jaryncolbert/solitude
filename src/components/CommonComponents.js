@@ -5,8 +5,7 @@ export const DrawingContainer = ({ children, className }) => (
   <div
     className={
       className ? "drawing-container " + className : "drawing-container"
-    }
-  >
+    }>
     {children}
   </div>
 );

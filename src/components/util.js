@@ -26,11 +26,10 @@ export function shuffleArray(array) {
 export function generatePowerSet(array) {
   var result = []; // Not including empty set
 
-  for (var i = 1; i < (1 << array.length); i++) {
+  for (var i = 1; i < 1 << array.length; i++) {
     var subset = [];
     for (var j = 0; j < array.length; j++)
-      if (i & (1 << j))
-        subset.push(array[j]);
+      if (i & (1 << j)) subset.push(array[j]);
 
     result.push(subset);
   }

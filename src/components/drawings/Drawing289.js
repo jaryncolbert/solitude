@@ -4,17 +4,17 @@ import LineOriginator from "../utilities/LineOriginator";
 import ResponsiveCanvas from "../canvas/ResponsiveCanvas";
 import DrawingInfo from "../controls/DrawingInfo";
 import DrawingContainer from "../controls/DrawingContainer";
+import _ from "underscore";
 
 export default class Drawing289 extends React.Component {
-  state = { lines: [] };
+  state = { lines: [], canvasPoints: {} };
 
   randomize = () => {
     const lines = Object.values(RectPoints).map(point => {
-      if (point === RectPoints.MIDPOINT) {
-        return this.originateLinesFrom(point, 24);
-      }
       if (point === RectPoints.DIAGONAL) {
         return null;
+      } else if (point === RectPoints.MIDPOINT) {
+        return this.originateLinesFrom(point, 24);
       } else {
         return this.originateLinesFrom(point, 12);
       }
@@ -25,22 +25,20 @@ export default class Drawing289 extends React.Component {
 
   setPoint = (point, propName) => {
     this.setState({
-      [propName]: point
+      canvasPoints: {
+        ...this.state.canvasPoints,
+        [propName]: point
+      }
     });
   };
 
   getPoint = point => {
-    return this.state[point];
+    return this.state.canvasPoints[point];
   };
 
-  // Save coordinates for line origination points on canvas
-  getCanvasPoints = () => {
-    // For each point, create a fn that sets a state prop using its name
-    return Object.values(RectPoints).map(point => {
-      return {
-        target: point,
-        callback: p => this.setPoint(p, point)
-      };
+  setCanvasPoints = points => {
+    this.setState({
+      canvasPoints: points
     });
   };
 
@@ -64,24 +62,20 @@ export default class Drawing289 extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (
       (prevState["lines"].length === 0 && !!this.state.lines) ||
-      this.props.width !== prevProps.width ||
-      this.props.height !== prevProps.height ||
-      this.state.BTM_RIGHT !== prevState.BTM_RIGHT
+      !_.isEqual(prevState.canvasPoints, this.state.canvasPoints)
     ) {
       this.randomize();
     }
   }
 
   render() {
-    const asThumbnail = this.props.asThumbnail;
-
     return (
       <DrawingContainer {...this.props} onRandomize={this.randomize}>
         <ResponsiveCanvas
-          targetPoints={this.getCanvasPoints()}
+          pointsCallback={this.setCanvasPoints}
           background="#000000">
           <DrawingInfo
-            titleOnly={asThumbnail}
+            titleOnly={this.props.asThumbnail}
             title="Wall Drawing 289"
             instructions="A 6-inch (15 cm) grid covering each of the four black
           walls. White lines to points on the grids. Fourth wall: twenty-four

@@ -8,9 +8,10 @@ import ResponsiveCanvas from "../canvas/ResponsiveCanvas";
 import DrawingInfo from "../controls/DrawingInfo";
 import DrawingContainer from "../controls/DrawingContainer";
 import { shuffleArray } from "../util";
+import _ from "underscore";
 
 export default class Drawing85 extends React.Component {
-  state = { rows: [] };
+  state = { rows: [], canvasWidth: 0 };
 
   randomize = () => {
     // Shallow clone of objects to shuffle in-place
@@ -25,10 +26,12 @@ export default class Drawing85 extends React.Component {
       return [{ lineColor: c, lineType: lineTypes[i] }];
     });
 
+    const { canvasWidth } = this.state;
+
     // Get all combinations of randomized properties
-    if (this.state.canvasWidth) {
+    if (canvasWidth && canvasWidth > 0) {
       let prevWidth = 0;
-      let rectWidth = Math.round(this.state.canvasWidth / rectProps.length);
+      let rectWidth = Math.round(canvasWidth / rectProps.length);
       rows.push(
         <RowOfRectangles
           key={"rect-row-1"}
@@ -44,7 +47,7 @@ export default class Drawing85 extends React.Component {
         [...rectProps[0], ...rectProps[2]],
         [...rectProps[0], ...rectProps[3]]
       ];
-      rectWidth = Math.round(this.state.canvasWidth / secondRow.length);
+      rectWidth = Math.round(canvasWidth / secondRow.length);
       rows.push(
         <RowOfRectangles
           key={"rect-row-2"}
@@ -65,27 +68,23 @@ export default class Drawing85 extends React.Component {
     });
   };
 
-  // Save coordinates for line origination points on canvas
-  getCanvasPoints = () => {
-    return [
-      {
-        target: RectPoints.BTM_RIGHT,
-        callback: point => {
-          this.setValue(point.x, "canvasWidth");
-        }
-      }
-    ];
+  setCanvasPoints = points => {
+    this.setState({
+      canvasWidth:
+        points[RectPoints.MID_RIGHT].x - points[RectPoints.MID_LEFT].x
+    });
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState["rows"].length === 0 && !!this.state.rows) {
+    if (
+      (prevState["rows"].length === 0 && !!this.state.rows) ||
+      !_.isEqual(prevState.canvasPoints, this.state.canvasPoints)
+    ) {
       this.randomize();
     }
   }
 
   render() {
-    let asThumbnail = this.props.asThumbnail;
-
     const instructions = (
       <>
         <b>Note</b>: This drawing is a work-in-progress and does not accurately
@@ -101,11 +100,11 @@ export default class Drawing85 extends React.Component {
     return (
       <DrawingContainer {...this.props} onRandomize={this.randomize}>
         <ResponsiveCanvas
-          targetPoints={this.getCanvasPoints()}
+          pointsCallback={this.setCanvasPoints}
           width={this.props.width}
           height={this.props.height}>
           <DrawingInfo
-            titleOnly={asThumbnail}
+            titleOnly={this.props.asThumbnail}
             title="WIP: Wall Drawing 85"
             instructions={instructions}
             year="1971"

@@ -8,7 +8,7 @@ import DrawingContainer from "../controls/DrawingContainer";
 import { getRandomInt } from "../util";
 
 export default class Drawing118 extends React.Component {
-  state = { lines: [] };
+  state = { lines: [], canvasMin: 0, canvasMax: 0 };
 
   randomize = () => {
     const points = this.generatePoints(50);
@@ -37,18 +37,11 @@ export default class Drawing118 extends React.Component {
     return this.state[point];
   };
 
-  // Save coordinates for line origination points on canvas
-  getCanvasPoints = () => {
-    return [
-      {
-        target: RectPoints.TOP_LEFT,
-        callback: point => this.setPoint(point, "canvasMin")
-      },
-      {
-        target: RectPoints.BTM_RIGHT,
-        callback: point => this.setPoint(point, "canvasMax")
-      }
-    ];
+  setCanvasPoints = points => {
+    this.setState({
+      canvasMin: points[RectPoints.TOP_LEFT],
+      canvasMax: points[RectPoints.BTM_RIGHT]
+    });
   };
 
   generatePoints = numPoints => {
@@ -88,7 +81,7 @@ export default class Drawing118 extends React.Component {
 
     return (
       <DrawingContainer {...this.props} onRandomize={this.randomize}>
-        <ResponsiveCanvas {...this.props} targetPoints={this.getCanvasPoints()}>
+        <ResponsiveCanvas {...this.props} pointsCallback={this.setCanvasPoints}>
           <DrawingInfo
             titleOnly={asThumbnail}
             title="Wall Drawing 118"

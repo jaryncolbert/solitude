@@ -50,15 +50,11 @@ export class SimpleRectangle extends Drawable {
 function withRectPoints(RectangleComponent) {
   return class RectangleWithPoints extends React.Component {
     static defaultProps = {
-      ...RectangleComponent.defaultProps,
-      /* targetPoints is an array of objects:
-       * {
-           target: A point of interest from SimpleRectangle.Points,
-           callback: A function that should be called to return target value
-         }
-       */
-      targetPoints: [],
-      diagonalLen: 0
+      ...RectangleComponent.defaultProps
+    };
+
+    state = {
+      points: {}
     };
 
     componentDidMount() {
@@ -78,20 +74,7 @@ function withRectPoints(RectangleComponent) {
     }
 
     registerPoints = () => {
-      let {
-        start,
-        height,
-        width,
-        targetPoints,
-        pointsCallback,
-        getDiagonal
-      } = this.props;
-
-      // Register each target point and its callback function to pass to parent
-      targetPoints.forEach(({ target, callback }) => {
-        const point = this.getPoint(target, start, height, width);
-        callback(point);
-      });
+      let { start, height, width, pointsCallback } = this.props;
 
       let points = {};
       let point;
@@ -103,15 +86,11 @@ function withRectPoints(RectangleComponent) {
         }
         points[v] = point;
       });
+
       this.setState({ points });
+
       if (pointsCallback) {
         pointsCallback(points);
-      }
-
-      if (getDiagonal) {
-        this.setState({
-          diagonalLen: this.getDiagonal(width, height)
-        });
       }
     };
 
@@ -152,7 +131,7 @@ function withRectPoints(RectangleComponent) {
     };
 
     render() {
-      let { targetPoints, pointsCallback, ...otherProps } = this.props;
+      let { pointsCallback, ...otherProps } = this.props;
       return <RectangleComponent {...otherProps} {...this.state} />;
     }
   };

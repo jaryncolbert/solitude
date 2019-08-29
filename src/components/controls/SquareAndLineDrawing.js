@@ -254,8 +254,8 @@ export default class SquareAndLineDrawing extends React.Component {
         <ResponsiveCanvas
           {...otherProps}
           pointsCallback={this.setCanvasPoints}
-          minWidth={sideLen * 1.1}
-          minHeight={sideLen * 1.1}>
+          minWidth={sideLen}
+          minHeight={sideLen}>
           <DrawingInfo {...drawingInfoProps} />
           <CenteredSquare
             midpoint={canvasMidpoint}

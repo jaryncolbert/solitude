@@ -15,7 +15,7 @@ const App = () => {
   return (
     <div className="App">
       <RowGroup>
-        <Thumbnail118 link="/wall-drawing-118" scaleHeight={0.5} />
+        <Thumbnail118 link="/wall-drawing-118" />
       </RowGroup>
 
       <RowGroup>
@@ -28,7 +28,7 @@ const App = () => {
 
       <RowGroup>
         <SquareThumbnails
-          scaleWidth={0.4}
+          scaleWidth={0.45}
           scaleHeight={0.2}
           link="/square-wall-drawings"
         />
@@ -40,21 +40,13 @@ export default App;
 
 const asThumbnailLink = DrawingComponent => {
   return function ThumbnailLink({ link, className, ...otherProps }) {
-    const defaultProps = {
-      scaleWidth: 0.9,
-      scaleHeight: 0.3
-    };
     return (
       <Link
         to={link}
         className={
           className ? "drawing-thumbnail " + className : "drawing-thumbnail"
         }>
-        <DrawingComponent
-          {...defaultProps}
-          {...otherProps}
-          asThumbnail={true}
-        />
+        <DrawingComponent {...otherProps} asThumbnail={true} />
       </Link>
     );
   };

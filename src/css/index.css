@@ -6,6 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: calc(0.6em + 0.7vw);
 }
 
 code {
@@ -21,26 +22,26 @@ ul.navbar-nav {
   text-align: right;
 }
 
+.navbar-brand {
+  color: black;
+}
+
 .navbar-brand img {
   margin: 0.5em;
-  width: 40px;
-  height: 40px;
+  width: calc(45px + 0.7vw);
+  height: calc(45px + 0.7vw);
 }
 
 .navbar {
-  font-size: 1vw;
+  font-size: calc(0.7em + 0.6vw);
 }
 
 .navbar-text {
-  font-size: 1.5vw;
+  font-size: calc(0.7em + 0.8vw);
 }
 
 .navbar-brand {
-  font-size: 2vw;
-}
-
-.nav-item.about {
-  font-size: 2vw;
+  font-size: calc(1.2em + 1.1vw);
 }
 
 .navbar-nav > li > a,
@@ -57,10 +58,16 @@ ul.navbar-nav {
   margin: auto;
 }
 .footer-container a img {
-  margin: 0.5em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 
 .footer {
   background-color: #f5f5f5;
   text-align: center;
+}
+
+.footer a {
+  color: black;
+  font-size: 16px;
 }

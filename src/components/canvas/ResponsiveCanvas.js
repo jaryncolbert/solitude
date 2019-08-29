@@ -3,8 +3,8 @@ import Canvas from "./P5Canvas";
 
 export default class ResponsiveCanvas extends React.Component {
   static defaultProps = {
-    scaleWidth: 0.9,
-    scaleHeight: 0.5,
+    scaleWidth: 0.95,
+    scaleHeight: 0.6,
     minWidth: 0,
     minHeight: 0,
     noFill: true,
@@ -19,10 +19,15 @@ export default class ResponsiveCanvas extends React.Component {
   componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
+    window.addEventListener("orientationchange", this.updateWindowDimensions);
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateWindowDimensions);
+    window.removeEventListener(
+      "orientationchange",
+      this.updateWindowDimensions
+    );
   }
 
   updateWindowDimensions = () => {

@@ -19,7 +19,7 @@ export default class SquareAndLineDrawing extends React.Component {
     lineStarts: {},
     lineMaxes: {},
     lineLengths: {},
-    sideLen: 300,
+    sideLen: 0,
     canvasMidpoint: new Point(0, 0),
     canvasHeight: 0,
     canvasWidth: 0,
@@ -38,6 +38,10 @@ export default class SquareAndLineDrawing extends React.Component {
 
   componentDidMount() {
     this.props.onRandomize(this.randomize);
+
+    this.setState({
+      sideLen: this.props.isThumbnail ? 100 : 225
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -250,8 +254,8 @@ export default class SquareAndLineDrawing extends React.Component {
         <ResponsiveCanvas
           {...otherProps}
           pointsCallback={this.setCanvasPoints}
-          minWidth={sideLen}
-          minHeight={sideLen}>
+          minWidth={sideLen * 1.1}
+          minHeight={sideLen * 1.1}>
           <DrawingInfo {...drawingInfoProps} />
           <CenteredSquare
             midpoint={canvasMidpoint}
@@ -286,7 +290,7 @@ const Controls = ({
   scalingAndExtensionProps
 }) => {
   return (
-    <>
+    <div className="drawing-controls container">
       <RowGroup>
         <Slider
           label="Square Size:"
@@ -313,7 +317,7 @@ const Controls = ({
       </RowGroup>
 
       <ScalingAndExtensionControls {...scalingAndExtensionProps} />
-    </>
+    </div>
   );
 };
 
@@ -328,7 +332,7 @@ const LineControl = ({
   return (
     <Slider
       {...otherProps}
-      label={lineType[0].toUpperCase() + lineType.slice(1) + " Line Length:"}
+      label={lineType[0].toUpperCase() + lineType.slice(1) + " Line:"}
       value={lineLen}
       changeHandler={changeHandler}
       min={lineMin}

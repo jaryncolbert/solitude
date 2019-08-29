@@ -20,10 +20,13 @@ const router = (
   <Router basename="/">
     <nav className="navbar navbar-light">
       <Link to="/" className="navbar-brand">
-        <img src={Sol391} width="75" height="75" alt="Sol Drawing 391" />
+        <img src={Sol391} alt="Sol Drawing 391" />
         Sol-itude
       </Link>
-      <span className="navbar-text">
+      <span className="navbar-text text-collapsible d-none d-sm-none d-md-inline d-lg-none">
+        Randomness through the Art of Sol LeWitt
+      </span>
+      <span className="navbar-text text-collapsible d-none d-lg-inline">
         An Exploration of Randomness through the Art of Sol LeWitt
       </span>
       <button

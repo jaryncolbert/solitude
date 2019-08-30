@@ -1,6 +1,7 @@
 import React from "react";
 import { RectPoints } from "../shapes/Rectangle";
 import LineOriginator from "../utilities/LineOriginator";
+import Colors from "../utilities/Colors";
 import ResponsiveCanvas from "../canvas/ResponsiveCanvas";
 import DrawingInfo from "../controls/DrawingInfo";
 import DrawingContainer from "../controls/DrawingContainer";
@@ -51,7 +52,7 @@ export default class Drawing289 extends React.Component {
         key={origin}
         originName={origin}
         numLines={numLines}
-        color="#FFFFFF"
+        color={Colors.WHITE}
         min={min}
         max={max}
         origin={this.getPoint(origin)}
@@ -72,8 +73,9 @@ export default class Drawing289 extends React.Component {
     return (
       <DrawingContainer {...this.props} onRandomize={this.randomize}>
         <ResponsiveCanvas
+          {...this.props}
           pointsCallback={this.setCanvasPoints}
-          background="#000000">
+          background={Colors.BLACK}>
           <DrawingInfo
             titleOnly={this.props.asThumbnail}
             title="Wall Drawing 289"

@@ -4,13 +4,14 @@ import { HorizLine, DiagLine, LineTypes } from "../shapes/Line";
 import SquareAndLineDrawing from "../controls/SquareAndLineDrawing";
 import { RectPoints } from "../shapes/Rectangle";
 import Drawing from "../controls/Drawing";
+import Colors from "../utilities/Colors";
 
 const SquareDrawings = props => {
   // Override default scaling so that square drawings are 2x2
   const defaultProps = {
     scaleWidth: 0.4,
     scaleHeight: 0.35,
-    lineColor: "#FF0000",
+    lineColor: Colors.RED,
     ...props
   };
 

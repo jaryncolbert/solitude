@@ -34,5 +34,10 @@ export function generatePowerSet(array) {
     result.push(subset);
   }
 
+  /**
+   * Sort subset arrays by length so that
+   * smaller sets are first
+   */
+  result.sort((a, b) => a.length - b.length);
   return result;
 }

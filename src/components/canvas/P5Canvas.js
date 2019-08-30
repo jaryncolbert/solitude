@@ -4,13 +4,18 @@ import PropTypes from "prop-types";
 
 import Point from "../shapes/Point";
 import Rectangle from "../shapes/Rectangle";
+import Colors from "../utilities/Colors";
+
+import _ from "underscore";
 
 export default class Canvas extends React.Component {
   static defaultProps = {
     width: 600,
     height: 400,
     start: new Point(0, 0),
-    background: "#FFFFFF"
+    background: Colors.WHITE,
+    noFill: true,
+    noOutline: true
   };
 
   static childContextTypes = {
@@ -35,7 +40,7 @@ export default class Canvas extends React.Component {
     if (
       prevProps.width !== this.props.width ||
       prevProps.height !== this.props.height ||
-      !prevProps.start.equals(this.props.start)
+      !_.isEqual(prevProps.start, this.props.start)
     ) {
       this.removeCanvas();
       this.createCanvas();

@@ -2,6 +2,7 @@ import React from "react";
 
 import Point from "./Point";
 import Drawable from "./Drawable";
+import Colors from "../utilities/Colors";
 
 export const RectPoints = Object.freeze({
   TOP_LEFT: "top_left",
@@ -19,7 +20,7 @@ export const RectPoints = Object.freeze({
 export class SimpleRectangle extends Drawable {
   static defaultProps = {
     ...Drawable.defaultProps,
-    color: "#000000"
+    color: Colors.BLACK
   };
 
   draw = p => {

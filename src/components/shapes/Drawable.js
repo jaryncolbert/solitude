@@ -1,11 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Point from "./Point";
+import Colors from "../utilities/Colors";
 
 export default class Drawable extends React.Component {
   static defaultProps = {
     strokeWeight: 4,
-    color: "#000000",
+    color: Colors.BLACK,
     start: new Point(0, 0)
   };
 

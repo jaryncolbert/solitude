@@ -19,7 +19,7 @@ export default class SquareAndLineDrawing extends React.Component {
     lineStarts: {},
     lineMaxes: {},
     lineLengths: {},
-    sideLen: 0,
+    sideLen: 200,
     canvasMidpoint: new Point(0, 0),
     canvasHeight: 0,
     canvasWidth: 0,
@@ -38,10 +38,6 @@ export default class SquareAndLineDrawing extends React.Component {
 
   componentDidMount() {
     this.props.onRandomize(this.randomize);
-
-    this.setState({
-      sideLen: this.props.isThumbnail ? 100 : 225
-    });
   }
 
   componentDidUpdate(prevProps, prevState) {
